@@ -38,7 +38,6 @@ jobs:
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
-        echo "RELEASES_BRANCH=${RELEASES_BRANCH}" >> $GITHUB_ENV
         echo "COMPILE_STARTINGTIME=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
 
     - name: Download armvirt file
