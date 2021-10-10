@@ -6,7 +6,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #======================================================
 
-name: N1 mini Version
+name: Mini OpenWrt
 
 on:
   repository_dispatch:
@@ -152,7 +152,6 @@ jobs:
         artifacts: ${{ env.FIRMWARE }}/*
         allowUpdates: true
         tag: ${{ env.FILE_NAME }}
-        commit: main
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
           ARMv8系列设备打包用临时固件，不可直刷
