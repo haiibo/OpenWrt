@@ -6,7 +6,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #======================================================
 
-name: Build OpenWrt
+name: N1 mini Version
 
 on:
   repository_dispatch:
