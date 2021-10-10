@@ -1,7 +1,6 @@
 ## Acknowledgments
 
 - [P3TERX](https://github.com/P3TERX/Actions-OpenWrt)
-- [OpenWrt](https://github.com/openwrt/openwrt)
 - [breakings](https://github.com/breakings/OpenWrt)
 - [Lienol/openwrt](https://github.com/Lienol/openwrt)
 - [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
