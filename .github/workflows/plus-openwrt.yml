@@ -156,7 +156,7 @@ jobs:
         body: |
           This is temporary firmware for Armvirt 64
           * ARMv8系列设备打包的临时固件，不可直刷
-          直刷固件参见tag名为ARMv8_PLUS的release
+          直刷固件参见Tags名为ARMv8_PLUS的Releases
           当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}
 
