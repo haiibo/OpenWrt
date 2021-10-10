@@ -1,8 +1,8 @@
-#=====================================================================================================================
+#========================================================================================================================
 # https://github.com/ophub/op
 # Description: Use Releases file to packaging
 # Cron: min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday)
-#=====================================================================================================================
+#========================================================================================================================
 
 name: Mini Packaging
 
@@ -16,6 +16,7 @@ env:
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
+  FILE_NAME: ROOTFS_MINI
   PRODUCT_NAME: ARMv8_MINI
 
 jobs:
@@ -45,11 +46,11 @@ jobs:
       run: |
         armvirt_tarfile_path="openwrt/bin/targets/armvirt/64"
         [ -d "${armvirt_tarfile_path}" ] || mkdir -p ${armvirt_tarfile_path}
-        curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "ARMv8_MINI.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
+        curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "${{ env.FILE_NAME }}.*/openwrt-armvirt-.*\.tar.gz" | head -n 1 > DOWNLOAD_URL
         [ -s DOWNLOAD_URL ] && wget -q -P ${armvirt_tarfile_path} https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_URL)
         echo "::set-output name=status::success"
 
-    - name: Package Armvirt as OpenWrt use Flippy script
+    - name: Package Armvirt as OpenWrt
       uses: ophub/flippy-openwrt-actions@main
       env:
         OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*.tar.gz
