@@ -179,7 +179,7 @@ jobs:
         body: |
           This is OpenWrt firmware for Armvirt 64
           * Firmware information
-          此固件为正常版本版，集成常用插件
+          此固件为常用多插件版本，集成常用插件等
           默认IP：10.10.10.11 默认密码：password
           安装到EMMC: 系统 → 晶晨宝盒 → 安装OpenWrt → 选择型号 → 安装
           升级OpenWrt: 系统 → 晶晨宝盒 → 手动上传更新或者在线下载更新
