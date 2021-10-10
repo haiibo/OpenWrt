@@ -75,7 +75,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
           This is OpenWrt firmware for Armvirt 64
-          * 此固件为个人精简版，仅集成常用科学上网和去广告插件
+          * 此固件为精简版，仅集成常用科学上网和去广告插件
           默认IP：10.10.10.11 默认密码：password
           安装到EMMC：系统 → 晶晨宝盒 → 安装OpenWrt → 选择型号 → 安装
           升级OpenWrt：系统 → 晶晨宝盒 → 手动上传更新或者在线下载更新
