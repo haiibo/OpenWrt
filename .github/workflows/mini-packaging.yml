@@ -64,7 +64,7 @@ jobs:
       with:
         path: ${{ env.PACKAGED_OUTPUTPATH }}/
 
-    - name: Upload OpenWrt Firmware to Release
+    - name: Upload OpenWrt to Release
       uses: ncipollo/release-action@v1
       if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
