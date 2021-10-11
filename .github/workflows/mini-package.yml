@@ -58,7 +58,7 @@ jobs:
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
 
-    - name: Package armvirt as openWrt
+    - name: Package armvirt as openwrt
       uses: ophub/flippy-openwrt-actions@main
       env:
         OPENWRT_ARMVIRT: https://github.com/hhaibo/ARMv8-OpenWrt/releases/download/ROOTFS_MINI/openwrt-armvirt-64-default-rootfs.tar.gz
@@ -73,7 +73,7 @@ jobs:
       with:
         path: ${{ env.PACKAGED_OUTPUTPATH }}/
 
-    - name: Upload openWrt to release
+    - name: Upload openwrt to release
       uses: ncipollo/release-action@v1
       if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
