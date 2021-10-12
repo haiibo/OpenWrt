@@ -18,6 +18,7 @@ env:
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
+  PRODUCT_NAME: ARMv8_${{ env.VERSION }}
 
 jobs:
   build:
@@ -36,7 +37,6 @@ jobs:
     env:
       VERSION: ${{ matrix.version }}
       RELEASE: ${{ matrix.release }}
-      PRODUCT_NAME: ARMv8_${{ env.VERSION }}
 
     steps:
     - name: Checkout
