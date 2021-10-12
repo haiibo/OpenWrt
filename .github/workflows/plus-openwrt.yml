@@ -29,6 +29,7 @@ env:
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
+  PACKAGE_RELEASE: true
   TZ: Asia/Shanghai
   FILE_NAME: ROOTFS_PLUS
   PRODUCT_NAME: ARMv8_PLUS
@@ -170,7 +171,7 @@ jobs:
 
     - name: Upload openwrt to release
       uses: ncipollo/release-action@v1
-      if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
+      if: env.PACKAGED_STATUS == 'success' && env.PACKAGE_RELEASE == 'true' && !cancelled()
       with:
         name: R${{ env.DATE }} for ${{ env.PRODUCT_NAME }}
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
