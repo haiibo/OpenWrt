@@ -89,7 +89,7 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         name: R${{ env.DATE }} for ${{ env.FILE_NAME }}
-        artifacts: ${{env.UPLOAD}}
+        artifacts: ${{ env.UPLOAD }}
         allowUpdates: true
         tag: ${{ env.FILE_NAME }}
         token: ${{ secrets.GITHUB_TOKEN }}
