@@ -28,9 +28,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - version: Mini
+          - version: MINI
             explain: 此固件为精简版，集成科学上网和去广告插件
-          - version: Plus
+          - version: PLUS
             explain: 此固件为常用多插件版本，集成常用插件等
 
     env:
