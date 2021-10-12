@@ -1,4 +1,4 @@
-## Acknowledgments
+## 感谢 ❤️
 
 - [P3TERX](https://github.com/P3TERX/Actions-OpenWrt)
 - [breakings](https://github.com/breakings/OpenWrt)
