@@ -36,7 +36,7 @@ jobs:
     env:
       VERSION: ${{ matrix.version }}
       RELEASE: ${{ matrix.release }}
-      PRODUCT_NAME: ARMv8_${{ env.VERSION }}
+      PRODUCT_NAME: ARMv8_${{ matrix.version }}
 
 
     steps:
