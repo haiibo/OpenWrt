@@ -90,10 +90,10 @@ jobs:
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
-        name: R${{ env.DATE }} for ROOTFS_${{ env.SUB_VERSION }}
+        name: R${{ env.DATE }} for ARMv8_${{ env.SUB_VERSION }}
         artifacts: ${{ env.UPLOAD }}/*
         allowUpdates: true
-        tag: ROOTFS_${{ env.SUB_VERSION }}
+        tag: ARMv8_${{ env.SUB_VERSION }}
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
           This is temporary firmware for Armvirt 64
