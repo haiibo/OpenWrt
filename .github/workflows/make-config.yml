@@ -22,10 +22,10 @@ jobs:
         include:
           - sub_version: mini
             config_file: mini/.config
-            file_name: ROOTFS_MINI
+            file_name: Mini
           - sub_version: plus
             config_file: plus/.config
-            file_name: ROOTFS_PLUS
+            file_name: Plus
 
     env:
         SUB_VERSION: ${{ matrix.sub_version }}
@@ -85,6 +85,12 @@ jobs:
         make defconfig
         cp .config ${UPLOAD}/${SUB_VERSION}.config
 
+    - name: Upload Config
+      uses: actions/upload-artifact@master
+      with:
+        name: ${SUB_VERSION}_Config
+        path: ${{env.UPLOAD}}
+
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
@@ -93,3 +99,9 @@ jobs:
         allowUpdates: true
         tag: ${{ env.FILE_NAME }}
         token: ${{ secrets.GITHUB_TOKEN }}
+        body: |
+          This is temporary firmware for Armvirt 64
+          * ARMv8系列设备打包临时固件，不可直刷
+          直刷固件参见Tags名为ARMv8_${{ env.FILE_NAME }}的Releases
+          当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
+          ${{ env.useVersionInfo }}
