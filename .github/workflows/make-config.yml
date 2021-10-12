@@ -9,7 +9,6 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  DIY_SH: mini/diy-part2.sh
   TZ: Asia/Shanghai
 
 jobs:
@@ -20,17 +19,16 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - sub_version: mini
+          - sub_version: Mini
             config_file: mini/.config
-            file_name: Mini
-          - sub_version: plus
+            DIY_SH: mini/diy-part2.sh
+          - sub_version: Plus
             config_file: plus/.config
-            file_name: Plus
+            DIY_SH: plus/diy-part2.sh
 
     env:
         SUB_VERSION: ${{ matrix.sub_version }}
         CONFIG_FILE: ${{ matrix.config_file }}
-        FILE_NAME: ${{ matrix.file_name }}
 
     steps:
     - name: Checkout
@@ -76,6 +74,14 @@ jobs:
         chmod +x $DIY_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_SH
+        make defconfig
+
+    - name: Make Config
+      run: |
+        rm -rf openwrt/.config.old
+        mv -f openwrt/.config openwrt/.config.old
+        mv -f $CONFIG_FILE openwrt/.config
+        cd openwrt
         ls -a
         make defconfig
         cp .config ${UPLOAD}/${SUB_VERSION}.config
@@ -89,14 +95,14 @@ jobs:
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
-        name: R${{ env.DATE }} for ${{ env.FILE_NAME }}
+        name: R${{ env.DATE }} for ${{ env.SUB_VERSION }}
         artifacts: ${{ env.UPLOAD }}/*
         allowUpdates: true
-        tag: ${{ env.FILE_NAME }}
+        tag: ${{ env.SUB_VERSION }}
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
           This is temporary firmware for Armvirt 64
           * ARMv8系列设备打包临时固件，不可直刷
-          直刷固件参见Tags名为ARMv8_${{ env.FILE_NAME }}的Releases
+          直刷固件参见Tags名为ARMv8_${{ env.SUB_VERSION }}的Releases
           当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}
