@@ -87,19 +87,13 @@ jobs:
         make defconfig
         cp .config ${UPLOAD}/${SUB_VERSION}.config
 
-    - name: Upload Config
-      uses: actions/upload-artifact@master
-      with:
-        name: ${SUB_VERSION}_Config
-        path: ${{env.UPLOAD}}
-
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
-        name: R${{ env.DATE }} for ${{ env.SUB_VERSION }}
+        name: R${{ env.DATE }} for ROOTFS_${{ env.SUB_VERSION }}
         artifacts: ${{ env.UPLOAD }}/*
         allowUpdates: true
-        tag: ${{ env.SUB_VERSION }}
+        tag: ROOTFS_${{ env.SUB_VERSION }}
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
           This is temporary firmware for Armvirt 64
