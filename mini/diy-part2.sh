@@ -18,6 +18,7 @@ sed -i 's/services/system/g' package/lean/luci-app-cpufreq/luasrc/controller/cpu
 
 # 移除冲突软件包
 rm -rf package/lean/luci-theme-argon
+rm -rf package/lean/luci-app-dockerman
 rm -rf package/lean/luci-app-jd-dailybonus
 
 # 添加额外软件包
