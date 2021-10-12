@@ -164,7 +164,7 @@ jobs:
       if: steps.compile.outputs.status == 'success' && !cancelled()
       env:
         OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*.tar.gz
-        PACKAGE_SOC: s905d_s905x3
+        PACKAGE_SOC: beikeyun_l1pro_s905d_s905x2_s905x3_s912_s922x_vplus
         KERNEL_REPO_URL: https://github.com/ophub/flippy-kernel/tree/main/library
         KERNEL_VERSION_NAME: 5.4.150_5.14.10
         KERNEL_AUTO_LATEST: true
