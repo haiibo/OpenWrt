@@ -161,6 +161,7 @@ jobs:
 
     - name: Package armvirt as openwrt
       uses: unifreq/openwrt_packit@master
+      if: steps.compile.outputs.status == 'success' && !cancelled()
       env:
         OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*.tar.gz
         PACKAGE_SOC: s905d_s905x3
