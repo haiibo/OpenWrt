@@ -85,12 +85,6 @@ jobs:
         make defconfig
         cp .config ${UPLOAD}/${SUB_VERSION}.config
 
-    - name: Upload Config
-      uses: actions/upload-artifact@master
-      with:
-        name: ${{env.CONFIG_FILE}}
-        path: ${{env.UPLOAD}}
-
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
