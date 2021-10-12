@@ -36,13 +36,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@main
 
-    - name: Initialization Environment
+    - name: Initialization environment
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update
-        sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004) tree
+        sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004)
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
@@ -52,7 +52,6 @@ jobs:
         sudo chown $USER:$GROUPS /upload
         cd /upload
         echo "UPLOAD=$PWD" >> $GITHUB_ENV
-        echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
 
     - name: Clone source code
       working-directory: /workdir
@@ -60,6 +59,10 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        cd openwrt
+        useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
+        echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
+        echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
 
     - name: Update & Install Feeds
       run: |
@@ -69,18 +72,10 @@ jobs:
 
     - name: Load Custom Configuration
       run: |
-        [ -e $CONFIG_FILE ] && cp $CONFIG_FILE openwrt/.config
+        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_SH
-        make defconfig
-
-    - name: Make Config
-      run: |
-        rm -rf openwrt/.config.old
-        mv -f openwrt/.config openwrt/.config.old
-        mv -f $CONFIG_FILE openwrt/.config
-        cd openwrt
         ls -a
         make defconfig
         cp .config ${UPLOAD}/${SUB_VERSION}.config
