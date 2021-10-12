@@ -19,10 +19,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - sub_version: Mini
+          - sub_version: MINI
             config_file: mini/.config
             diy_sh: mini/diy-part2.sh
-          - sub_version: Plus
+          - sub_version: PLUS
             config_file: plus/.config
             diy_sh: plus/diy-part2.sh
 
