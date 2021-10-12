@@ -67,7 +67,7 @@ sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=c2979d956127946861977781beb3323ad
 svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
 sed -i "s|https.*/OpenWrt|https://github.com/hhaibo/ARMv8-OpenWrt|g" package/luci-app-amlogic/root/etc/config/amlogic
 sed -i "s|opt/kernel|https://github.com/ophub/flippy-kernel/tree/main/library|g" package/luci-app-amlogic/root/etc/config/amlogic
-sed -i "s|ARMv8|ARMv8_Mini|g" package/luci-app-amlogic/root/etc/config/amlogic
+sed -i "s|ARMv8|ARMv8_MINI|g" package/luci-app-amlogic/root/etc/config/amlogic
 
 # 修改插件名字
 sed -i 's/"挂载 SMB 网络共享"/"挂载网络共享"/g' `grep "挂载 SMB 网络共享" -rl ./`
