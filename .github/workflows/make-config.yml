@@ -21,14 +21,15 @@ jobs:
         include:
           - sub_version: Mini
             config_file: mini/.config
-            DIY_SH: mini/diy-part2.sh
+            diy_sh: mini/diy-part2.sh
           - sub_version: Plus
             config_file: plus/.config
-            DIY_SH: plus/diy-part2.sh
+            diy_sh: plus/diy-part2.sh
 
     env:
         SUB_VERSION: ${{ matrix.sub_version }}
         CONFIG_FILE: ${{ matrix.config_file }}
+        DIY_SH: ${{ matrix.diy_sh }}
 
     steps:
     - name: Checkout
