@@ -17,8 +17,9 @@ sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci
 sed -i 's/services/system/g' package/lean/luci-app-cpufreq/luasrc/controller/cpufreq.lua
 
 # 移除冲突软件包
-rm -rf package/luci-app-netdata
+rm -rf package/lean/luci-app-netdata
 rm -rf package/lean/luci-theme-argon
+rm -rf package/lean/luci-app-jd-dailybonus
 
 # 添加额外软件包
 git clone https://github.com/jerrykuku/luci-app-jd-dailybonus.git package/luci-app-jd-dailybonus
@@ -28,9 +29,9 @@ git clone https://github.com/kongfl888/luci-app-adguardhome.git package/luci-app
 git clone https://github.com/small-5/luci-app-adblock-plus package/luci-app-adblock-plus
 git clone https://github.com/tty228/luci-app-serverchan.git package/luci-app-serverchan
 git clone https://github.com/swxk521/luci-app-eqos.git package/luci-app-eqos
-git clone https://github.com/sirpdboy/luci-app-netdata package/luci-app-netdata
 git clone https://github.com/project-lede/luci-app-godproxy package/luci-app-godproxy
 svn co https://github.com/kiddin9/openwrt-bypass/trunk/luci-app-bypass package/luci-app-bypass
+svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-netdata package/luci-app-netdata
 svn co https://github.com/lisaac/luci-app-dockerman/trunk/applications/luci-app-dockerman package/luci-app-dockerman
 
 # 科学上网插件依赖
