@@ -19,7 +19,6 @@ sed -i 's/services/system/g' package/lean/luci-app-cpufreq/luasrc/controller/cpu
 # 移除冲突软件包
 rm -rf package/lean/luci-theme-argon
 rm -rf package/lean/luci-app-netdata
-rm -rf package/lean/luci-app-dockerman
 rm -rf package/lean/luci-app-jd-dailybonus
 
 # 添加额外软件包
@@ -66,7 +65,7 @@ git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/luc
 git clone https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 git clone https://github.com/sirpdboy/luci-theme-opentopd package/luci-theme-opentopd
 
-#添加smartdns
+# smartdns
 svn co https://github.com/garypang13/openwrt-packages/trunk/smartdns-le package/smartdns-le
 svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-app-smartdns package/luci-app-smartdns
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2021.34/' feeds/packages/net/smartdns/Makefile
