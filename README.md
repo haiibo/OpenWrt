@@ -13,6 +13,7 @@
 ## 感谢 ❤️
 
 - [flippy](https://github.com/unifreq/openwrt_packit)
+- [ophub](https://github.com/ophub/op)
 - [P3TERX](https://github.com/P3TERX/Actions-OpenWrt)
 - [breakings](https://github.com/breakings/OpenWrt)
 - [Lienol/openwrt](https://github.com/Lienol/openwrt)
