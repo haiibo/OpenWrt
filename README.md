@@ -12,6 +12,9 @@
 
 ## Mini版插件预览
  ![applist](https://github.com/hhaibo/ARMv8-OpenWrt/blob/main/imgs/mini.jpg)
+ 
+## Plus版插件预览
+ ![applist](https://github.com/hhaibo/ARMv8-OpenWrt/blob/main/imgs/plus.jpg)
 
 ## 感谢 ❤️
 
