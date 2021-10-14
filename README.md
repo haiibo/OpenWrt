@@ -6,6 +6,8 @@
 - Releases中的直刷固件分为[***MINI版***](https://github.com/hhaibo/ARMv8-OpenWrt/releases/tag/ARMv8_MINI) 和[***PLUS版***](https://github.com/hhaibo/ARMv8-OpenWrt/releases/tag/ARMv8_PLUS)，MINI版主要适合科学上网为主要需求的用户，PLUS版是正常多插件版本集成各种常用插件。
 - 固件默认IP：`10.10.10.11` 默认密码：`password`
 - 刷机和升级方法请参考f大这两个帖子：[➦旧帖](https://www.right.com.cn/forum/thread-4055451-1-1.html) 和 [➦新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
+- U盘写入EMMC：登录OpenWrt → 系统 → 晶晨宝盒 → 安装OpenWrt → 选择型号 → 安装
+- 升级OpenWrt：登录OpenWrt → 系统 → 晶晨宝盒 → 手动上传更新，上传你下载的固件 或者 在线下载更新 里面默认设置了相对应版本连接直接升级即可
 
 ## 声明
 - 刷机有风险需自行承担！我只是出于个人爱好学习编译创建的这个项目，小白刷此固件请三思，本人不承担任何后果和技术支持！
