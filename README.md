@@ -10,6 +10,9 @@
 ## 声明
 - 刷机有风险需自行承担！我只是出于个人爱好学习编译创建的这个项目，小白刷此固件请三思，本人不承担任何后果和技术支持！
 
+## Mini版插件预览
+ ![applist](https://github.com/hhaibo/ARMv8-OpenWrt/blob/main/imgs/mini.jpg)
+
 ## 感谢 ❤️
 
 - [flippy](https://github.com/unifreq/openwrt_packit)
