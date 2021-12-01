@@ -1,8 +1,10 @@
-#=====================================================================================================================
+#===============================================
+# Description: Package Armvirt
+# File name: package-armvirt.yml
+# Lisence: MIT
+# Author: OPHUB
 # https://github.com/ophub/op
-# Description: Use Releases file to packaging
-# Cron: min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday)
-#=====================================================================================================================
+#===============================================
 
 name: Package
 
@@ -23,15 +25,15 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     if: github.event.repository.owner.id == github.event.sender.id
-    name: Package For ${{ matrix.version }}
+    name: Package for ${{ matrix.version }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - version: MINI
-            explain: 此固件为精简版，集成科学上网和去广告插件
+            explain: 这是精简版本，集成科学上网和去广告插件
           - version: PLUS
-            explain: 此固件为常用多插件版本，集成常用插件等
+            explain: 这是多功能版本，集成一些日常常用插件等
 
     env:
       VERSION: ${{ matrix.version }}
@@ -68,11 +70,12 @@ jobs:
     - name: Package armvirt as openwrt
       uses: ophub/flippy-openwrt-actions@main
       env:
-        OPENWRT_ARMVIRT: https://github.com/hhaibo/ARMv8-OpenWrt/releases/download/ROOTFS_${{ env.VERSION }}/openwrt-armvirt-64-default-rootfs.tar.gz
-        PACKAGE_SOC: vplus_beikeyun_l1pro_s905d_s905x3_s922x
-        KERNEL_REPO_URL: https://github.com/ophub/flippy-kernel/tree/main/library
+        OPENWRT_ARMVIRT: https://github.com/haiibo/OpenWrt/releases/download/ROOTFS_${{ env.VERSION }}/openwrt-armvirt-64-default-rootfs.tar.gz
+        PACKAGE_SOC: vplus_beikeyun_l1pro_s905d_s905x3_s922x_s922x-n2
+        KERNEL_REPO_URL: https://github.com/ophub/kernel/tree/main/pub/stable
         KERNEL_VERSION_NAME: 5.4.150_5.14.10
         KERNEL_AUTO_LATEST: true
+        GZIP_IMGS: .gz
 
     - name: Upload artifact to actions
       uses: kittaakos/upload-artifact-as-is@master
@@ -87,28 +90,14 @@ jobs:
         name: R${{ env.DATE }} for ARMv8_${{ env.VERSION }}
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
         allowUpdates: true
+        removeArtifacts: true
         tag: ARMv8_${{ env.VERSION }}
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
           This is OpenWrt firmware for Armvirt 64
           * ${{ env.EXPLAIN }}
-          默认IP：10.10.10.11 默认密码：password
+          默认IP：10.10.10.10 默认密码：password
           安装到EMMC：系统 → 晶晨宝盒 → 安装OpenWrt → 选择型号 → 安装
-          升级OpenWrt：系统 → 晶晨宝盒 → 手动上传更新或者在线下载更新
+          升级OpenWrt：系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新
           当前使用版本:【编译前的最后一次➦[主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}
-
-    - name: Delete workflow runs
-      uses: GitRML/delete-workflow-runs@main
-      with:
-        retain_days: 1
-        keep_minimum_runs: 3
-
-    - name: Remove old releases
-      uses: dev-drprasad/delete-older-releases@v0.2.0
-      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-      with:
-        keep_latest: 4
-        delete_tags: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

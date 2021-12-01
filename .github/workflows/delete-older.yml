@@ -1,0 +1,48 @@
+#===============================================
+# Description: Delete Older
+# File name: delete-older.yml
+# Lisence: MIT
+# Author: OPHUB
+# https://github.com/ophub/op
+#===============================================
+
+name: Delete Older
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 23 * * *'
+
+env:
+  DELETE_RELEASE: true
+  DELETE_WORKFLOW: true
+  KEEP_DAY: 3
+  KEEP_MININUM_RUNS: 0
+  KEEP_MININUM_RELEASE: 10
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Delete older releases
+      uses: dev-drprasad/delete-older-releases@master
+      if: env.DELETE_RELEASE == 'true'
+      with:
+        keep_latest: ${{ env.KEEP_MININUM_RELEASE }}
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Delete older workflows
+      uses: Mattraks/delete-workflow-runs@main
+      if: env.DELETE_WORKFLOW == 'true'
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ github.repository }}
+        retain_days: ${{ env.KEEP_DAY }}
+        keep_minimum_runs: ${{ env.KEEP_MININUM_RUNS }}

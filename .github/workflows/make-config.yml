@@ -85,7 +85,7 @@ jobs:
         cd openwrt
         ls -a
         make defconfig
-        cp .config ${UPLOAD}/${SUB_VERSION}.config
+        cp .config ${UPLOAD}/build.config
 
     - name: Create release
       uses: ncipollo/release-action@v1
@@ -97,21 +97,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
           This is temporary firmware for Armvirt 64
-          * ARMv8系列设备打包临时固件，不可直刷
+          * 这是ARMv8_${{ env.SUB_VERSION }}打包临时固件，不可直刷
           直刷固件参见Tags名为ARMv8_${{ env.SUB_VERSION }}的Releases
           当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}
-
-    - name: Delete workflow runs
-      uses: GitRML/delete-workflow-runs@main
-      with:
-        retain_days: 1
-        keep_minimum_runs: 2
-
-    - name: Remove old releases
-      uses: dev-drprasad/delete-older-releases@v0.2.0
-      with:
-        keep_latest: 4
-        delete_tags: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
