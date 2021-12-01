@@ -10,13 +10,6 @@
 # 修改默认IP
 sed -i 's/192.168.1.1/10.10.10.10/g' package/base-files/files/bin/config_generate
 
-# Autocore
-sed -i 's/TARGET_rockchip/TARGET_rockchip\|\|TARGET_armvirt/g' package/lean/autocore/Makefile
-
-# Cpufreq
-sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' package/lean/luci-app-cpufreq/Makefile
-sed -i 's/services/system/g' package/lean/luci-app-cpufreq/luasrc/controller/cpufreq.lua
-
 # 移除重复软件包
 rm -rf package/lean/luci-theme-argon
 rm -rf package/lean/luci-app-netdata
@@ -68,18 +61,12 @@ svn co https://github.com/fw876/helloworld/trunk/trojan package/trojan
 
 # Themes
 svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-edge package/luci-theme-edge
-svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-atmaterial_new package/luci-theme-atmaterial_new
+git clone https://github.com/openwrt-develop/luci-theme-atmaterial.git package/luci-theme-atmaterial
 git clone https://github.com/Leo-Jo-My/luci-theme-opentomcat.git package/luci-theme-opentomcat
 git clone https://github.com/xiaoqingfengATGH/luci-theme-infinityfreedom package/luci-theme-infinityfreedom
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon
 git clone https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 git clone https://github.com/sirpdboy/luci-theme-opentopd package/luci-theme-opentopd
-
-# 晶晨宝盒
-svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
-sed -i "s|https.*/OpenWrt|https://github.com/haiibo/OpenWrt|g" package/luci-app-amlogic/root/etc/config/amlogic
-sed -i "s|opt/kernel|https://github.com/ophub/kernel/tree/main/pub/stable|g" package/luci-app-amlogic/root/etc/config/amlogic
-sed -i "s|ARMv8|ARMv8_PLUS|g" package/luci-app-amlogic/root/etc/config/amlogic
 
 # 阿里云盘
 svn co https://github.com/messense/aliyundrive-webdav/trunk/openwrt/luci-app-aliyundrive-webdav package/luci-app-aliyundrive-webdav
@@ -107,7 +94,6 @@ sed -i 's/services/vpn/g' package/lean/luci-app-v2ray-server/luasrc/model/cbi/v2
 sed -i 's/services/vpn/g' package/lean/luci-app-v2ray-server/luasrc/view/v2ray_server/*.htm
 
 # 修改插件名字
-# sed -i 's/"CPU 性能优化调节"/"CPU性能调节"/g' `grep "CPU 性能优化调节" -rl ./`
 sed -i 's/"OpenVPN 服务器"/"Open VPN 服务器"/g' `grep "OpenVPN 服务器" -rl ./`
 sed -i 's/"挂载 SMB 网络共享"/"挂载网络"/g' `grep "挂载 SMB 网络共享" -rl ./`
 sed -i 's/"Argon 主题设置"/"Argon 设置"/g' `grep "Argon 主题设置" -rl ./`
