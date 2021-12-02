@@ -1,12 +1,12 @@
 #===============================================
-# Description: Package Armvirt
-# File name: package-armvirt.yml
+# Description: ARMv8 Package
+# File name: armv8-package.yml
 # Lisence: MIT
 # Author: OPHUB
 # https://github.com/ophub/op
 #===============================================
 
-name: Package
+name: ARMv8 Package
 
 on:
   repository_dispatch:

@@ -1,12 +1,12 @@
 #===============================================
 # Description: Build OpenWrt
-# File name: plus-openwrt.yml
+# File name: build-openwrt.yml
 # Lisence: MIT
 # Author: P3TERX
 # https://github.com/P3TERX
 #===============================================
 
-name: Plus OpenWrt
+name: ARMv8_Mini OpenWrt
 
 on:
   repository_dispatch:
@@ -22,16 +22,16 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  FEEDS_CONF: plus/feeds.conf.default
-  CONFIG_FILE: plus/.config
-  DIY_P1_SH: plus/diy-part1.sh
-  DIY_P2_SH: plus/diy-part2.sh
+  FEEDS_CONF: mini/feeds.conf.default
+  CONFIG_FILE: mini/.config
+  DIY_P1_SH: mini/diy-part1.sh
+  DIY_P2_SH: mini/diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  FILE_NAME: ROOTFS_PLUS
-  PRODUCT_NAME: ARMv8_PLUS
+  FILE_NAME: ROOTFS_MINI
+  PRODUCT_NAME: ARMv8_MINI
 
 jobs:
   build:
@@ -132,7 +132,7 @@ jobs:
         tar -zcvf Packages.tar.gz ./*
         cp Packages.tar.gz $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
         cd $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
-        rm -rf packages sha256sums feeds.buildinfo openwrt-armvirt-64-default.manifest openwrt-armvirt-64-Image version.buildinfo
+        rm -rf packages feeds.buildinfo sha256sums version.buildinfo
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
@@ -154,8 +154,8 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
           This is temporary firmware for Armvirt 64
-          * ARMv8_PLUS多功能版打包临时固件，不可直刷
-          直刷固件参见Tags名为ARMv8_PLUS的Releases
+          * ARMv8_MINI精简版打包临时固件，不可直刷
+          直刷固件参见Tags名为ARMv8_MINI的Releases
           当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}
 
@@ -182,7 +182,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
           This is OpenWrt firmware for Armvirt 64
-          * 这是多功能版本，集成一些日常常用插件等
+          * 这是精简版本，集成科学上网和去广告插件
           默认IP：10.10.10.10 默认密码：password
           安装到EMMC：系统 → 晶晨宝盒 → 安装OpenWrt → 选择型号 → 安装
           升级OpenWrt：系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新

@@ -1,12 +1,12 @@
 #===============================================
 # Description: Build OpenWrt
-# File name: r4s-openwrt.yml
+# File name: build-openwrt.yml
 # Lisence: MIT
 # Author: P3TERX
 # https://github.com/P3TERX
 #===============================================
 
-name: R4S OpenWrt
+name: NanoPi_R4S OpenWrt
 
 on:
   repository_dispatch:
@@ -30,7 +30,7 @@ env:
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  FILE_NAME: Nanopi_R4S
+  FILE_NAME: NanoPi_R4S
 
 jobs:
   build:
@@ -131,7 +131,7 @@ jobs:
         tar -zcvf Packages.tar.gz openwrt/bin/packages
         cp Packages.tar.gz openwrt/bin/targets/*/*
         cd openwrt/bin/targets/*/*
-        rm -rf packages feeds.buildinfo *.manifest sha256sums version.buildinfo
+        rm -rf packages feeds.buildinfo sha256sums version.buildinfo
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
@@ -152,8 +152,8 @@ jobs:
         tag: ${{ env.FILE_NAME }}
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
-          This is OpenWrt firmware for Nanopi_R4S
-          * 这是Nanopi_R4S固件，集成的插件与PLUS一致
+          This is OpenWrt firmware for NanoPi_R4S
+          * 这是NanoPi_R4S固件，集成的插件与PLUS一致
           默认IP：10.10.10.10 默认密码：password
           当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}

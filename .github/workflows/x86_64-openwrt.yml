@@ -1,12 +1,12 @@
 #===============================================
 # Description: Build OpenWrt
-# File name: x86-openwrt.yml
+# File name: build-openwrt.yml
 # Lisence: MIT
 # Author: P3TERX
 # https://github.com/P3TERX
 #===============================================
 
-name: X86 OpenWrt
+name: X86_64 OpenWrt
 
 on:
   repository_dispatch:
@@ -131,7 +131,7 @@ jobs:
         tar -zcvf Packages.tar.gz openwrt/bin/packages
         cp Packages.tar.gz openwrt/bin/targets/*/*
         cd openwrt/bin/targets/*/*
-        rm -rf packages feeds.buildinfo *.manifest sha256sums version.buildinfo
+        rm -rf packages feeds.buildinfo sha256sums version.buildinfo
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 

@@ -1,12 +1,12 @@
 #===============================================
-# Description: Delete Older
-# File name: delete-older.yml
+# Description: Delete Artifacts
+# File name: delete-artifacts.yml
 # Lisence: MIT
 # Author: OPHUB
 # https://github.com/ophub/op
 #===============================================
 
-name: Delete Older
+name: Delete Older Artifacts
 
 on:
   repository_dispatch:
