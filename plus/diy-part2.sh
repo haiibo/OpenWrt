@@ -19,6 +19,7 @@ sed -i 's/services/system/g' package/lean/luci-app-cpufreq/luasrc/controller/cpu
 
 # 移除重复软件包
 rm -rf package/lean/luci-theme-argon
+rm -rf package/lean/luci-theme-netgear
 rm -rf package/lean/luci-app-netdata
 rm -rf package/lean/luci-app-wrtbwmon
 rm -rf package/lean/luci-app-jd-dailybonus
@@ -68,10 +69,11 @@ svn co https://github.com/fw876/helloworld/trunk/trojan package/trojan
 
 # Themes
 svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-edge package/luci-theme-edge
-svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-atmaterial_new package/luci-theme-atmaterial_new
+svn co https://github.com/haiibo/packages/trunk/luci-theme-atmaterial_new package/luci-theme-atmaterial_new
 svn co https://github.com/apollo-ng/luci-theme-darkmatter/trunk/luci/themes/luci-theme-darkmatter package/luci-theme-darkmatter
 svn co https://github.com/rosywrt/luci-theme-rosy/trunk/luci-theme-rosy package/luci-theme-rosy
-git clone https://github.com/Leo-Jo-My/luci-theme-opentomcat.git package/luci-theme-opentomcat
+svn co https://github.com/haiibo/packages/trunk/luci-theme-opentomcat package/luci-theme-opentomcat
+svn co https://github.com/haiibo/packages/trunk/luci-theme-netgear package/luci-theme-netgear
 git clone https://github.com/xiaoqingfengATGH/luci-theme-infinityfreedom package/luci-theme-infinityfreedom
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon
 git clone https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
@@ -117,7 +119,7 @@ sed -i 's/services/vpn/g' package/lean/luci-app-v2ray-server/luasrc/view/v2ray_s
 # 修改插件名字
 # sed -i 's/"CPU 性能优化调节"/"CPU性能调节"/g' `grep "CPU 性能优化调节" -rl ./`
 sed -i 's/"OpenVPN 服务器"/"Open VPN 服务器"/g' `grep "OpenVPN 服务器" -rl ./`
-sed -i 's/"挂载 SMB 网络共享"/"挂载网络"/g' `grep "挂载 SMB 网络共享" -rl ./`
+sed -i 's/"挂载 SMB 网络共享"/"挂载共享"/g' `grep "挂载 SMB 网络共享" -rl ./`
 sed -i 's/"Argon 主题设置"/"Argon 设置"/g' `grep "Argon 主题设置" -rl ./`
 sed -i 's/"阿里云盘 WebDAV"/"阿里云盘"/g' `grep "阿里云盘 WebDAV" -rl ./`
 sed -i 's/"USB 打印服务器"/"USB 打印"/g' `grep "USB 打印服务器" -rl ./`
