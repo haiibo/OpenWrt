@@ -19,13 +19,12 @@
 - 右上角点击自己头像 → Settings → Developer settings → Personal access tokens里面创建个人访问令牌，固件发布会调用，否则可能无法发布
 - Fork本项目
 - 点击Actions → 要编译的Workflows → Run workflow → Run workflow 一般一次编译要3~5小时
-- `ARMv8_Mini OpenWrt` ARMv8_Mini精简版编译和打包
-- `ARMv8_Plus OpenWrt` ARMv8_Plus多功能版编译和打包
+- `ARMv8_Mini OpenWrt` ARMv8_Mini精简版固件编译与打包
+- `ARMv8_Plus OpenWrt` ARMv8_Plus多功能版固件编译与打包
 - `ARMv8 Package` 用编译好的ARMv8临时固件进行打包，一般是在内核更新需要单独打包的时候运行
-- `Make Config Files` 制作config文件，将自己定制的config文件整理成完整的config文件
-- `X86_64 OpenWrt` X86_64多功能版编译
-- `NanoPi_R2S OpenWrt` NanoPi_R2S多功能版编译
-- `NanoPi_R4S OpenWrt` NanoPi_R4S多功能版编译
+- `X86_64 OpenWrt` X86_64多功能版固件编译
+- `NanoPi_R2S OpenWrt` NanoPi_R2S多功能版固件编译
+- `NanoPi_R4S OpenWrt` NanoPi_R4S多功能版固件编译
 
 ## 声明
 - 我只是出于个人爱好学习编译创建的这个项目，刷此固件本人不承担任何后果以及技术支持！
