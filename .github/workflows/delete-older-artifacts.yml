@@ -39,7 +39,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Delete older workflows
-      uses: Mattraks/delete-workflow-runs@main
+      uses: GitRML/delete-workflow-runs@main
       if: env.DELETE_WORKFLOW == 'true'
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
