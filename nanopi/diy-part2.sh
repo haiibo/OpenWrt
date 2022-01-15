@@ -27,6 +27,9 @@ git clone https://github.com/tty228/luci-app-serverchan.git package/luci-app-ser
 git clone https://github.com/iwrt/luci-app-ikoolproxy.git package/luci-app-ikoolproxy
 git clone https://github.com/sirpdboy/luci-app-advanced package/luci-app-advanced
 git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
+git clone https://github.com/jerrykuku/luci-app-ttnode.git package/luci-app-ttnode
+git clone https://github.com/small-5/luci-app-adblock-plus package/luci-app-adblock-plus
+git clone https://github.com/destan19/OpenAppFilter.git package/OpenAppFilter
 svn co https://github.com/kiddin9/openwrt-packages/trunk/luci-app-eqos package/luci-app-eqos
 svn co https://github.com/kiddin9/openwrt-bypass/trunk/luci-app-bypass package/luci-app-bypass
 svn co https://github.com/lisaac/luci-app-dockerman/trunk/applications/luci-app-dockerman package/luci-app-dockerman
@@ -78,6 +81,10 @@ svn co https://github.com/QiuSimons/openwrt-mos/trunk/mosdns package/mosdns
 # DDNS.to
 svn co https://github.com/linkease/nas-packages-luci/trunk/luci/luci-app-ddnsto package/luci-app-ddnsto
 svn co https://github.com/linkease/nas-packages/trunk/network/services/ddnsto package/ddnsto
+
+# 易有云
+svn co https://github.com/linkease/nas-packages-luci/trunk/luci/luci-app-linkease package/luci-app-linkease
+svn co https://github.com/linkease/nas-packages/trunk/network/services/linkease package/linkease
 
 # 流量监控
 svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-wrtbwmon package/luci-app-wrtbwmon
