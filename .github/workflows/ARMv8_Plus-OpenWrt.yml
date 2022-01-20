@@ -17,10 +17,10 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  FEEDS_CONF: plus/feeds.conf.default
-  CONFIG_FILE: plus/.config
-  DIY_P1_SH: plus/diy-part1.sh
-  DIY_P2_SH: plus/diy-part2.sh
+  FEEDS_CONF: armv8/plus/feeds.conf.default
+  CONFIG_FILE: armv8/plus/.config
+  DIY_P1_SH: armv8/plus/diy-part1.sh
+  DIY_P2_SH: armv8/plus/diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
