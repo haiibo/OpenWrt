@@ -6,7 +6,7 @@
 # https://github.com/P3TERX
 #===============================================
 
-name: X86_64 OpenWrt
+name: NanoPi_R4S OpenWrt
 
 on:
   repository_dispatch:
@@ -17,15 +17,15 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  FEEDS_CONF: x86/feeds.conf.default
-  CONFIG_FILE: x86/.config
-  DIY_P1_SH: x86/diy-part1.sh
-  DIY_P2_SH: x86/diy-part2.sh
+  FEEDS_CONF: nanopi/feeds.conf.default
+  CONFIG_FILE: nanopi/r4s.config
+  DIY_P1_SH: nanopi/diy-part1.sh
+  DIY_P2_SH: nanopi/diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  FILE_NAME: x86_64
+  FILE_NAME: NanoPi_R4S
 
 jobs:
   build:
@@ -140,8 +140,8 @@ jobs:
         tag: ${{ env.FILE_NAME }}
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
-          This is OpenWrt firmware for X86_64
-          * 这是x86_64固件，集成的插件与PLUS一致
-          默认IP：10.10.10.10 默认密码：password
+          **This is OpenWrt firmware for NanoPi_R4S**
+          * 这是 NanoPi_R4S 固件，集成的插件与 PLUS 一致
+          默认 IP：10.10.10.10 默认密码：password
           当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}

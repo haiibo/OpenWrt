@@ -6,7 +6,7 @@
 # https://github.com/P3TERX
 #===============================================
 
-name: ARMv8_Plus OpenWrt
+name: X86_64 OpenWrt
 
 on:
   repository_dispatch:
@@ -17,16 +17,15 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  FEEDS_CONF: plus/feeds.conf.default
-  CONFIG_FILE: plus/.config
-  DIY_P1_SH: plus/diy-part1.sh
-  DIY_P2_SH: plus/diy-part2.sh
+  FEEDS_CONF: x86/feeds.conf.default
+  CONFIG_FILE: x86/.config
+  DIY_P1_SH: x86/diy-part1.sh
+  DIY_P2_SH: x86/diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  FILE_NAME: ROOTFS_PLUS
-  PRODUCT_NAME: ARMv8_PLUS
+  FILE_NAME: X86_64
 
 jobs:
   build:
@@ -141,38 +140,8 @@ jobs:
         tag: ${{ env.FILE_NAME }}
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
-          This is temporary firmware for Armvirt 64
-          * ARMv8_PLUS多功能版打包临时固件，不可直刷
-          直刷固件参见Tags名为ARMv8_PLUS的Releases
+          **This is OpenWrt firmware for X86_64**
+          * 这是 X86_64 固件，集成的插件与 PLUS 一致
+          默认 IP：10.10.10.10 默认密码：password
           当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
-          ${{ env.useVersionInfo }}
-
-    - name: Package armvirt as openwrt
-      uses: unifreq/openwrt_packit@master
-      if: steps.compile.outputs.status == 'success' && !cancelled()
-      env:
-        OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*.tar.gz
-        PACKAGE_SOC: vplus_beikeyun_l1pro_s905d_s905x3_s922x_s922x-n2
-        KERNEL_REPO_URL: https://github.com/ophub/kernel/tree/main/pub/stable
-        KERNEL_VERSION_NAME: 5.4.163_5.10.83_5.15.6
-        KERNEL_AUTO_LATEST: true
-        GZIP_IMGS: .gz
-
-    - name: Upload openwrt to release
-      uses: ncipollo/release-action@v1
-      if: env.PACKAGED_STATUS == 'success' && !cancelled()
-      with:
-        name: R${{ env.DATE }} for ${{ env.PRODUCT_NAME }}
-        artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
-        allowUpdates: true
-        removeArtifacts: true
-        tag: ${{ env.PRODUCT_NAME }}
-        token: ${{ secrets.GITHUB_TOKEN }}
-        body: |
-          This is OpenWrt firmware for Armvirt 64
-          * 这是多功能版本，集成一些日常常用插件等
-          默认IP：10.10.10.10 默认密码：password
-          安装到EMMC：系统 → 晶晨宝盒 → 安装OpenWrt → 选择型号 → 安装
-          升级OpenWrt：系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新
-          当前使用版本:【编译前的最后一次➦[主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}
