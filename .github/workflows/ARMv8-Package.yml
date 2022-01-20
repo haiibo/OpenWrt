@@ -31,9 +31,9 @@ jobs:
       matrix:
         include:
           - version: MINI
-            explain: 这是精简版本，集成科学上网和去广告插件
+            explain: 这是 ARMv8 精简版，集成一些日常常用插件
           - version: PLUS
-            explain: 这是多功能版本，集成一些日常常用插件等
+            explain: 这是 ARMv8 多功能版，集成插件多适合折腾
 
     env:
       VERSION: ${{ matrix.version }}
@@ -71,7 +71,7 @@ jobs:
       uses: ophub/flippy-openwrt-actions@main
       env:
         OPENWRT_ARMVIRT: https://github.com/haiibo/OpenWrt/releases/download/ROOTFS_${{ env.VERSION }}/openwrt-armvirt-64-default-rootfs.tar.gz
-        PACKAGE_SOC: vplus_beikeyun_l1pro_s905d_s905x3_s922x_s922x-n2
+        PACKAGE_SOC: vplus_beikeyun_l1pro_s905d_s905x2_s905x3_s912_s922x_s922x-n2
         KERNEL_REPO_URL: https://github.com/ophub/kernel/tree/main/pub/stable
         KERNEL_VERSION_NAME: 5.4.163_5.10.83_5.15.6
         KERNEL_AUTO_LATEST: true
@@ -94,10 +94,10 @@ jobs:
         tag: ARMv8_${{ env.VERSION }}
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
-          This is OpenWrt firmware for Armvirt 64
+          **This is OpenWrt firmware for Armvirt 64**
           * ${{ env.EXPLAIN }}
-          默认IP：10.10.10.10 默认密码：password
-          安装到EMMC：系统 → 晶晨宝盒 → 安装OpenWrt → 选择型号 → 安装
-          升级OpenWrt：系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新
+          默认 IP：10.10.10.10 默认密码：password
+          安装到 EMMC：系统 → 晶晨宝盒 → 安装 OpenWrt → 选择型号 → 安装
+          升级 OpenWrt：系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新
           当前使用版本:【编译前的最后一次➦[主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}
