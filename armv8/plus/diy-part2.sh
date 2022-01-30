@@ -34,8 +34,6 @@ git clone https://github.com/tty228/luci-app-serverchan.git package/luci-app-ser
 git clone https://github.com/iwrt/luci-app-ikoolproxy.git package/luci-app-ikoolproxy
 git clone https://github.com/sirpdboy/luci-app-advanced package/luci-app-advanced
 git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
-git clone https://github.com/jerrykuku/luci-app-ttnode.git package/luci-app-ttnode
-git clone https://github.com/small-5/luci-app-adblock-plus package/luci-app-adblock-plus
 git clone https://github.com/destan19/OpenAppFilter.git package/OpenAppFilter
 svn co https://github.com/kiddin9/openwrt-packages/trunk/luci-app-eqos package/luci-app-eqos
 svn co https://github.com/kiddin9/openwrt-bypass/trunk/luci-app-bypass package/luci-app-bypass
@@ -71,8 +69,8 @@ svn co https://github.com/fw876/helloworld/trunk/trojan package/trojan
 
 # Themes
 svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-edge package/luci-theme-edge
-svn co https://github.com/apollo-ng/luci-theme-darkmatter/trunk/luci/themes/luci-theme-darkmatter package/luci-theme-darkmatter
 svn co https://github.com/rosywrt/luci-theme-rosy/trunk/luci-theme-rosy package/luci-theme-rosy
+svn co https://github.com/haiibo/packages/trunk/luci-theme-darkmatter package/luci-theme-darkmatter
 svn co https://github.com/haiibo/packages/trunk/luci-theme-atmaterial_new package/luci-theme-atmaterial_new
 svn co https://github.com/haiibo/packages/trunk/luci-theme-opentomcat package/luci-theme-opentomcat
 svn co https://github.com/haiibo/packages/trunk/luci-theme-netgear package/luci-theme-netgear
@@ -124,11 +122,11 @@ sed -i 's/services/nas/g' package/lean/luci-app-aliyundrive-webdav/luasrc/model/
 sed -i 's/services/nas/g' package/lean/luci-app-aliyundrive-webdav/luasrc/view/aliyundrive-webdav/*.htm
 
 # 修改插件名字
-sed -i 's/"OpenVPN 服务器"/"Open VPN 服务器"/g' `grep "OpenVPN 服务器" -rl ./`
 sed -i 's/"挂载 SMB 网络共享"/"挂载共享"/g' `grep "挂载 SMB 网络共享" -rl ./`
 sed -i 's/"Argon 主题设置"/"Argon 设置"/g' `grep "Argon 主题设置" -rl ./`
 sed -i 's/"阿里云盘 WebDAV"/"阿里云盘"/g' `grep "阿里云盘 WebDAV" -rl ./`
 sed -i 's/"USB 打印服务器"/"USB 打印"/g' `grep "USB 打印服务器" -rl ./`
+sed -i 's/"BaiduPCS Web"/"百度网盘"/g' `grep "BaiduPCS Web" -rl ./`
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a

@@ -46,13 +46,13 @@
 <details>
 <summary><b>&nbsp;ARM 盒子 Mini 精简版本插件预览</b></summary>
 <br/>
-<img src="https://cdn.jsdelivr.net/gh/haiibo/OpenWrt/image/mini.jpg"/>
+<img src="https://cdn.jsdelivr.net/gh/haiibo/OpenWrt/image/mini.png"/>
 </details>
 
 <details>
 <summary><b>&nbsp;ARM 盒子 Plus 多功能版插件预览</b></summary>
 <br/>
-<img src="https://cdn.jsdelivr.net/gh/haiibo/OpenWrt/image/plus.jpg"/>
+<img src="https://cdn.jsdelivr.net/gh/haiibo/OpenWrt/image/plus.png"/>
 </details>
 
 <details>
@@ -73,6 +73,7 @@
 </details>
 <details>
 <summary><b>├── 系统</b></summary>
+　├── Web 管理<br/>
 　├── 系统<br/>
 　├── 管理权<br/>
 　├── TTYD 终端<br/>
@@ -94,39 +95,35 @@
 <details>
 <summary><b>├── 服务</b></summary>
 　├── PassWall<br/>
-　├── 甜糖心愿自动采集<br/>
 　├── Hello World<br/>
-　├── Adblock Plus+<br/>
 　├── iKoolProxy 滤广告<br/>
 　├── Bypass<br/>
 　├── 广告屏蔽大师 Plus+<br/>
 　├── AdGuard Home<br/>
 　├── 京东签到服务<br/>
 　├── ShadowSocksR Plus+<br/>
-　├── 易友云文件管理器<br/>
 　├── DDNS.to内网穿透<br/>
-　├── 微信推送<br/>
-　├── 全能推送<br/>
+　├── 易友云文件管理器<br/>
 　├── MosDNS<br/>
+　├── 微信推送<br/>
 　├── 上网时间控制<br/>
-　├── 解锁网易云灰色歌曲<br/>
+　├── 全能推送<br/>
 　├── OpenClash<br/>
+　├── 解锁网易云灰色歌曲<br/>
 　├── 动态 DNS<br/>
 　├── WiFi 计划<br/>
 　├── SmartDNS<br/>
-　├── 网络唤醒<br/>
 　├── 迅雷快鸟<br/>
+　├── 网络唤醒<br/>
 　├── UU游戏加速器<br/>
-　├── Frps<br/>
 　├── Frp 内网穿透<br/>
+　├── Frps<br/>
 　├── AirPlay 2 音频接收<br/>
-　├── Gost<br/>
+　├── UPnP<br/>
 　├── KMS 服务器<br/>
 　├── uHTTPd<br/>
 　├── udpxy<br/>
-　├── UPnP<br/>
 　├── Nps 内网穿透<br/>
-　├── Docker CE 容器<br/>
 　└── MWAN3 分流助手
 </details>
 <details>
@@ -141,19 +138,20 @@
 </details>
 <details>
 <summary><b>├── 网络存储</b></summary>
+　├── 可道云<br/>
 　├── NFS 管理<br/>
 　├── 阿里云盘 WebDAV<br/>
-　├── 微力同步<br/>
 　├── qBittorrent<br/>
 　├── USB 打印服务器<br/>
 　├── 硬盘休眠<br/>
-　├── Transmission<br/>
 　├── 挂载 SMB 网络共享<br/>
 　├── 网络共享<br/>
 　├── FTP 服务器<br/>
 　├── Rclone<br/>
 　├── Aria2 配置<br/>
-　└── miniDLNA
+　├── miniDLNA<br/>
+　├── Transmission<br/>
+　└── BaiduPCS Web<br/>
 </details>
 <details>
 <summary><b>├── VPN</b></summary>
@@ -175,6 +173,7 @@
 　├── 防火墙<br/>
 　├── 诊断<br/>
 　├── Socat<br/>
+　├── SQM QoS<br/>
 　├── 应用过滤<br/>
 　├── 网速控制<br/>
 　├── 多线多拨<br/>
@@ -194,13 +193,54 @@
 
 ## 编译教程 [![](https://img.shields.io/badge/-项目基本编译教程-FFFFFF.svg)](#编译教程-)
 1. 点击右上角 `Fork`，Fork 本项目到你自己的仓库
+
 2. 创建个人访问令牌，如果已创建请跳过第三步（固件发布会调用，否则无法发布）
+
 3. 点击右上角自己头像 → `Settings` → `Developer settings` → `Personal access tokens` → `Generate new token` Note 名字随便写一个，勾选 `repo` 和 `workflow` 点击最下方绿色按钮 `Generate token` 完成创建
+
 4. 编辑对应文件夹下 `.config` 文件，`luci-app-xxx` 为插件名，结尾 `=y` 为选择，`is not set` 为不选择
+
 5. 插件对应名称及功能请参考恩山网友帖子：[OpenWrt 编译 LuCI -> Applications 添加插件应用说明-L大](https://www.right.com.cn/forum/thread-3682029-1-1.html)
+
 6. 如果需要修改默认 IP、添加或删除插件源以及一些其他自定义设置请在 `diy-part2.sh` 文件中进行修改
+
 7. 点击 `Actions` → `要编译的workflow` → `Run workflow` → `Run workflow` 一次编译大概需要3~5小时
-8. 编译完成后在仓库主页 `Releases` 对应 Tag 标签中查看以及下载
+
+8. 编译完成后在仓库主页 `Releases` 对应 Tag 标签中查看以及下载固件
+
+<details>
+<summary><b>&nbsp;如果你觉得修改 .config 文件麻烦，那么你可以点击此处尝试本地提取</b></summary>
+
+1. 首先安装好 Ubuntu 64bit，推荐 Ubuntu 20.04 LTS x64
+
+2. 命令行输入 `sudo apt-get update`，然后输入
+`sudo apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf wget curl swig rsync`
+
+3. 使用 `git clone https://github.com/coolsnowwolf/lede` 命令下载好源代码，然后 `cd lede` 进入目录
+
+4. 复制 diy-part2.sh 文件内所有内容到命令行，添加自定义插件和自定义设置
+
+5. ```bash
+   ./scripts/feeds update -a
+   ./scripts/feeds install -a
+   make menuconfig
+   ```
+
+6. 选好插件后输入以下命令导出差异部分
+
+   ```bash
+   make defconfig
+   ./scripts/diffconfig.sh > seed.config
+   ```
+
+7. 这样配置的差异部分就写入 seed.config 这个文件了
+   
+   在命令行输入 `cat seed.config` 查看这个文件，也可以用文本编辑器打开
+
+8. 复制 seed.config 文件内所有内容到对应 .config 文件中覆盖就可以了
+
+   **如果不懂编译界面可以参考 YouTube 视频：[软路由固件 OpenWrt 编译界面设置](https://www.youtube.com/watch?v=jEE_J6-4E3Y&list=WL&index=7)**
+</details>
 
 
 ## 特别提示 [![](https://img.shields.io/badge/-个人免责声明-FFFFFF.svg)](#特别提示-)
@@ -225,11 +265,12 @@
 
 
 ## 鸣谢 [![](https://img.shields.io/badge/-跪谢各大佬-FFFFFF.svg)](#鸣谢-)
-- [flippy](https://github.com/unifreq/openwrt_packit)
-- [ophub](https://github.com/ophub/op)
-- [P3TERX](https://github.com/P3TERX/Actions-OpenWrt)
-- [breakings](https://github.com/breakings/OpenWrt)
-- [coolsnowwolf](https://github.com/coolsnowwolf/lede)
+| [ImmortalWrt](https://github.com/immortalwrt) | [coolsnowwolf](https://github.com/coolsnowwolf) | [P3TERX](https://github.com/P3TERX) | [Flippy](https://github.com/unifreq) |
+| :-------------: | :-------------: | :-------------: | :-------------: |
+| <img width="100" src="https://avatars.githubusercontent.com/u/53193414"/> | <img width="100" src="https://avatars.githubusercontent.com/u/31687149"/> | <img width="100" src="https://avatars.githubusercontent.com/u/25927179"/> | <img width="100" src="https://avatars.githubusercontent.com/u/39355261"/> |
+| [Ophub](https://github.com/ophub) | [Jerrykuku](https://github.com/jerrykuku) | [QiuSimons](https://github.com/QiuSimons) | [IvanSolis1989](https://github.com/IvanSolis1989) |
+| <img width="100" src="https://avatars.githubusercontent.com/u/68696949"/> | <img width="100" src="https://avatars.githubusercontent.com/u/9485680"/> | <img width="100" src="https://avatars.githubusercontent.com/u/45143996"/> | <img width="100" src="https://avatars.githubusercontent.com/u/44228691"/> |
+
 
 <a href="#readme">
 <img src="https://img.shields.io/badge/-返回顶部-FFFFFF.svg" title="返回顶部" align="right"/>
