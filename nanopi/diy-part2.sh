@@ -11,6 +11,7 @@
 sed -i 's/192.168.1.1/10.10.10.10/g' package/base-files/files/bin/config_generate
 
 # 移除重复软件包
+rm -rf feeds/packages/net/mosdns
 rm -rf feeds/luci/themes/luci-theme-argon
 rm -rf feeds/luci/themes/luci-theme-netgear
 rm -rf feeds/luci/applications/luci-app-netdata
@@ -74,6 +75,7 @@ git clone https://github.com/sirpdboy/luci-theme-opentopd package/luci-theme-ope
 
 # MosDNS
 svn co https://github.com/QiuSimons/openwrt-mos/trunk/luci-app-mosdns package/luci-app-mosdns
+svn co https://github.com/QiuSimons/openwrt-mos/trunk/v2ray-geodata package/v2ray-geodata
 svn co https://github.com/QiuSimons/openwrt-mos/trunk/mosdns package/mosdns
 
 # DDNS.to
