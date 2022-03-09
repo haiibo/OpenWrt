@@ -12,6 +12,7 @@ sed -i 's/192.168.1.1/10.10.10.10/g' package/base-files/files/bin/config_generat
 
 # 移除重复软件包
 rm -rf feeds/packages/net/mosdns
+rm -rf feeds/packages/admin/netdata
 rm -rf feeds/luci/themes/luci-theme-argon
 rm -rf feeds/luci/themes/luci-theme-netgear
 rm -rf feeds/luci/applications/luci-app-netdata
@@ -33,7 +34,6 @@ svn co https://github.com/kiddin9/openwrt-packages/trunk/luci-app-eqos package/l
 svn co https://github.com/kiddin9/openwrt-bypass/trunk/luci-app-bypass package/luci-app-bypass
 svn co https://github.com/lisaac/luci-app-dockerman/trunk/applications/luci-app-dockerman package/luci-app-dockerman
 svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-smartdns package/luci-app-smartdns
-svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-netdata package/luci-app-netdata
 svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-socat package/luci-app-socat
 
 # 科学上网插件依赖
@@ -85,6 +85,10 @@ svn co https://github.com/linkease/nas-packages/trunk/network/services/ddnsto pa
 # 易有云
 svn co https://github.com/linkease/nas-packages-luci/trunk/luci/luci-app-linkease package/luci-app-linkease
 svn co https://github.com/linkease/nas-packages/trunk/network/services/linkease package/linkease
+
+# 实时监控
+svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-netdata package/luci-app-netdata
+svn co https://github.com/sirpdboy/sirpdboy-package/trunk/netdata package/netdata
 
 # 流量监控
 svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-wrtbwmon package/luci-app-wrtbwmon
