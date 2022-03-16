@@ -78,6 +78,7 @@ git clone https://github.com/xiaoqingfengATGH/luci-theme-infinityfreedom package
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon
 git clone https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 git clone https://github.com/sirpdboy/luci-theme-opentopd package/luci-theme-opentopd
+git clone https://github.com/thinktip/luci-theme-neobird package/luci-theme-neobird
 
 # 晶晨宝盒
 svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
