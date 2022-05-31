@@ -60,7 +60,7 @@ svn co https://github.com/fw876/helloworld/trunk/simple-obfs package/simple-obfs
 svn co https://github.com/fw876/helloworld/trunk/trojan package/trojan
 
 # Themes
-svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-edge package/luci-theme-edge
+svn co https://github.com/haiibo/packages/trunk/luci-theme-edge package/luci-theme-edge
 svn co https://github.com/rosywrt/luci-theme-rosy/trunk/luci-theme-rosy package/luci-theme-rosy
 svn co https://github.com/haiibo/packages/trunk/luci-theme-darkmatter package/luci-theme-darkmatter
 svn co https://github.com/haiibo/packages/trunk/luci-theme-atmaterial package/luci-theme-atmaterial
