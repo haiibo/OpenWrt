@@ -177,7 +177,7 @@ jobs:
         OPENWRT_ARMVIRT: lean/*/*/*rootfs.tar.gz
         PACKAGE_SOC: vplus_beikeyun_l1pro_s905d_s905x2_s905x3_s912_s922x_s922x-n2
         KERNEL_REPO_URL: https://github.com/ophub/kernel/tree/main/pub/stable
-        KERNEL_VERSION_NAME: 5.15.13_5.17.4
+        KERNEL_VERSION_NAME: 5.15.13_5.18.5
         KERNEL_AUTO_LATEST: true
         GZIP_IMGS: .gz
 
