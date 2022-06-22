@@ -95,6 +95,7 @@
 <details>
 <summary><b>├── 服务</b></summary>
 　├── PassWall<br/>
+　├── PassWall2<br/>
 　├── Hello World<br/>
 　├── iKoolProxy 滤广告<br/>
 　├── Bypass<br/>
