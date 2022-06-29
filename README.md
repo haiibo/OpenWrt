@@ -73,7 +73,6 @@
 </details>
 <details>
 <summary><b>├── 系统</b></summary>
-　├── Web 管理<br/>
 　├── 系统<br/>
 　├── 管理权<br/>
 　├── TTYD 终端<br/>
@@ -82,14 +81,12 @@
 　├── 计划任务<br/>
 　├── 挂载点<br/>
 　├── 磁盘管理<br/>
-　├── 高级设置<br/>
 　├── LED 配置<br/>
 　├── 备份/升级<br/>
-　├── 文件管理<br/>
 　├── 定时重启<br/>
 　├── 文件传输<br/>
 　├── Argon 主题设置<br/>
-　└── 重启<br/>
+　├── 重启<br/>
 　└── 关机
 </details>
 <details>
@@ -101,19 +98,17 @@
 　├── Bypass<br/>
 　├── DNS 过滤器<br/>
 　├── 广告屏蔽大师 Plus+<br/>
+　├── 阿里云盘 FUSE<br/>
+　├── 阿里云盘 WebDAV<br/>
 　├── AdGuard Home<br/>
-　├── 京东签到服务<br/>
 　├── ShadowSocksR Plus+<br/>
 　├── DDNS.to内网穿透<br/>
-　├── 易友云文件管理器<br/>
-　├── MosDNS<br/>
 　├── 微信推送<br/>
 　├── 上网时间控制<br/>
 　├── 全能推送<br/>
 　├── OpenClash<br/>
 　├── 解锁网易云灰色歌曲<br/>
 　├── 动态 DNS<br/>
-　├── WatchCat<br/>
 　├── SmartDNS<br/>
 　├── 迅雷快鸟<br/>
 　├── 网络唤醒<br/>
@@ -140,26 +135,26 @@
 </details>
 <details>
 <summary><b>├── 网络存储</b></summary>
+　├── 文件浏览器<br/>
 　├── 可道云<br/>
 　├── NFS 管理<br/>
 　├── 微力同步<br/>
-　├── 阿里云盘 WebDAV<br/>
 　├── qBittorrent<br/>
 　├── USB 打印服务器<br/>
 　├── 硬盘休眠<br/>
+　├── aMule设置<br/>
 　├── 挂载 SMB 网络共享<br/>
 　├── 网络共享<br/>
 　├── FTP 服务器<br/>
 　├── Rclone<br/>
 　├── Aria2 配置<br/>
 　├── miniDLNA<br/>
-　├── Transmission<br/>
-　└── BaiduPCS Web<br/>
+　└── Transmission
 </details>
 <details>
 <summary><b>├── VPN</b></summary>
-　├── N2N v2 VPN<br/>
 　├── V2ray 服务器<br/>
+　├── N2N v2 VPN<br/>
 　├── SoftEther VPN 服务器<br/>
 　├── OpenVPN 服务器<br/>
 　├── PPTP VPN 服务器<br/>
@@ -175,7 +170,6 @@
 　├── 静态路由<br/>
 　├── 防火墙<br/>
 　├── 诊断<br/>
-　├── Socat<br/>
 　├── SQM QoS<br/>
 　├── 应用过滤<br/>
 　├── 网速控制<br/>
@@ -271,8 +265,8 @@
 | [ImmortalWrt](https://github.com/immortalwrt) | [coolsnowwolf](https://github.com/coolsnowwolf) | [P3TERX](https://github.com/P3TERX) | [Flippy](https://github.com/unifreq) |
 | :-------------: | :-------------: | :-------------: | :-------------: |
 | <img width="100" src="https://avatars.githubusercontent.com/u/53193414"/> | <img width="100" src="https://avatars.githubusercontent.com/u/31687149"/> | <img width="100" src="https://avatars.githubusercontent.com/u/25927179"/> | <img width="100" src="https://avatars.githubusercontent.com/u/39355261"/> |
-| [Ophub](https://github.com/ophub) | [Jerrykuku](https://github.com/jerrykuku) | [QiuSimons](https://github.com/QiuSimons) | [IvanSolis1989](https://github.com/IvanSolis1989) |
-| <img width="100" src="https://avatars.githubusercontent.com/u/68696949"/> | <img width="100" src="https://avatars.githubusercontent.com/u/9485680"/> | <img width="100" src="https://avatars.githubusercontent.com/u/45143996"/> | <img width="100" src="https://avatars.githubusercontent.com/u/44228691"/> |
+| [Ophub](https://github.com/ophub) | [Breakings](https://github.com/breakings) | [QiuSimons](https://github.com/QiuSimons) | [IvanSolis1989](https://github.com/IvanSolis1989) |
+| <img width="100" src="https://avatars.githubusercontent.com/u/68696949"/> | <img width="100" src="https://avatars.githubusercontent.com/u/25475074"/> | <img width="100" src="https://avatars.githubusercontent.com/u/45143996"/> | <img width="100" src="https://avatars.githubusercontent.com/u/44228691"/> |
 
 
 <a href="#readme">
