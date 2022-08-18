@@ -16,7 +16,7 @@
 - 项目使用 Github Actions 拉取 [Lean](https://github.com/coolsnowwolf/lede) 的 `Openwrt` 源码仓库进行云编译
 - 设置定时自动编译（北京时间每天早上6点左右自动触发编译）
 - 固件默认 IP 地址：`192.168.1.1` 默认密码：`password`
-- 适配的软路由设备有：`X86_64`、`NanoPi_R2S`、`NanoPi_R4S`
+- 适配的软路由设备有：`X86_64`、`NanoPi_R2S`、`NanoPi_R4S`、`R68S`
 - 适配的 ARM 盒子设备有：`微加云`、`贝壳云`、`我家云`、`斐讯N1`、`章鱼星球`、`S905x3`（包括常见的 `HK1`、`H96`、`X96` 等盒子）、`S922x`（目前支持 `GT-King`、`GT-King Pro`、`Odroid N2` 三款盒子）
 - ARM 盒子固件分为 [Mini版](https://github.com/haiibo/OpenWrt/releases/tag/ARMv8_MINI) 和 [Plus版](https://github.com/haiibo/OpenWrt/releases/tag/ARMv8_PLUS)，Mini 精简版适合科学上网为主要需求的用户，Plus 多功能版插件多适合喜欢折腾的用户
 - 仓库编译的固件插件均为最新版本，最新版意味着可能有 BUG，如果之前使用稳定，则无需追新
@@ -55,7 +55,7 @@
 </details>
 
 <details>
-<summary><b>&nbsp;X86、R2S、R4S 软路由插件预览</b></summary>
+<summary><b>&nbsp;X86、R2S、R4S 等软路由插件预览</b></summary>
 <br/>
 <details>
 <summary><b>├── 状态</b></summary>
@@ -207,31 +207,35 @@
 <details>
 <summary><b>&nbsp;如果你觉得修改 .config 文件麻烦，那么你可以点击此处尝试本地提取</b></summary>
 
-1. 首先安装好 Ubuntu 64bit，推荐 Ubuntu 20.04 LTS x64
+1. 首先装好 Linux 系统，推荐 Debian 11 或 Ubuntu LTS
 
-2. 命令行输入 `sudo apt-get update`，然后输入
-`sudo apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf wget curl swig rsync`
+2. 安装编译依赖环境
 
-3. 使用 `git clone https://github.com/coolsnowwolf/lede` 命令下载好源代码，然后 `cd lede` 进入目录
+   ```bash
+   sudo apt update -y
+   sudo apt full-upgrade -y
+   sudo apt install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python2.7 python3 python3-pip libpython3-dev qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
+   ```
+
+3. 下载源代码，更新 feeds 并安装到本地
+
+   ```bash
+   git clone https://github.com/coolsnowwolf/lede
+   cd lede
+   ./scripts/feeds update -a
+   ./scripts/feeds install -a
+   ```
 
 4. 复制 diy-part2.sh 文件内所有内容到命令行，添加自定义插件和自定义设置
 
-5. ```bash
-   ./scripts/feeds update -a
-   ./scripts/feeds install -a
-   make menuconfig
-   ```
-
-6. 选好插件后输入以下命令导出差异部分
+5. 命令行输入 `make menuconfig` 选择配置，选好配置后导出差异部分到 seed.config 文件
 
    ```bash
    make defconfig
    ./scripts/diffconfig.sh > seed.config
    ```
 
-7. 这样配置的差异部分就写入 seed.config 这个文件了
-   
-   在命令行输入 `cat seed.config` 查看这个文件，也可以用文本编辑器打开
+7. 命令行输入 `cat seed.config` 查看这个文件，也可以用文本编辑器打开
 
 8. 复制 seed.config 文件内所有内容到对应 .config 文件中覆盖就可以了
 
