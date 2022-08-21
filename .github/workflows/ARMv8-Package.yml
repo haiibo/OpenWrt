@@ -30,7 +30,7 @@ jobs:
 
     env:
       VERSION: MINI
-      EXPLAIN: 这是 ARMv8 精简版，集成一些日常常用插件
+      EXPLAIN: 这是 ARMv8 精简版，只集成了一些常用插件
 
     steps:
     - name: Checkout

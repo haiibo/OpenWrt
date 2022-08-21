@@ -1,40 +1,42 @@
 <div align="center">
-<img width="768" src="https://cdn.jsdelivr.net/gh/haiibo/OpenWrt/image/openwrt.png"/>
+<img width="768" src="https://cdn.jsdelivr.net/gh/haiibo/OpenWrt/images/openwrt.png"/>
 <h1>OpenWrt — 多设备固件云编译</h1>
 
-<img src="https://img.shields.io/github/downloads/haiibo/OpenWrt/total.svg?style=for-the-badge&color=green"/>
+<img src="https://img.shields.io/github/downloads/haiibo/OpenWrt/total.svg?style=for-the-badge&color=32C955"/>
 <img src="https://img.shields.io/github/stars/haiibo/OpenWrt.svg?style=for-the-badge&color=orange"/>
 <img src="https://img.shields.io/github/forks/haiibo/OpenWrt.svg?style=for-the-badge&color=ff69b4"/>
 <img src="https://img.shields.io/github/license/haiibo/OpenWrt.svg?style=for-the-badge&color=blueviolet"/>
 
-[![](https://img.shields.io/badge/-目录:-696969.svg)](#readme) [![](https://img.shields.io/badge/-项目说明-FFFFFF.svg)](#项目说明-) [![](https://img.shields.io/badge/-固件下载-FFFFFF.svg)](#固件下载-) [![](https://img.shields.io/badge/-近期更新-FFFFFF.svg)](#近期更新-) [![](https://img.shields.io/badge/-插件预览-FFFFFF.svg)](#插件预览-) [![](https://img.shields.io/badge/-编译教程-FFFFFF.svg)](#编译教程-) [![](https://img.shields.io/badge/-特别提示-FFFFFF.svg)](#特别提示-) [![](https://img.shields.io/badge/-捐助项目-FFFFFF.svg)](#捐助项目-) [![](https://img.shields.io/badge/-鸣谢-FFFFFF.svg)](#鸣谢-)
+[![](https://img.shields.io/badge/-目录:-696969.svg)](#readme) [![](https://img.shields.io/badge/-项目说明-FFFFFF.svg)](#项目说明-) [![](https://img.shields.io/badge/-固件下载-FFFFFF.svg)](#固件下载-) [![](https://img.shields.io/badge/-近期更新-FFFFFF.svg)](#近期更新-) [![](https://img.shields.io/badge/-插件预览-FFFFFF.svg)](#插件预览-) [![](https://img.shields.io/badge/-定制固件-FFFFFF.svg)](#定制固件-) [![](https://img.shields.io/badge/-特别提示-FFFFFF.svg)](#特别提示-) [![](https://img.shields.io/badge/-捐助项目-FFFFFF.svg)](#捐助项目-) [![](https://img.shields.io/badge/-鸣谢-FFFFFF.svg)](#鸣谢-)
 </div>
 
 
 ## 项目说明 [![](https://img.shields.io/badge/-项目基本介绍-FFFFFF.svg)](#项目说明-)
-- 固件来源：[![Lean](https://img.shields.io/badge/Lede-Lean-red.svg?style=flat&logo=appveyor)](https://github.com/coolsnowwolf/lede) [![P3TERX](https://img.shields.io/badge/OpenWrt-P3TERX-blueviolet.svg?style=flat&logo=appveyor)](https://github.com/P3TERX/Actions-OpenWrt) [![Sirpdboy](https://img.shields.io/badge/Package-Sirpdboy-orange.svg?style=flat&logo=appveyor)](https://github.com/sirpdboy/sirpdboy-package) [![Haiibo](https://img.shields.io/badge/Build-Haiibo-success.svg?style=flat&logo=appveyor)](https://github.com/haiibo/OpenWrt)
-- 项目使用 Github Actions 拉取 [Lean](https://github.com/coolsnowwolf/lede) 的 `Openwrt` 源码仓库进行云编译
-- 设置定时自动编译（北京时间每天早上6点左右自动触发编译）
-- 固件默认 IP 地址：`192.168.1.1` 默认密码：`password`
-- 适配的软路由设备有：`X86_64`、`NanoPi_R2S`、`NanoPi_R4S`、`R68S`
-- 适配的 ARM 盒子设备有：`微加云`、`贝壳云`、`我家云`、`斐讯N1`、`章鱼星球`、`S905x3`（包括常见的 `HK1`、`H96`、`X96` 等盒子）、`S922x`（目前支持 `GT-King`、`GT-King Pro`、`Odroid N2` 三款盒子）
-- ARM 盒子固件分为 [Mini版](https://github.com/haiibo/OpenWrt/releases/tag/ARMv8_MINI) 和 [Plus版](https://github.com/haiibo/OpenWrt/releases/tag/ARMv8_PLUS)，Mini 精简版适合科学上网为主要需求的用户，Plus 多功能版插件多适合喜欢折腾的用户
-- 仓库编译的固件插件均为最新版本，最新版意味着可能有 BUG，如果之前使用稳定，则无需追新
-- 如固件使用有什么问题，可以直接在 [Issues](https://github.com/haiibo/OpenWrt/issues) 内留言，我会根据大家的问题进行修改
-- 喜欢的可以给个 Star，感谢各位！想要自己编译固件的请看下方编译教程！
+- 固件来源：[![Lean](https://img.shields.io/badge/Lede-Lean-ff69b4.svg?style=flat&logo=appveyor)](https://github.com/coolsnowwolf/lede) [![P3TERX](https://img.shields.io/badge/OpenWrt-P3TERX-blueviolet.svg?style=flat&logo=appveyor)](https://github.com/P3TERX/Actions-OpenWrt) [![Flippy](https://img.shields.io/badge/Package-Flippy-orange.svg?style=flat&logo=appveyor)](https://github.com/unifreq/openwrt_packit) [![Haiibo](https://img.shields.io/badge/Build-Haiibo-32C955.svg?style=flat&logo=appveyor)](https://github.com/haiibo/OpenWrt)
+- 项目使用 Github Actions 拉取 [Lean](https://github.com/coolsnowwolf/lede) 的 Openwrt 源码仓库进行云编译
+- 每天定时自动编译，更新内核版本和插件，确保获得最新体验
+- 固件默认管理地址：`192.168.1.1` 默认用户：`root` 默认密码：`password`
+- 适配的软路由设备：`X86_64`、`NanoPi R2C`、`NanoPi R2S`、`NanoPi R4S`、`NanoPi R5S`、`树莓派 4B`、`R68S`
+- 适配的 ARM 盒子设备：`微加云`、`贝壳云`、`我家云`、`斐讯N1`、`章鱼星球`、`S905x2`、`S905x3`（包括常见的 HK1、H96、X96 等盒子）、`S922x`（目前支持 GT-King、GT-King Pro、Odroid N2 三款盒子）
+- ARM 盒子固件分为 [Mini版](https://github.com/haiibo/OpenWrt/releases/tag/ARMv8_MINI) 和 [Plus版](https://github.com/haiibo/OpenWrt/releases/tag/ARMv8_PLUS)，Mini 精简版以科学上网为主，Plus 多功能版插件多适合折腾
+- 固件集成的所有 ipk 插件全部打包在 Packages 文件中，可以在 [Releases](https://github.com/haiibo/OpenWrt/releases) 内进行下载
+- 仓库编译的固件插件均为最新版本，最新版可能有 BUG，如果之前使用稳定，则无需追新
+- 喜欢的可以给个 Star，感谢各位！想要自己编译固件的请看下方定制固件！
 
 
 ## 固件下载 [![](https://img.shields.io/badge/-编译状态及下载链接-FFFFFF.svg)](#固件下载-)
 点击下表中 [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?style=flat&logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases) 即可跳转到该设备固件下载页面
-| 序号 | 平台+设备名称 | 固件编译状态 | 插件配置 | 固件下载 |
-| :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
-| 1 | [![](https://img.shields.io/badge/OpenWrt-X86_64位-green.svg?logo=openwrt)](https://github.com/haiibo/OpenWrt/blob/main/.github/workflows/X86_64-OpenWrt.yml) | [![](https://github.com/haiibo/OpenWrt/actions/workflows/X86_64-OpenWrt.yml/badge.svg)](https://github.com/haiibo/OpenWrt/actions/workflows/X86_64-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/haiibo/OpenWrt/blob/main/x86/.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases/tag/X86_64) |
-| 2 | [![](https://img.shields.io/badge/OpenWrt-ARMv8_Mini-green.svg?logo=openwrt)](https://github.com/haiibo/OpenWrt/blob/main/.github/workflows/ARMv8_Mini-OpenWrt.yml) | [![](https://github.com/haiibo/OpenWrt/actions/workflows/ARMv8_Mini-OpenWrt.yml/badge.svg)](https://github.com/haiibo/OpenWrt/actions/workflows/ARMv8_Mini-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/haiibo/OpenWrt/blob/main/armv8/mini/.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases/tag/ARMv8_MINI) |
-| 3 | [![](https://img.shields.io/badge/OpenWrt-ARMv8_Plus-green.svg?logo=openwrt)](https://github.com/haiibo/OpenWrt/blob/main/.github/workflows/ARMv8_Plus-OpenWrt.yml) | [![](https://github.com/haiibo/OpenWrt/actions/workflows/ARMv8_Plus-OpenWrt.yml/badge.svg)](https://github.com/haiibo/OpenWrt/actions/workflows/ARMv8_Plus-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/haiibo/OpenWrt/blob/main/armv8/plus/.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases/tag/ARMv8_PLUS) |
-| 4 | [![](https://img.shields.io/badge/OpenWrt-NanoPi_R2S-green.svg?logo=openwrt)](https://github.com/haiibo/OpenWrt/blob/main/.github/workflows/NanoPi_R2S-OpenWrt.yml) | [![](https://github.com/haiibo/OpenWrt/actions/workflows/NanoPi_R2S-OpenWrt.yml/badge.svg)](https://github.com/haiibo/OpenWrt/actions/workflows/NanoPi_R2S-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/haiibo/OpenWrt/blob/main/nanopi/r2s.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases/tag/NanoPi_R2S) |
-| 5 | [![](https://img.shields.io/badge/OpenWrt-NanoPi_R4S-green.svg?logo=openwrt)](https://github.com/haiibo/OpenWrt/blob/main/.github/workflows/NanoPi_R4S-OpenWrt.yml) | [![](https://github.com/haiibo/OpenWrt/actions/workflows/NanoPi_R4S-OpenWrt.yml/badge.svg)](https://github.com/haiibo/OpenWrt/actions/workflows/NanoPi_R4S-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/haiibo/OpenWrt/blob/main/nanopi/r4s.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases/tag/NanoPi_R4S) |
-
-**提示：**[![](https://img.shields.io/badge/设备-passing-32CD32.svg?logo=github)](https://github.com/haiibo/OpenWrt/actions) 标志为正常，[![](https://img.shields.io/badge/设备-failing-DC143C.svg?logo=github)](https://github.com/haiibo/OpenWrt/actions) 不代表所有编译均失败，请点击 [![](https://img.shields.io/badge/设备-状态-32CD32.svg?logo=github)](https://github.com/haiibo/OpenWrt/actions) 到 Actions 进一步查看
+| 平台+设备名称 | 固件编译状态 | 配置文件 | 固件下载 |
+| :-------------: | :-------------: | :-------------: | :-------------: |
+| [![](https://img.shields.io/badge/OpenWrt-X86_64位-32C955.svg?logo=openwrt)](https://github.com/haiibo/OpenWrt/blob/main/.github/workflows/X86_64-OpenWrt.yml) | [![](https://github.com/haiibo/OpenWrt/actions/workflows/X86_64-OpenWrt.yml/badge.svg)](https://github.com/haiibo/OpenWrt/actions/workflows/X86_64-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/haiibo/OpenWrt/blob/main/configs/x86_64.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases/tag/X86_64) |
+| [![](https://img.shields.io/badge/OpenWrt-ARMv8_Mini-32C955.svg?logo=openwrt)](https://github.com/haiibo/OpenWrt/blob/main/.github/workflows/ARMv8_Mini-OpenWrt.yml) | [![](https://github.com/haiibo/OpenWrt/actions/workflows/ARMv8_Mini-OpenWrt.yml/badge.svg)](https://github.com/haiibo/OpenWrt/actions/workflows/ARMv8_Mini-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/haiibo/OpenWrt/blob/main/configs/armv8_mini.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases/tag/ARMv8_MINI) |
+| [![](https://img.shields.io/badge/OpenWrt-ARMv8_Plus-32C955.svg?logo=openwrt)](https://github.com/haiibo/OpenWrt/blob/main/.github/workflows/ARMv8_Plus-OpenWrt.yml) | [![](https://github.com/haiibo/OpenWrt/actions/workflows/ARMv8_Plus-OpenWrt.yml/badge.svg)](https://github.com/haiibo/OpenWrt/actions/workflows/ARMv8_Plus-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/haiibo/OpenWrt/blob/main/configs/armv8_plus.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases/tag/ARMv8_PLUS) |
+| [![](https://img.shields.io/badge/OpenWrt-NanoPi_R2C-32C955.svg?logo=openwrt)](https://github.com/haiibo/OpenWrt/blob/main/.github/workflows/Rockchip-OpenWrt.yml) | [![](https://github.com/haiibo/OpenWrt/actions/workflows/Rockchip-OpenWrt.yml/badge.svg)](https://github.com/haiibo/OpenWrt/actions/workflows/Rockchip-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/haiibo/OpenWrt/blob/main/configs/rockchip.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases/tag/Rockchip) |
+| [![](https://img.shields.io/badge/OpenWrt-NanoPi_R2S-32C955.svg?logo=openwrt)](https://github.com/haiibo/OpenWrt/blob/main/.github/workflows/Rockchip-OpenWrt.yml) | [![](https://github.com/haiibo/OpenWrt/actions/workflows/Rockchip-OpenWrt.yml/badge.svg)](https://github.com/haiibo/OpenWrt/actions/workflows/Rockchip-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/haiibo/OpenWrt/blob/main/configs/rockchip.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases/tag/Rockchip) |
+| [![](https://img.shields.io/badge/OpenWrt-NanoPi_R4S-32C955.svg?logo=openwrt)](https://github.com/haiibo/OpenWrt/blob/main/.github/workflows/Rockchip-OpenWrt.yml) | [![](https://github.com/haiibo/OpenWrt/actions/workflows/Rockchip-OpenWrt.yml/badge.svg)](https://github.com/haiibo/OpenWrt/actions/workflows/Rockchip-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/haiibo/OpenWrt/blob/main/configs/rockchip.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases/tag/Rockchip) |
+| [![](https://img.shields.io/badge/OpenWrt-NanoPi_R5S-32C955.svg?logo=openwrt)](https://github.com/haiibo/OpenWrt/blob/main/.github/workflows/Rockchip-OpenWrt.yml) | [![](https://github.com/haiibo/OpenWrt/actions/workflows/Rockchip-OpenWrt.yml/badge.svg)](https://github.com/haiibo/OpenWrt/actions/workflows/Rockchip-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/haiibo/OpenWrt/blob/main/configs/rockchip.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases/tag/Rockchip) |
+| [![](https://img.shields.io/badge/OpenWrt-香橙派_R1_Plus-32C955.svg?logo=openwrt)](https://github.com/haiibo/OpenWrt/blob/main/.github/workflows/Rockchip-OpenWrt.yml) | [![](https://github.com/haiibo/OpenWrt/actions/workflows/Rockchip-OpenWrt.yml/badge.svg)](https://github.com/haiibo/OpenWrt/actions/workflows/Rockchip-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/haiibo/OpenWrt/blob/main/configs/rockchip.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases/tag/Rockchip) |
+| [![](https://img.shields.io/badge/OpenWrt-树莓派_4B-32C955.svg?logo=openwrt)](https://github.com/haiibo/OpenWrt/blob/main/.github/workflows/RaspberryPi4-OpenWrt.yml) | [![](https://github.com/haiibo/OpenWrt/actions/workflows/RaspberryPi4-OpenWrt.yml/badge.svg)](https://github.com/haiibo/OpenWrt/actions/workflows/RaspberryPi4-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/haiibo/OpenWrt/blob/main/configs/rpi4.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/haiibo/OpenWrt/releases/tag/RaspberryPi4) |
 
 
 ## 近期更新 [![](https://img.shields.io/badge/-近期固件更新-FFFFFF.svg)](#近期更新-)
@@ -45,13 +47,13 @@
 <details>
 <summary><b>&nbsp;ARM 盒子 Mini 精简版本插件预览</b></summary>
 <br/>
-<img src="https://cdn.jsdelivr.net/gh/haiibo/OpenWrt/image/mini.png"/>
+<img src="https://cdn.jsdelivr.net/gh/haiibo/OpenWrt/images/mini.png"/>
 </details>
 
 <details>
 <summary><b>&nbsp;ARM 盒子 Plus 多功能版插件预览</b></summary>
 <br/>
-<img src="https://cdn.jsdelivr.net/gh/haiibo/OpenWrt/image/plus.png"/>
+<img src="https://cdn.jsdelivr.net/gh/haiibo/OpenWrt/images/plus.png"/>
 </details>
 
 <details>
@@ -187,25 +189,21 @@
 </details>
 
 
-## 编译教程 [![](https://img.shields.io/badge/-项目基本编译教程-FFFFFF.svg)](#编译教程-)
-1. 点击右上角 `Fork`，Fork 本项目到你自己的仓库
+## 定制固件 [![](https://img.shields.io/badge/-项目基本编译教程-FFFFFF.svg)](#定制固件-)
+1. 首先登录 Gihub 账号，Fork 此项目到你自己的仓库
 
-2. 创建个人访问令牌，如果已创建请跳过第三步（固件发布会调用，否则无法发布）
+2. 修改 configs 目录对应文件添加或删除插件，或者复制自备的 xx.config 文件内容到配置文件
 
-3. 点击右上角自己头像 → `Settings` → `Developer settings` → `Personal access tokens` → `Generate new token` Note 名字随便写一个，勾选 `repo` 和 `workflow` 点击最下方绿色按钮 `Generate token` 完成创建
+3. 插件对应名称及功能请参考恩山网友帖子：[Applications 添加插件应用说明](https://www.right.com.cn/forum/thread-3682029-1-1.html)
 
-4. 编辑对应文件夹下 `.config` 文件，`luci-app-xxx` 为插件名，结尾 `=y` 为选择，`is not set` 为不选择
+4. 如果需要修改默认 IP、添加或删除插件源以及一些其他自定义设置请在 diy-script.sh 文件中进行修改
 
-5. 插件对应名称及功能请参考恩山网友帖子：[OpenWrt 编译 LuCI -> Applications 添加插件应用说明-L大](https://www.right.com.cn/forum/thread-3682029-1-1.html)
+5. 点击 Actions → 要编译的 workflow → Run workflow → Run workflow 即可开始编译
 
-6. 如果需要修改默认 IP、添加或删除插件源以及一些其他自定义设置请在 `diy-part2.sh` 文件中进行修改
-
-7. 点击 `Actions` → `要编译的workflow` → `Run workflow` → `Run workflow` 一次编译大概需要3~5小时
-
-8. 编译完成后在仓库主页 `Releases` 对应 Tag 标签中查看以及下载固件
+6. 编译大概需要3-5小时，编译完成后可在仓库主页 [Releases](https://github.com/haiibo/OpenWrt/releases) 对应 Tag 标签中查看以及下载固件
 
 <details>
-<summary><b>&nbsp;如果你觉得修改 .config 文件麻烦，那么你可以点击此处尝试本地提取</b></summary>
+<summary><b>&nbsp;如果你觉得修改 config 文件麻烦，那么你可以点击此处尝试本地提取</b></summary>
 
 1. 首先装好 Linux 系统，推荐 Debian 11 或 Ubuntu LTS
 
@@ -226,7 +224,7 @@
    ./scripts/feeds install -a
    ```
 
-4. 复制 diy-part2.sh 文件内所有内容到命令行，添加自定义插件和自定义设置
+4. 复制 diy-script.sh 文件内所有内容到命令行，添加自定义插件和自定义设置
 
 5. 命令行输入 `make menuconfig` 选择配置，选好配置后导出差异部分到 seed.config 文件
 
@@ -237,9 +235,9 @@
 
 7. 命令行输入 `cat seed.config` 查看这个文件，也可以用文本编辑器打开
 
-8. 复制 seed.config 文件内所有内容到对应 .config 文件中覆盖就可以了
+8. 复制 seed.config 文件内所有内容到 configs 目录对应文件中覆盖就可以了
 
-   **如果不懂编译界面可以参考 YouTube 视频：[软路由固件 OpenWrt 编译界面设置](https://www.youtube.com/watch?v=jEE_J6-4E3Y&list=WL&index=7)**
+   **如果看不懂编译界面可以参考 YouTube 视频：[软路由固件 OpenWrt 编译界面设置](https://www.youtube.com/watch?v=jEE_J6-4E3Y&list=WL&index=7)**
 </details>
 
 
@@ -249,27 +247,28 @@
 
 - **本人不对任何人因使用本固件所遭受的任何理论或实际的损失承担责任！**
 
-- **本人保证固件没加入任何后门，保护干净安全的网络环境从我做起！**
-
+- **请务必遵从 “不涉及政治，不涉及宗教，不涉及黄赌毒” 三不原则！**
 
 ## 捐助项目 [![](https://img.shields.io/badge/-请我喝咖啡啦-FFFFFF.svg)](#捐助项目-)
 
-**如果你觉得此项目对你有帮助，可以捐助我们，以鼓励项目能持续发展，更加完善！**
+- 如果你觉得此项目对你有帮助，可以捐助我们，以鼓励项目能持续发展，更加完善！
 
-**你们的支持就是作者前进的动力！**
+- 本捐赠渠道仅作捐赠用途之用，付费后不会得到任何形式的额外内容及保证，请知悉！
+
+- 捐赠纯属自愿行为，非强制，未捐赠也可以正常使用，未满 18 岁未成年禁止捐赠！
 
 ### 捐助方式
 | <img src="https://img.shields.io/badge/-支付宝-1678FF.svg" height="25" href="#赞助支持本项目-"/> | <img src="https://img.shields.io/badge/-微信-22AB39.svg" height="25" href="#赞助支持本项目-"/> |
 | :-------------: | :-------------: |
-| <img src="https://user-images.githubusercontent.com/85640068/149810593-b27af61f-71c7-4a13-9f33-4e04ff2978c1.jpg" width="150" height="150" href="#赞助支持本项目-"/> | <img src="https://user-images.githubusercontent.com/85640068/149810694-a181e062-0d71-4fd9-9279-3f9ab0128b7f.jpg" width="150" height="150" href="#赞助支持本项目-"/> |
+| <img src="https://user-images.githubusercontent.com/85640068/149810593-b27af61f-71c7-4a13-9f33-4e04ff2978c1.jpg" width="180" height="180" href="#赞助支持本项目-"/> | <img src="https://user-images.githubusercontent.com/85640068/149810694-a181e062-0d71-4fd9-9279-3f9ab0128b7f.jpg" width="180" height="180" href="#赞助支持本项目-"/> |
 
 
 ## 鸣谢 [![](https://img.shields.io/badge/-跪谢各大佬-FFFFFF.svg)](#鸣谢-)
-| [ImmortalWrt](https://github.com/immortalwrt) | [coolsnowwolf](https://github.com/coolsnowwolf) | [P3TERX](https://github.com/P3TERX) | [Flippy](https://github.com/unifreq) |
+| [ImmortalWrt](https://github.com/immortalwrt) | [Coolsnowwolf](https://github.com/coolsnowwolf) | [P3TERX](https://github.com/P3TERX) | [Flippy](https://github.com/unifreq) |
 | :-------------: | :-------------: | :-------------: | :-------------: |
 | <img width="100" src="https://avatars.githubusercontent.com/u/53193414"/> | <img width="100" src="https://avatars.githubusercontent.com/u/31687149"/> | <img width="100" src="https://avatars.githubusercontent.com/u/25927179"/> | <img width="100" src="https://avatars.githubusercontent.com/u/39355261"/> |
-| [Ophub](https://github.com/ophub) | [Breakings](https://github.com/breakings) | [QiuSimons](https://github.com/QiuSimons) | [IvanSolis1989](https://github.com/IvanSolis1989) |
-| <img width="100" src="https://avatars.githubusercontent.com/u/68696949"/> | <img width="100" src="https://avatars.githubusercontent.com/u/25475074"/> | <img width="100" src="https://avatars.githubusercontent.com/u/45143996"/> | <img width="100" src="https://avatars.githubusercontent.com/u/44228691"/> |
+| [Ophub](https://github.com/ophub) | [SuLingGG](https://github.com/SuLingGG) | [QiuSimons](https://github.com/QiuSimons) | [IvanSolis1989](https://github.com/IvanSolis1989) |
+| <img width="100" src="https://avatars.githubusercontent.com/u/68696949"/> | <img width="100" src="https://avatars.githubusercontent.com/u/22287562"/> | <img width="100" src="https://avatars.githubusercontent.com/u/45143996"/> | <img width="100" src="https://avatars.githubusercontent.com/u/44228691"/> |
 
 
 <a href="#readme">
