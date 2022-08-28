@@ -6,24 +6,23 @@
 # https://github.com/P3TERX
 #===============================================
 
-name: ARMv8_Plus OpenWrt
+name: ARMv8 Mini OpenWrt
 
 on:
-  repository_dispatch:
   workflow_dispatch:
   schedule:
-    - cron: '0 21 * * *'
+    - cron: '0 23 * * *'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  CONFIG_FILE: configs/armv8_plus.config
-  DIY_SCRIPT: diy-script.sh
+  CONFIG_FILE: configs/armv8-mini.config
+  DIY_SCRIPT: diy-mini.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
-  FILE_NAME: ROOTFS_PLUS
-  PRODUCT_NAME: ARMv8_PLUS
+  FILE_NAME: ROOTFS_MINI
+  PRODUCT_NAME: ARMv8_MINI
   TZ: Asia/Shanghai
 
 jobs:
@@ -39,16 +38,14 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       run: |
         docker rmi $(docker images -q)
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /etc/mysql /etc/php /usr/local/lib/android /opt/ghc
-        sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* adoptopenjdk* mysql* php* mongodb* dotnet* moby* snapd* || true
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update
-        sudo -E apt-get -qq install $(curl -fsSL https://is.gd/depends_ubuntu_2204)
+        sudo -E apt-get -qq install $(curl -fsSL is.gd/depends_ubuntu_2204)
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
-        df -Th
 
     - name: Clone source code
       working-directory: /workdir
@@ -96,8 +93,7 @@ jobs:
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
     - name: Check space usage
-      if: (!cancelled())
-      run: df -Th
+      run: df -hT
 
     - name: Upload bin directory
       uses: actions/upload-artifact@main
@@ -108,7 +104,7 @@ jobs:
 
     - name: Organize files
       id: organize
-      if: steps.compile.outputs.status == 'success' && !cancelled()
+      if: steps.compile.outputs.status == 'success'
       run: |
         cp openwrt/.config build.config
         mkdir -p Packages
@@ -124,14 +120,14 @@ jobs:
 
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true'
       with:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
 
     - name: Upload firmware to release
-      uses: ncipollo/release-action@v1
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
+      uses: ncipollo/release-action@main
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true'
       with:
         name: R${{ env.DATE }} for ${{ env.FILE_NAME }}
         artifacts: ${{ env.FIRMWARE }}/*
@@ -140,14 +136,14 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
           **This is temporary firmware for Armvirt 64**
-          * 这是 ARMv8_PLUS 多功能版打包临时固件，不可直刷
-          直刷固件参见 Tag 名为 ARMv8_PLUS 的 Releases
+          * 这是 ARMv8_MINI 精简版打包临时固件，不可直刷
+          直刷固件参见 Tag 名为 ARMv8_MINI 的 Releases
           当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}
 
     - name: Package armvirt as openwrt
       uses: unifreq/openwrt_packit@master
-      if: steps.organize.outputs.status == 'success' && !cancelled()
+      if: steps.organize.outputs.status == 'success'
       env:
         OPENWRT_ARMVIRT: lean/*/*/*rootfs.tar.gz
         PACKAGE_SOC: all
@@ -156,9 +152,15 @@ jobs:
         KERNEL_AUTO_LATEST: true
         GZIP_IMGS: .gz
 
+    - name: Upload openwrt to actions
+      uses: kittaakos/upload-artifact-as-is@master
+      if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_FIRMWARE == 'true'
+      with:
+        path: ${{ env.PACKAGED_OUTPUTPATH }}
+
     - name: Upload openwrt to release
-      uses: ncipollo/release-action@v1
-      if: env.PACKAGED_STATUS == 'success' && !cancelled()
+      uses: ncipollo/release-action@main
+      if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_RELEASE == 'true'
       with:
         name: R${{ env.DATE }} for ${{ env.PRODUCT_NAME }}
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
@@ -168,7 +170,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
           **This is OpenWrt firmware for Armvirt 64**
-          * 这是 ARMv8 多功能版，集成插件多适合折腾
+          * 这是 ARMv8 精简版，只集成了一些常用插件
           默认 IP：192.168.1.1 默认密码：password
           安装到 EMMC：系统 → 晶晨宝盒 → 安装 OpenWrt → 选择型号 → 安装
           升级 OpenWrt：系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新
