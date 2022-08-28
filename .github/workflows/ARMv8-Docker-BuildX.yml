@@ -1,0 +1,69 @@
+name: ARMv8 Docker BuildX
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 16 * * 5'
+
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_BRANCH: master
+  DOCKER_BUILD: buildImageX.sh
+  DOCKER_IMAGE: summary/openwrt-aarch64
+  TZ: Asia/Shanghai
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install $(curl -fsSL is.gd/depends_ubuntu_2204)
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        sudo timedatectl set-timezone "$TZ"
+        sudo mkdir -p /workdir
+        sudo chown $USER:$GROUPS /workdir
+
+    - name: Get openwrt version date
+      working-directory: /workdir
+      run: |
+        df -hT $PWD
+        git clone $REPO_URL -b $REPO_BRANCH openwrt
+        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        cd openwrt
+        version=$(echo "$(cat package/lean/default-settings/files/zzz-default-settings)" | grep -Po "DISTRIB_REVISION=\'\K[^\']*")
+        echo "TAG=$version" >> $GITHUB_ENV
+
+    - name: Check docker environment
+      run: |
+        echo "docker buildx version"
+        docker buildx version
+        echo "ls -l /proc/sys/fs/binfmt_misc"
+        ls -l /proc/sys/fs/binfmt_misc
+        echo "docker run --privileged --rm tonistiigi/binfmt --install all"
+        docker run --privileged --rm tonistiigi/binfmt --install all
+        echo "ls -l /proc/sys/fs/binfmt_misc"
+        ls -l /proc/sys/fs/binfmt_misc
+        echo "docker buildx ls"
+        docker buildx ls
+
+    - name: Build and push docker image
+      run: |
+        cd $GITHUB_WORKSPACE/docker
+        wget -q https://github.com/${GITHUB_REPOSITORY}/releases/download/ROOTFS_PLUS/openwrt-armvirt-64-default-rootfs.tar.gz
+        chmod +x $DOCKER_BUILD
+        ./$DOCKER_BUILD
+        gzip -dc dockerimgs/docker/*.gz | docker load
+        docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+        docker tag ${{ env.DOCKER_IMAGE }} ${{ env.DOCKER_IMAGE }}:${{ env.TAG }}
+        docker push ${{ env.DOCKER_IMAGE }}:${{ env.TAG }}
+        docker push ${{ env.DOCKER_IMAGE }}

@@ -1,0 +1,30 @@
+#!/usr/bin/env perl
+#use strict;
+
+sub get_stat {
+	open IN, "<", "/proc/stat";
+	$_ = <IN>;
+	chomp;
+	close(IN);
+	my ($cpu, $user, $nice, $system, $idle, $iowait, $irq, $softirq, $steal, $guest,  $guest_nice) = split;
+	my $Idle = $idle + $iowait;
+	my $Non_Idle = $user + $nice + $system + $irq + $softirq + $steal + $guest + $guest_nice;
+	return ($Idle, $Non_Idle);
+}
+
+my($prev_idle, $prev_non_idle) = &get_stat;
+my $prev_total = $prev_idle + $prev_non_idle;
+sleep(3);
+my($idle, $non_idle) = &get_stat;
+my $total = $idle + $non_idle;
+
+my $totald = $total - $prev_total;
+my $idled = $idle - $prev_idle;
+my $cpu_percentage = ($totald - $idled) / $totald * 100;
+
+$| = 1;
+open OUT, ">", "/tmp/cpuusage";
+printf OUT "%0.1f\%", $cpu_percentage;
+close(OUT);
+
+exit(0);

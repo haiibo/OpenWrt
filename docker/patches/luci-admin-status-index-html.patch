@@ -1,0 +1,48 @@
+--- index.htm.orig	2020-03-12 22:49:17.000000000 +0800
++++ index.htm	2020-03-13 00:49:19.000000000 +0800
+@@ -17,6 +17,7 @@
+ 	local sysinfo = luci.util.ubus("system", "info") or { }
+ 	local boardinfo = luci.util.ubus("system", "board") or { }
+ 	local unameinfo = nixio.uname() or { }
++	local cpustat = luci.sys.exec("/usr/bin/cpustat") or { }
+ 
+ 	local meminfo = sysinfo.memory or {
+ 		total = 0,
+@@ -43,8 +44,7 @@
+ 			fs.readfile("/proc/sys/net/netfilter/nf_conntrack_count") or "") or 0
+ 
+ 		local conn_max = tonumber(luci.sys.exec(
+-			"sysctl -n -e net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max"
+-		):match("%d+")) or 4096
++			"sysctl -n -e net.netfilter.nf_conntrack_max net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max | head -n 1"):match("%d+")) or 4096
+ 		
+ 		local user_info = tonumber(luci.sys.exec("cat /proc/net/arp | grep 'br-lan' | grep '0x2' | wc -l"))
+ 		
+@@ -65,7 +65,8 @@
+ 			conncount  = conn_count,
+ 			leases     = stat.dhcp_leases(),
+ 			leases6    = stat.dhcp6_leases(),
+-			wifinets   = stat.wifi_networks()
++			wifinets   = stat.wifi_networks(),
++			cpustat    = luci.sys.exec("/usr/bin/cpustat") or { }
+ 		}
+ 
+ 		if wan then
+@@ -637,6 +638,9 @@
+ 			if (e = document.getElementById('localtime'))
+ 				e.innerHTML = info.localtime;
+ 
++			if (e = document.getElementById('cpustat'))
++				e.innerHTML = info.cpustat;
++
+ 			if (e = document.getElementById('uptime'))
+ 				e.innerHTML = String.format('%t', info.uptime);
+ 				
+@@ -701,6 +705,7 @@
+ 		<tr><td width="33%"><%:Kernel Version%></td><td><%=unameinfo.release or "?"%></td></tr>
+ 		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
+ 		<tr><td width="33%"><%:Uptime%></td><td id="uptime">-</td></tr>
++		<tr><td width="33%"><%:CPU状态%></td><td id="cpustat">-</td></tr>
+ 		<tr><td width="33%"><%:Load Average%></td><td id="loadavg">-</td></tr>
+ 		<tr><td width="33%"><%:CPU usage (%)%></td><td id="cpuusage">-</td></tr>
+ 	</table>

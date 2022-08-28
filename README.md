@@ -19,8 +19,9 @@
 - 适配的软路由设备：`X86_64`、`NanoPi R2C`、`NanoPi R2S`、`NanoPi R4S`、`NanoPi R5S`、`树莓派 4B`、`R68S`
 - 适配的 ARM 盒子设备：`微加云`、`贝壳云`、`我家云`、`斐讯N1`、`章鱼星球`、`S905x2`、`S905x3`（包括常见的 HK1、H96、X96 等盒子）、`S922x`（目前支持 GT-King、GT-King Pro、Odroid N2 三款盒子）
 - ARM 盒子固件分为 [Mini版](https://github.com/haiibo/OpenWrt/releases/tag/ARMv8_MINI) 和 [Plus版](https://github.com/haiibo/OpenWrt/releases/tag/ARMv8_PLUS)，Mini 精简版以科学上网为主，Plus 多功能版插件多适合折腾
+- ARM64 Docker 镜像使用 PLUS 版为底包，镜像拉取命令：`docker pull summary/openwrt-aarch64:latest`
 - 固件集成的所有 ipk 插件全部打包在 Packages 文件中，可以在 [Releases](https://github.com/haiibo/OpenWrt/releases) 内进行下载
-- 仓库编译的固件插件均为最新版本，最新版可能有 BUG，如果之前使用稳定，则无需追新
+- 项目编译的固件插件为最新版本，最新版插件可能有 BUG，如果之前使用稳定，则无需追新
 - 喜欢的可以给个 Star，感谢各位！想要自己编译固件的请看下方定制固件！
 
 
