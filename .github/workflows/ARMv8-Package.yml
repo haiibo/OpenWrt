@@ -62,9 +62,10 @@ jobs:
     - name: Download armvirt firmware
       id: download
       run: |
-        mkdir -p openwrt/bin/targets/armvirt/64
-        cd openwrt/bin/targets/armvirt/64
-        wget -q https://github.com/${GITHUB_REPOSITORY}/releases/download/ROOTFS_${{ env.VERSION }}/openwrt-armvirt-64-default-rootfs.tar.gz
+        OPENWRT_URL=$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "ROOTFS_${{ env.VERSION }}/.*rootfs.tar.gz")
+        ARMVIRT_PATH=openwrt/bin/targets/armvirt/64
+        [ -d ${ARMVIRT_PATH} ] || mkdir -p ${ARMVIRT_PATH}
+        wget -q -P ${ARMVIRT_PATH} https://github.com/${GITHUB_REPOSITORY}/releases/download/${OPENWRT_URL}
         echo "::set-output name=status::success"
 
     - name: Package armvirt as openwrt
@@ -142,9 +143,10 @@ jobs:
     - name: Download armvirt firmware
       id: download
       run: |
-        mkdir -p openwrt/bin/targets/armvirt/64
-        cd openwrt/bin/targets/armvirt/64
-        wget -q https://github.com/${GITHUB_REPOSITORY}/releases/download/ROOTFS_${{ env.VERSION }}/openwrt-armvirt-64-default-rootfs.tar.gz
+        OPENWRT_URL=$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "ROOTFS_${{ env.VERSION }}/.*rootfs.tar.gz")
+        ARMVIRT_PATH=openwrt/bin/targets/armvirt/64
+        [ -d ${ARMVIRT_PATH} ] || mkdir -p ${ARMVIRT_PATH}
+        wget -q -P ${ARMVIRT_PATH} https://github.com/${GITHUB_REPOSITORY}/releases/download/${OPENWRT_URL}
         echo "::set-output name=status::success"
 
     - name: Package armvirt as openwrt

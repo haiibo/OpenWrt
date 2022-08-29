@@ -192,7 +192,7 @@
 
 
 ## 定制固件 [![](https://img.shields.io/badge/-项目基本编译教程-FFFFFF.svg)](#定制固件-)
-1. 首先登录 Gihub 账号，Fork 此项目到你自己的仓库
+1. 首先要登录 Gihub 账号，然后 Fork 此项目到你自己的 Github 仓库
 
 2. 修改 configs 目录对应文件添加或删除插件，或者复制自备的 xx.config 文件内容到配置文件
 
