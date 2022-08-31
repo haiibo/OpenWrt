@@ -20,50 +20,37 @@ jobs:
     - name: Checkout
       uses: actions/checkout@main
 
-    - name: Initialization environment
-      env:
-        DEBIAN_FRONTEND: noninteractive
+    - name: Get openwrt version
       run: |
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-        sudo -E apt-get -qq update
-        sudo -E apt-get -qq install $(curl -fsSL is.gd/depends_ubuntu_2204)
-        sudo -E apt-get -qq autoremove --purge
-        sudo -E apt-get -qq clean
-        sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir
-        sudo chown $USER:$GROUPS /workdir
-
-    - name: Get openwrt version date
-      working-directory: /workdir
-      run: |
-        df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-        cd openwrt
+        cd $GITHUB_WORKSPACE/openwrt
         version=$(echo "$(cat package/lean/default-settings/files/zzz-default-settings)" | grep -Po "DISTRIB_REVISION=\'\K[^\']*")
         echo "TAG=$version" >> $GITHUB_ENV
 
-    - name: Check docker environment
-      run: |
-        echo "docker buildx version"
-        docker buildx version
-        echo "ls -l /proc/sys/fs/binfmt_misc"
-        ls -l /proc/sys/fs/binfmt_misc
-        echo "docker run --privileged --rm tonistiigi/binfmt --install all"
-        docker run --privileged --rm tonistiigi/binfmt --install all
-        echo "ls -l /proc/sys/fs/binfmt_misc"
-        ls -l /proc/sys/fs/binfmt_misc
-        echo "docker buildx ls"
-        docker buildx ls
-
-    - name: Build and push docker image
+    - name: Get openwrt firmware
       run: |
         cd $GITHUB_WORKSPACE/docker
-        wget -q https://github.com/${GITHUB_REPOSITORY}/releases/download/ROOTFS_PLUS/openwrt-armvirt-64-default-rootfs.tar.gz
-        chmod +x $DOCKER_BUILD
-        ./$DOCKER_BUILD
-        gzip -dc dockerimgs/docker/*.gz | docker load
-        docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
-        docker tag ${{ env.DOCKER_IMAGE }} ${{ env.DOCKER_IMAGE }}:${{ env.TAG }}
-        docker push ${{ env.DOCKER_IMAGE }}:${{ env.TAG }}
-        docker push ${{ env.DOCKER_IMAGE }}
+        wget -q $(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/releases | grep ROOTFS_PLUS.*rootfs.tar.gz | cut -d '"' -f 4)
+        chmod +x $DOCKER_BUILD && ./$DOCKER_BUILD
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@master
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@master
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@master
+      with:
+         username: ${{ secrets.DOCKER_USERNAME }}
+         password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push Docker
+      uses: docker/build-push-action@master
+      with:
+        platforms: linux/arm64
+        context: docker
+        push: true
+        tags: |
+          ${{ env.DOCKER_IMAGE }}:${{ env.TAG }}
+          ${{ env.DOCKER_IMAGE }}
