@@ -1,41 +1,172 @@
 #!/usr/bin/env perl
-#use strict;
+use strict;
 use utf8;
+use Time::HiRes qw /usleep/;
 binmode(STDOUT, ":utf8");
 
 sub get_soc_temp {
+    my $t=shift;
     my @fnames=(
           '/sys/devices/virtual/thermal/thermal_zone0/temp',
           '/sys/devices/platform/scpi/scpi:sensors/hwmon/hwmon0/temp1_input',
        );
-    my $fh;
     my $temp = "Unknown";
     for my $fname (@fnames) {
         if( -f $fname ) {
-            open $fh, "<", $fname;
-            $temp = sprintf "%0.1f℃", <$fh> / 1000;
+            open my $fh, "<", $fname;
+	    if($t) {
+                $temp = sprintf "%0.1f", <$fh> / 1000;
+            } else {
+                $temp = sprintf "%0.1f℃", <$fh> / 1000;
+            }
             close $fh;
             return $temp;
         }
     }
+
     return $temp;
 }
 
 sub get_cpu_freq {
-    my @fnames=(
-           '/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_cur_freq',
-       );
-    my $fh;
-    my $freq = "Unknown";
-    for my $fname (@fnames) {
-        if( -f $fname ) {
-            open $fh, "<", $fname;
+    my $f=shift;
+    my @fnames=</sys/devices/system/cpu/cpufreq/policy?/cpuinfo_cur_freq>;
+    my $freq_str = "";
+    for (my $i=0; $i < $#fnames + 1; $i++) {
+        my $fname = $fnames[$i];
+        open my $fh, "<", $fname;
+	usleep(50000);
+	my $freq;
+	if($f =~ /-F(\d*)/) {
+	    my $alert_mhz = 1500;
+	    if($1 ne "") {
+		$alert_mhz = $1;
+	    }
+	    my $color = "\x1b[92m";
+            $freq = <$fh> / 1000;
+	    if($freq > $alert_mhz) {
+		$color = "\x1b[91m";
+	    }
+            $freq = sprintf "%s%d Mhz\x1b[0m", $color, $freq;
+        } else {
             $freq = sprintf "%dMhz", <$fh> / 1000;
-	    close $fh;
-	    return $freq;
-        }
+        }    
+        close $fh;
+	$freq_str .= $freq;
+        if($i < $#fnames) {
+            $freq_str .= " & ";
+        } 
     }
-    return $freq;
+
+    if($#fnames > 0 && $f eq "") {
+	$freq_str = "(" . $freq_str . ")";
+    }
+
+    if($freq_str eq "") {
+	$freq_str = "Unknown";
+    }
+    return $freq_str;
 }
 
-print  &get_cpu_freq, " / ", &get_soc_temp, "\n";
+sub get_arch_info {
+    my $a=shift;
+    my @cpus = </sys/devices/system/cpu/cpu?>;
+    my @cpu_groups;
+    my %group_core_count;
+    for my $cpu (@cpus) {
+        open my $fh, "<", "${cpu}/uevent";
+        while(<$fh>) {
+            chomp;
+            my($key,$value) = split /=/;
+            if($key eq "OF_COMPATIBLE_0") {
+		my($cortex, $a) = split /-/, (split /,/, $value)[1];
+                my $core_type_name = ucfirst($cortex) . "-" . ucfirst($a);
+                if(not exists $group_core_count{$core_type_name}) {
+                     push @cpu_groups, $core_type_name;
+                     $group_core_count{$core_type_name} = 0;
+                }
+                $group_core_count{$core_type_name} += 1;
+            } 
+        }
+        close $fh;
+    }
+
+    my $arch_info;
+    if($a) {
+        $arch_info = "AArch64 : " if ($a);
+    } else {
+        $arch_info = "AArch64 Processor : ";
+    }
+    for (my $i = 0; $i < $#cpu_groups + 1; $i++) {
+        my $group = $cpu_groups[$i];
+	#if($i == 0) {
+	#    $arch_info .= "";
+	#}
+        $arch_info .= $group;
+	if($a) {
+            $arch_info .= " x ";
+        } else {
+            $arch_info .= " * ";
+        }
+        $arch_info .= $group_core_count{$group};
+        if($i < $#cpu_groups) {
+            $arch_info .= " & ";
+        } #else {
+	#    $arch_info .= "";
+	#}
+    }
+
+    return "$arch_info";
+}
+
+sub get_uptime {
+    my $fh;
+    my $result;
+    open $fh, "<", "/proc/uptime" or die;
+    my $str_uptime = <$fh>;
+    if($str_uptime =~ /(\d*)/) {
+        my $day  = int($1/86400);
+        my $hour = int(($1%86400)/3600);
+	my $min  = int(($1%3600)/60);
+	my $sec  =  $1%60;
+
+	my $sday  = $day . "天 " if($day>0);
+	my $shour = $hour . "小时 " if($hour>0 || $day>0) ;
+	my $smin  = $min . "分钟 ";
+	my $ssec  = $sec . "秒";
+	$result  .= $sday . $shour . $smin . $ssec;
+    } 
+    close $fh;
+    return $result;
+}
+
+sub get_avgload {
+    my $fh;
+    my $result;
+    open $fh, "<", "/proc/loadavg" or die;
+    my $str = <$fh>;
+    $result = join(' ', (split(/\s+/, $str))[0,1,2]);
+    close $fh;
+    return $result;
+}
+
+#####   main program #####
+my $argc = scalar( @ARGV );
+if($argc == 0) {
+    print &get_cpu_freq, " / ", &get_soc_temp, "\n";
+} elsif($ARGV[0] eq "-a") {
+    print &get_arch_info, "\n";
+} elsif($ARGV[0] eq "-A") {
+    print &get_arch_info("A"), "\n";
+} elsif($ARGV[0] eq "-t") {
+    print &get_soc_temp, "\n";
+} elsif($ARGV[0] eq "-T") {
+    print &get_soc_temp("T"), "\n";
+} elsif($ARGV[0] eq "-f") {
+    print &get_cpu_freq, "\n";
+} elsif($ARGV[0] =~ /-F/) {
+    print &get_cpu_freq($ARGV[0]), "\n";
+} elsif($ARGV[0] eq "-u") {
+    print &get_uptime, "\n";
+} elsif($ARGV[0] eq "-l") {
+    print &get_avgload, "\n";
+}

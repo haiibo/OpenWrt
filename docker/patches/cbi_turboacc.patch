@@ -1,0 +1,35 @@
+--- a/usr/lib/lua/luci/model/cbi/turboacc.lua
++++ b/usr/lib/lua/luci/model/cbi/turboacc.lua
+@@ -10,7 +10,7 @@ s = m:section(TypedSection, "turboacc",
+ s.addremove = false
+ s.anonymous = true
+ 
+-if nixio.fs.access("/lib/modules/" .. kernel_version .. "/xt_FLOWOFFLOAD.ko") then
++if luci.sys.call("modinfo xt_FLOWOFFLOAD >/dev/null") == 0 then
+ sw_flow = s:option(Flag, "sw_flow", translate("Software flow offloading"))
+ sw_flow.default = 0
+ sw_flow.description = translate("Software based offloading for routing/NAT")
+@@ -24,20 +24,20 @@ hw_flow.description = translate("Require
+ hw_flow:depends("sw_flow", 1)
+ end
+ 
+-if nixio.fs.access("/lib/modules/" .. kernel_version .. "/shortcut-fe-cm.ko") then
++if luci.sys.call("modinfo shortcut-fe-cm >/dev/null") == 0 then
+ sfe_flow = s:option(Flag, "sfe_flow", translate("Shortcut-FE flow offloading"))
+ sfe_flow.default = 0
+ sfe_flow.description = translate("Shortcut-FE based offloading for routing/NAT")
+ sfe_flow:depends("sw_flow", 0)
+ end
+ 
+-if nixio.fs.access("/lib/modules/" .. kernel_version .. "/tcp_bbr.ko") then
++if luci.sys.call("modinfo tcp_bbr >/dev/null") == 0 then
+ bbr_cca = s:option(Flag, "bbr_cca", translate("BBR CCA"))
+ bbr_cca.default = 0
+ bbr_cca.description = translate("Using BBR CCA can improve TCP network performance effectively")
+ end 
+ 
+-if nixio.fs.access("/lib/modules/" .. kernel_version .. "/xt_FULLCONENAT.ko") then
++if luci.sys.call("modinfo xt_FULLCONENAT >/dev/null") == 0 then
+ fullcone_nat = s:option(Flag, "fullcone_nat", translate("FullCone NAT"))
+ fullcone_nat.default = 0
+ fullcone_nat.description = translate("Using FullCone NAT can improve gaming performance effectively")

@@ -1,0 +1,28 @@
+--- a/etc/init.d/turboacc
++++ b/etc/init.d/turboacc
+@@ -21,10 +21,10 @@ inital_conf(){
+ 	config_get "dns_caching_mode" "config" "dns_caching_mode" "0"
+ 	config_get "dns_caching_dns" "config" "dns_caching_dns"
+ 
+-	[ -e "/lib/modules/$(uname -r)/mtkhnat.ko" ] && { sw_flow="0"; hw_flow="1"; }
+-	[ ! -e "/lib/modules/$(uname -r)/xt_FLOWOFFLOAD.ko" ] && { sw_flow="0"; hw_flow="0"; }
+-	[ ! -e "/lib/modules/$(uname -r)/tcp_bbr.ko" ] && bbr_cca="0"
+-	[ ! -e "/lib/modules/$(uname -r)/xt_FULLCONENAT.ko" ] && fullcone_nat="0"
++	modinfo mtkhnat >/dev/null 2>&1 && { sw_flow="0"; hw_flow="1"; }
++	modinfo xt_FLOWOFFLOAD >/dev/null 2>&1 || { sw_flow="0"; hw_flow="0"; }
++	modinfo tcp_bbr >/dev/null 2>&1 || bbr_cca="0"
++	modinfo xt_FULLCONENAT >/dev/null 2>&1 || fullcone_nat="0"
+ }
+ 
+ start_pdnsd() {
+@@ -228,8 +228,8 @@ revert_dns() {
+ load_sfe() {
+ 	local kernel_version=$(uname -r)
+ 
+-	[ -e "/lib/modules/$kernel_version/shortcut-fe-cm.ko" ] && modprobe shortcut-fe-cm
+-	[ -e "/lib/modules/$kernel_version/fast-classifier.ko" ] && modprobe fast-classifier
++	modinfo shortcut-fe-cm >/dev/null 2>&1 && modprobe shortcut-fe-cm
++	modinfo fast-classifier >/dev/null 2>&1 && modprobe fast-classifier
+ }
+ 
+ unload_sfe() {
