@@ -30,7 +30,7 @@ jobs:
     - name: Get openwrt firmware
       run: |
         cd $GITHUB_WORKSPACE/docker
-        wget -q $(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/releases | grep ROOTFS_PLUS.*rootfs.tar.gz | cut -d '"' -f 4)
+        wget -q $(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/releases | grep ARMv8_Docker.*rootfs.tar.gz | cut -d '"' -f 4)
         chmod +x $DOCKER_BUILD && ./$DOCKER_BUILD
 
     - name: Set up QEMU
