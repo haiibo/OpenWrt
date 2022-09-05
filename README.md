@@ -71,6 +71,7 @@
 　├── 系统进程<br/>
 　├── 实时信息<br/>
 　├── 实时监控<br/>
+　├── WireGuard 状态<br/>
 　├── 负载均衡<br/>
 　└── 释放内存
 </details>
@@ -99,16 +100,16 @@
 　├── Hello World<br/>
 　├── iKoolProxy 滤广告<br/>
 　├── Bypass<br/>
-　├── DNS 过滤器<br/>
 　├── 广告屏蔽大师 Plus+<br/>
 　├── 阿里云盘 FUSE<br/>
 　├── 阿里云盘 WebDAV<br/>
 　├── AdGuard Home<br/>
 　├── ShadowSocksR Plus+<br/>
-　├── DDNS.to内网穿透<br/>
+　├── DDNSTO 远程控制<br/>
 　├── 微信推送<br/>
 　├── 上网时间控制<br/>
 　├── 全能推送<br/>
+　├── MosDNS<br/>
 　├── OpenClash<br/>
 　├── 解锁网易云灰色歌曲<br/>
 　├── 动态 DNS<br/>
@@ -173,6 +174,7 @@
 　├── 静态路由<br/>
 　├── 防火墙<br/>
 　├── 诊断<br/>
+　├── Socat<br/>
 　├── SQM QoS<br/>
 　├── 应用过滤<br/>
 　├── 网速控制<br/>
