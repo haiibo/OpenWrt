@@ -23,13 +23,22 @@ env:
   TZ: Asia/Shanghai
 
 jobs:
-  Package-for-Mini:
+  package:
     runs-on: ubuntu-22.04
     if: github.event.repository.owner.id == github.event.sender.id
+    name: Package for ${{ matrix.version }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - version: MINI
+          explain: 这是 ARMv8 精简版，只集成了一些常用插件
+        - version: PLUS
+          explain: 这是 ARMv8 多功能版，集成插件多适合折腾
 
     env:
-      VERSION: MINI
-      EXPLAIN: 这是 ARMv8 精简版，只集成了一些常用插件
+      VERSION: ${{ matrix.version }}
+      EXPLAIN: ${{ matrix.explain }}
 
     steps:
     - name: Checkout
@@ -62,88 +71,7 @@ jobs:
     - name: Download armvirt firmware
       id: download
       run: |
-        OPENWRT_URL=$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "ROOTFS_${{ env.VERSION }}/.*rootfs.tar.gz")
-        ARMVIRT_PATH=openwrt/bin/targets/armvirt/64
-        [ -d ${ARMVIRT_PATH} ] || mkdir -p ${ARMVIRT_PATH}
-        wget -q -P ${ARMVIRT_PATH} https://github.com/${GITHUB_REPOSITORY}/releases/download/${OPENWRT_URL}
-        echo "::set-output name=status::success"
-
-    - name: Package armvirt as openwrt
-      uses: ophub/flippy-openwrt-actions@main
-      if: steps.download.outputs.status == 'success'
-      env:
-        OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*rootfs.tar.gz
-        PACKAGE_SOC: all
-        KERNEL_REPO_URL: https://github.com/ophub/kernel/tree/main/pub/stable
-        KERNEL_VERSION_NAME: 5.15.13_5.19.1
-        KERNEL_AUTO_LATEST: true
-        GZIP_IMGS: .gz
-
-    - name: Upload openwrt to actions
-      uses: kittaakos/upload-artifact-as-is@master
-      if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_FIRMWARE == 'true'
-      with:
-        path: ${{ env.PACKAGED_OUTPUTPATH }}
-
-    - name: Upload openwrt to release
-      uses: ncipollo/release-action@main
-      if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_RELEASE == 'true'
-      with:
-        name: R${{ env.DATE }} for ARMv8_${{ env.VERSION }}
-        artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
-        allowUpdates: true
-        removeArtifacts: true
-        tag: ARMv8_${{ env.VERSION }}
-        token: ${{ secrets.GITHUB_TOKEN }}
-        body: |
-          **This is OpenWrt firmware for Armvirt 64**
-          * ${{ env.EXPLAIN }}
-          默认 IP：192.168.1.1 默认密码：password
-          安装到 EMMC：系统 → 晶晨宝盒 → 安装 OpenWrt → 选择型号 → 安装
-          升级 OpenWrt：系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新
-          当前使用版本:【编译前的最后一次➦[主源码](https://github.com/coolsnowwolf/lede)更新记录】
-          ${{ env.useVersionInfo }}
-
-  Package-for-Plus:
-    runs-on: ubuntu-22.04
-    if: github.event.repository.owner.id == github.event.sender.id
-
-    env:
-      VERSION: PLUS
-      EXPLAIN: 这是 ARMv8 多功能版，集成插件多适合折腾
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@main
-
-    - name: Initialization environment
-      env:
-        DEBIAN_FRONTEND: noninteractive
-      run: |
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-        sudo -E apt-get -qq update
-        sudo -E apt-get -qq install $(curl -fsSL is.gd/depends_ubuntu_2204)
-        sudo -E apt-get -qq autoremove --purge
-        sudo -E apt-get -qq clean
-        sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir
-        sudo chown $USER:$GROUPS /workdir
-
-    - name: Clone source code
-      working-directory: /workdir
-      run: |
-        df -hT $PWD
-        git clone $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-        cd openwrt
-        useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
-        echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
-        echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
-
-    - name: Download armvirt firmware
-      id: download
-      run: |
-        OPENWRT_URL=$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "ROOTFS_${{ env.VERSION }}/.*rootfs.tar.gz")
+        OPENWRT_URL=$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "ROOTFS_${{ env.VERSION }}.*rootfs.tar.gz")
         ARMVIRT_PATH=openwrt/bin/targets/armvirt/64
         [ -d ${ARMVIRT_PATH} ] || mkdir -p ${ARMVIRT_PATH}
         wget -q -P ${ARMVIRT_PATH} https://github.com/${GITHUB_REPOSITORY}/releases/download/${OPENWRT_URL}
