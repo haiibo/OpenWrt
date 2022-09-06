@@ -113,8 +113,7 @@ jobs:
         mv -f openwrt/bin/targets/*/*/packages/*.ipk Packages
         tar -zcvf Packages.tar.gz Packages
         mv *.config *.tar.gz openwrt/bin/targets/*/*
-        cp -rf openwrt/bin/targets lean
-        rm -rf openwrt/* && cd lean/*/*
+        cd openwrt/bin/targets/*/*
         rm -rf packages feeds.buildinfo sha256sums version.buildinfo
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
@@ -142,11 +141,52 @@ jobs:
           当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}
 
+  package:
+    needs: build
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install $(curl -fsSL is.gd/depends_ubuntu_2204)
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        sudo timedatectl set-timezone "$TZ"
+        sudo mkdir -p /workdir
+        sudo chown $USER:$GROUPS /workdir
+
+    - name: Clone source code
+      working-directory: /workdir
+      run: |
+        df -hT $PWD
+        git clone $REPO_URL -b $REPO_BRANCH openwrt
+        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        cd openwrt
+        useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
+        echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
+        echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
+
+    - name: Download armvirt firmware
+      id: download
+      run: |
+        [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
+        curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "${{ env.FILE_NAME }}.*rootfs.tar.gz" > DOWNLOAD_ARMVIRT
+        [ -s DOWNLOAD_ARMVIRT ]
+        wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_ARMVIRT)
+        echo "::set-output name=status::success"
+
     - name: Package armvirt as openwrt
       uses: unifreq/openwrt_packit@master
-      if: steps.organize.outputs.status == 'success'
+      if: steps.download.outputs.status == 'success'
       env:
-        OPENWRT_ARMVIRT: lean/*/*/*rootfs.tar.gz
+        OPENWRT_ARMVIRT: openwrt-armvirt/*rootfs.tar.gz
         PACKAGE_SOC: all
         KERNEL_REPO_URL: https://github.com/ophub/kernel/tree/main/pub/stable
         KERNEL_VERSION_NAME: 5.15.13_5.19.1
