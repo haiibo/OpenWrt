@@ -70,7 +70,7 @@ svn co https://github.com/fw876/helloworld/trunk/lua-neturl package/lua-neturl
 svn co https://github.com/fw876/helloworld/trunk/trojan package/trojan
 
 # Themes
-svn co https://github.com/haiibo/packages/trunk/luci-theme-edge package/luci-theme-edge
+git clone -b 18.06 https://github.com/kiddin9/luci-theme-edge package/luci-theme-edge
 svn co https://github.com/rosywrt/luci-theme-rosy/trunk/luci-theme-rosy package/luci-theme-rosy
 svn co https://github.com/haiibo/packages/trunk/luci-theme-darkmatter package/luci-theme-darkmatter
 svn co https://github.com/haiibo/packages/trunk/luci-theme-atmaterial_new package/luci-theme-atmaterial_new
