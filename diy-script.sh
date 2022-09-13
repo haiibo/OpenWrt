@@ -110,6 +110,11 @@ date_version=$(date +"%Y.%m.%d")
 orig_version=$(echo "$(cat package/lean/default-settings/files/zzz-default-settings)" | grep -Po "DISTRIB_REVISION=\'\K[^\']*")
 sed -i "s/${orig_version}/R${date_version}/g" package/lean/default-settings/files/zzz-default-settings
 
+# 调整 x86 只显示 CPU 型号
+sed -i '/h=${g}.*/d' package/lean/autocore/files/x86/autocore
+sed -i 's/(dmesg.*/{a}${b}${c}${d}${e}${f}/g' package/lean/autocore/files/x86/autocore
+sed -i 's/echo $h/echo $g/g' package/lean/autocore/files/x86/autocore
+
 # 修改 Makefile
 find package/*/ -maxdepth 2 -path "*/Makefile" | xargs -i sed -i 's/include\ \.\.\/\.\.\/luci\.mk/include \$(TOPDIR)\/feeds\/luci\/luci\.mk/g' {}
 find package/*/ -maxdepth 2 -path "*/Makefile" | xargs -i sed -i 's/include\ \.\.\/\.\.\/lang\/golang\/golang\-package\.mk/include \$(TOPDIR)\/feeds\/packages\/lang\/golang\/golang\-package\.mk/g' {}
