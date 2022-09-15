@@ -38,8 +38,8 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       run: |
         docker rmi $(docker images -q)
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-        sudo -E apt-get -qq purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell mysql* php* moby* android*
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /etc/mysql /usr/local/lib/android
+        sudo -E apt-get -qq purge azure-cli google* llvm* moby* mysql* php* powershell
         sudo -E apt-get -qq update
         sudo -E apt-get -qq install $(curl -fsSL is.gd/depends_ubuntu_2204)
         sudo -E apt-get -qq autoremove --purge
