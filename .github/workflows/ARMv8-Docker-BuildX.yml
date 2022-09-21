@@ -3,7 +3,7 @@ name: ARMv8 Docker BuildX
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 16 * * 5'
+    - cron: 0 1 * * 6
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -20,17 +20,17 @@ jobs:
     - name: Checkout
       uses: actions/checkout@main
 
-    - name: Get openwrt version
+    - name: Extract OpenWrt Version
       run: |
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         cd $GITHUB_WORKSPACE/openwrt
         version=$(echo "$(cat package/lean/default-settings/files/zzz-default-settings)" | grep -Po "DISTRIB_REVISION=\'\K[^\']*")
         echo "TAG=$version" >> $GITHUB_ENV
 
-    - name: Get openwrt firmware
+    - name: Extract OpenWrt Firmware
       run: |
         cd $GITHUB_WORKSPACE/docker
-        wget -q $(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/releases | grep ARMv8_Docker.*rootfs.tar.gz | cut -d '"' -f 4)
+        wget -q $(curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY/releases" | grep "ARMv8_Docker.*rootfs.tar.gz" | cut -d '"' -f 4)
         chmod +x $DOCKER_BUILD && ./$DOCKER_BUILD
 
     - name: Set up QEMU

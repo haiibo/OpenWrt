@@ -11,7 +11,7 @@ name: ARMv8 Mini OpenWrt
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 23 * * *'
+    - cron: 0 22 * * *
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -19,21 +19,24 @@ env:
   CONFIG_FILE: configs/armv8-mini.config
   DIY_SCRIPT: diy-mini.sh
   UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: false
-  UPLOAD_RELEASE: true
-  FILE_NAME: ROOTFS_MINI
-  PRODUCT_NAME: ARMv8_MINI
+  FIRMWARE_RELEASE: true
+  FIRMWARE_TAG: ROOTFS_MINI
+  OPENWRT_RELEASE: true
+  OPENWRT_TAG: ARMv8_MINI
   TZ: Asia/Shanghai
 
 jobs:
-  build:
+  Build:
     runs-on: ubuntu-22.04
+
+    outputs:
+      VERSION_INFO: ${{ steps.clone.outputs.VERSION_INFO }}
 
     steps:
     - name: Checkout
       uses: actions/checkout@main
 
-    - name: Initialization environment
+    - name: Initialization Environment
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -47,31 +50,35 @@ jobs:
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
 
-    - name: Clone source code
+    - name: Clone Source Code
       working-directory: /workdir
+      id: clone
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
-        useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
-        echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
+        VERSION_INFO=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
+        echo "VERSION_INFO=$VERSION_INFO" >> $GITHUB_ENV
+        echo "::set-output name=VERSION_INFO::$(echo $VERSION_INFO)"
 
-    - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a
+    - name: Install Feeds
+      run: |
+        cd openwrt
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
 
-    - name: Install feeds
-      run: cd openwrt && ./scripts/feeds install -a
-
-    - name: Load custom configuration
+    - name: Load Custom Configuration
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+        chmod +x $GITHUB_WORKSPACE/scripts/*.sh
         chmod +x $DIY_SCRIPT
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_SCRIPT
+        $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
 
-    - name: Download package
+    - name: Download DL Package
       id: package
       run: |
         cd openwrt
@@ -80,75 +87,102 @@ jobs:
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
-    - name: Compile the firmware
+    - name: Extract Information
+      id: extract
+      run: |
+        cd openwrt
+        DEVICE_TARGET=$(cat .config | grep CONFIG_TARGET_BOARD | awk -F '"' '{print $2}')
+        echo "DEVICE_TARGET=$DEVICE_TARGET" >> $GITHUB_ENV
+        DEVICE_SUBTARGET=$(cat .config | grep CONFIG_TARGET_SUBTARGET | awk -F '"' '{print $2}')
+        echo "DEVICE_SUBTARGET=$DEVICE_SUBTARGET" >> $GITHUB_ENV
+
+    - name: Compile Packages
       id: compile
       run: |
         cd openwrt
         echo -e "$(nproc) thread compile"
-        make -j$(nproc) || make -j1 || make -j1 V=s
-        echo "::set-output name=status::success"
-        grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
-        [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
-        echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
-        echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+        make tools/compile -j$(nproc) || make tools/compile -j1 V=s
+        make toolchain/compile -j$(nproc) || make toolchain/compile -j1 V=s
+        make target/compile -j$(nproc) || make target/compile -j1 V=s IGNORE_ERRORS=1
+        make diffconfig
+        make package/compile -j$(nproc) IGNORE_ERRORS=1 || make package/compile -j1 V=s IGNORE_ERRORS=1
+        make package/index
 
-    - name: Check space usage
+    - name: Generate Firmware
+      id: generate
+      run: |
+        cd openwrt
+        mkdir -p files/etc/uci-defaults
+        cp $GITHUB_WORKSPACE/scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
+        make package/install -j$(nproc) || make package/install -j1 V=s
+        make target/install -j$(nproc) || make target/install -j1 V=s
+        echo "::set-output name=status::success"
+        make checksum
+        echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
+        echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
+
+    - name: Check Space Usage
+      if: always()
       run: df -hT
 
-    - name: Upload bin directory
+    - name: Upload Bin Directory
+      if: steps.generate.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       uses: actions/upload-artifact@main
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
-        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: lede-bin-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.FILE_DATE }}
         path: openwrt/bin
 
-    - name: Organize files
+    - name: Organize Files
+      if: steps.generate.outputs.status == 'success'
       id: organize
-      if: steps.compile.outputs.status == 'success'
       run: |
-        cp openwrt/.config build.config
         mkdir -p Packages
+        cp openwrt/.config build.config
         mv -f openwrt/bin/packages/*/*/*.ipk Packages
         mv -f openwrt/bin/targets/*/*/packages/*.ipk Packages
-        tar -zcvf Packages.tar.gz Packages
+        tar -zcvf Packages.tar.gz Packages && rm -rf Packages
         mv *.config *.tar.gz openwrt/bin/targets/*/*
         cd openwrt/bin/targets/*/*
-        rm -rf packages feeds.buildinfo sha256sums version.buildinfo
-        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+        rm -rf packages feeds.buildinfo version.buildinfo
+        echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
-    - name: Upload firmware directory
+    - name: Upload Firmware To Artifact
+      if: steps.organize.outputs.status == 'success' && env.FIRMWARE_RELEASE != 'true'
       uses: actions/upload-artifact@main
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true'
       with:
-        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: ${{ env.FIRMWARE }}
+        name: lede-firmware-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.FILE_DATE }}
+        path: ${{ env.FIRMWARE_PATH }}
 
-    - name: Upload firmware to release
+    - name: Upload Firmware To Release
+      if: steps.organize.outputs.status == 'success' && env.FIRMWARE_RELEASE == 'true'
       uses: ncipollo/release-action@main
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true'
       with:
-        name: R${{ env.DATE }} for ${{ env.FILE_NAME }}
-        artifacts: ${{ env.FIRMWARE }}/*
+        name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}
         allowUpdates: true
-        tag: ${{ env.FILE_NAME }}
+        replacesArtifacts: true
+        tag: ${{ env.FIRMWARE_TAG }}
         token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: ${{ env.FIRMWARE_PATH }}/*
         body: |
-          **This is temporary firmware for Armvirt 64**
+          **This is Temporary Firmware for Armvirt 64**
           * 这是 ARMv8_MINI 精简版打包临时固件，不可直刷
           直刷固件参见 Tag 名为 ARMv8_MINI 的 Releases
           当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
-          ${{ env.useVersionInfo }}
+          ${{ env.VERSION_INFO }}
 
-  package:
-    needs: build
+  Package:
+    needs: [Build]
     runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout
       uses: actions/checkout@main
 
-    - name: Initialization environment
+    - name: Restore Variables
+      run: echo "VERSION_INFO=$(echo '${{needs.Build.outputs.VERSION_INFO}}')" >> $GITHUB_ENV
+
+    - name: Initialization Environment
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -158,61 +192,48 @@ jobs:
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir
-        sudo chown $USER:$GROUPS /workdir
 
-    - name: Clone source code
-      working-directory: /workdir
-      run: |
-        df -hT $PWD
-        git clone $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-        cd openwrt
-        useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
-        echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
-        echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
-
-    - name: Download armvirt firmware
+    - name: Download Armvirt Firmware
       id: download
       run: |
         [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-        curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" | grep -o "${{ env.FILE_NAME }}.*rootfs.tar.gz" > DOWNLOAD_ARMVIRT
+        curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY/releases" | grep -o "$FIRMWARE_TAG.*rootfs.tar.gz" > DOWNLOAD_ARMVIRT
         [ -s DOWNLOAD_ARMVIRT ]
-        wget -q -P openwrt-armvirt https://github.com/${GITHUB_REPOSITORY}/releases/download/$(cat DOWNLOAD_ARMVIRT)
+        wget -q -P openwrt-armvirt https://github.com/$GITHUB_REPOSITORY/releases/download/$(cat DOWNLOAD_ARMVIRT)
         echo "::set-output name=status::success"
+        echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
 
-    - name: Package armvirt as openwrt
-      uses: unifreq/openwrt_packit@master
+    - name: Package OpenWrt Firmware
       if: steps.download.outputs.status == 'success'
+      uses: unifreq/openwrt_packit@master
       env:
         OPENWRT_ARMVIRT: openwrt-armvirt/*rootfs.tar.gz
         PACKAGE_SOC: all
         KERNEL_REPO_URL: https://github.com/ophub/kernel/tree/main/pub/stable
         KERNEL_VERSION_NAME: 5.15.13_5.19.1
         KERNEL_AUTO_LATEST: true
-        GZIP_IMGS: .gz
 
-    - name: Upload openwrt to actions
+    - name: Upload OpenWrt To Artifact
+      if: env.PACKAGED_STATUS == 'success' && env.OPENWRT_RELEASE != 'true'
       uses: kittaakos/upload-artifact-as-is@master
-      if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_FIRMWARE == 'true'
       with:
         path: ${{ env.PACKAGED_OUTPUTPATH }}
 
-    - name: Upload openwrt to release
+    - name: Upload OpenWrt To Release
+      if: env.PACKAGED_STATUS == 'success' && env.OPENWRT_RELEASE == 'true'
       uses: ncipollo/release-action@main
-      if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_RELEASE == 'true'
       with:
-        name: R${{ env.DATE }} for ${{ env.PRODUCT_NAME }}
-        artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
+        name: R${{ env.DATE }} for ${{ env.OPENWRT_TAG }}
         allowUpdates: true
         removeArtifacts: true
-        tag: ${{ env.PRODUCT_NAME }}
+        tag: ${{ env.OPENWRT_TAG }}
         token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
         body: |
-          **This is OpenWrt firmware for Armvirt 64**
+          **This is OpenWrt Firmware for Armvirt 64**
           * 这是 ARMv8 精简版，只集成了一些常用插件
           默认 IP：192.168.1.1 默认密码：password
           安装到 EMMC：系统 → 晶晨宝盒 → 安装 OpenWrt → 选择型号 → 安装
           升级 OpenWrt：系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新
           当前使用版本:【编译前的最后一次➦[主源码](https://github.com/coolsnowwolf/lede)更新记录】
-          ${{ env.useVersionInfo }}
+          ${{ env.VERSION_INFO }}

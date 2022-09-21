@@ -1,23 +1,23 @@
-name: Delete Older Artifacts
+name: Delete Old Workflows
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: 0 3 * * *
 
 jobs:
   Cleaning:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
-    - name: Delete Older Workflows
+    - name: Delete Old Workflows
       uses: GitRML/delete-workflow-runs@main
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         retain_days: 7
         keep_minimum_runs: 0
 
-    - name: Delete Older Releases
+    - name: Delete Old Releases
       uses: dev-drprasad/delete-older-releases@master
       with:
         keep_latest: 10
