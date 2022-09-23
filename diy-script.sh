@@ -111,7 +111,7 @@ sed -i '/nlbwmon/a\uci commit nlbwmon' package/lean/default-settings/files/zzz-d
 # 修改版本为编译日期
 date_version=$(date +"%Y.%m.%d")
 orig_version=$(echo "$(cat package/lean/default-settings/files/zzz-default-settings)" | grep -Po "DISTRIB_REVISION=\'\K[^\']*")
-sed -i "s/${orig_version}/R${date_version}/g" package/lean/default-settings/files/zzz-default-settings
+sed -i "s/${orig_version}/R${date_version} by Haiibo/g" package/lean/default-settings/files/zzz-default-settings
 
 # 调整 x86 只显示 CPU 型号
 sed -i '/h=${g}.*/d' package/lean/autocore/files/x86/autocore

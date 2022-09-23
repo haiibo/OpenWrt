@@ -61,6 +61,7 @@ jobs:
         VERSION_INFO=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
         echo "VERSION_INFO=$VERSION_INFO" >> $GITHUB_ENV
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
+        echo "DATE1=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
 
     - name: Download Armvirt Firmware
       id: download
@@ -77,9 +78,11 @@ jobs:
       env:
         OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*rootfs.tar.gz
         PACKAGE_SOC: all
+        WHOAMI: Haiibo
         KERNEL_REPO_URL: https://github.com/ophub/kernel/tree/main/pub/stable
         KERNEL_VERSION_NAME: 5.15.13_5.19.1
         KERNEL_AUTO_LATEST: true
+        DISTRIB_REVISION: R${{ env.DATE1 }} by Haiibo
 
     - name: Upload OpenWrt To Artifact
       uses: kittaakos/upload-artifact-as-is@master
