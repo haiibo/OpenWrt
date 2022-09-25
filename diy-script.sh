@@ -103,6 +103,11 @@ svn co https://github.com/linkease/nas-packages/trunk/network/services/ddnsto pa
 svn co https://github.com/haiibo/packages/trunk/luci-app-wrtbwmon package/luci-app-wrtbwmon
 svn co https://github.com/haiibo/packages/trunk/wrtbwmon package/wrtbwmon
 
+# 设置向导
+svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-wizard package/luci-app-wizard
+sed -i 's/"admin"/"admin", "system"/g' package/luci-app-wizard/files/luci/controller/wizard.lua
+sed -i 's/21/87/g' package/luci-app-wizard/files/luci/controller/wizard.lua
+
 # 在线用户
 svn co https://github.com/haiibo/packages/trunk/luci-app-onliner package/luci-app-onliner
 sed -i '/bin\/sh/a\uci set nlbwmon.@nlbwmon[0].refresh_interval=2s' package/lean/default-settings/files/zzz-default-settings
