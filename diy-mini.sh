@@ -90,6 +90,9 @@ git clone --depth=1 https://github.com/haiibo/luci-app-onliner package/luci-app-
 sed -i '/bin\/sh/a\uci set nlbwmon.@nlbwmon[0].refresh_interval=2s' package/lean/default-settings/files/zzz-default-settings
 sed -i '/nlbwmon/a\uci commit nlbwmon' package/lean/default-settings/files/zzz-default-settings
 
+# 修改 bypass 依赖
+sed -i 's/luci-lib-ipkg/luci-base/g' package/luci-app-bypass/Makefile
+
 # 修改版本为编译日期
 date_version=$(date +"%Y.%m.%d")
 orig_version=$(echo "$(cat package/lean/default-settings/files/zzz-default-settings)" | grep -Po "DISTRIB_REVISION=\'\K[^\']*")
