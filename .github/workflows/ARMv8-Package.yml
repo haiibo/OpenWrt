@@ -12,8 +12,6 @@ on:
   workflow_dispatch:
   schedule:
     - cron: 0 15 * * *
-  watch:
-    types: started
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -24,7 +22,6 @@ env:
 jobs:
   Package:
     runs-on: ubuntu-22.04
-    if: github.event.repository.owner.id == github.event.sender.id
     name: Package for ${{ matrix.version }}
     strategy:
       fail-fast: false
