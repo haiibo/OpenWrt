@@ -28,20 +28,20 @@ rm -rf feeds/luci/applications/luci-app-wrtbwmon
 rm -rf feeds/luci/applications/luci-app-dockerman
 
 # 添加额外软件包
-git clone --depth=1 https://github.com/kongfl888/luci-app-adguardhome package/luci-app-adguardhome
-git clone --depth=1 https://github.com/tty228/luci-app-serverchan package/luci-app-serverchan
-git clone --depth=1 https://github.com/iwrt/luci-app-ikoolproxy package/luci-app-ikoolproxy
-git clone --depth=1 https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
-git clone --depth=1 https://github.com/destan19/OpenAppFilter package/OpenAppFilter
-git clone --depth=1 https://github.com/Jason6111/luci-app-netdata package/luci-app-netdata
-git clone --depth=1 -b lede https://github.com/pymumu/luci-app-smartdns package/luci-app-smartdns
+git clone --depth 1 https://github.com/kongfl888/luci-app-adguardhome package/luci-app-adguardhome
+git clone --depth 1 https://github.com/tty228/luci-app-serverchan package/luci-app-serverchan
+git clone --depth 1 https://github.com/iwrt/luci-app-ikoolproxy package/luci-app-ikoolproxy
+git clone --depth 1 https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
+git clone --depth 1 https://github.com/destan19/OpenAppFilter package/OpenAppFilter
+git clone --depth 1 https://github.com/Jason6111/luci-app-netdata package/luci-app-netdata
+git clone --depth 1 -b lede https://github.com/pymumu/luci-app-smartdns package/luci-app-smartdns
 svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-filebrowser package/luci-app-filebrowser
 svn co https://github.com/lisaac/luci-app-dockerman/trunk/applications/luci-app-dockerman package/luci-app-dockerman
 svn co https://github.com/immortalwrt/luci/branches/openwrt-18.06/applications/luci-app-eqos package/luci-app-eqos
 
 # 科学上网插件
-git clone --depth=1 https://github.com/jerrykuku/luci-app-vssr package/luci-app-vssr
-git clone --depth=1 https://github.com/jerrykuku/lua-maxminddb package/lua-maxminddb
+git clone --depth 1 https://github.com/jerrykuku/luci-app-vssr package/luci-app-vssr
+git clone --depth 1 https://github.com/jerrykuku/lua-maxminddb package/lua-maxminddb
 svn co https://github.com/kiddin9/openwrt-bypass/trunk/luci-app-bypass package/luci-app-bypass
 svn co https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/luci-app-openclash
 svn co https://github.com/xiaorouji/openwrt-passwall/branches/luci/luci-app-passwall package/luci-app-passwall
@@ -75,11 +75,11 @@ svn co https://github.com/fw876/helloworld/trunk/lua-neturl package/lua-neturl
 svn co https://github.com/fw876/helloworld/trunk/trojan package/trojan
 
 # Themes
-git clone --depth=1 -b 18.06 https://github.com/kiddin9/luci-theme-edge package/luci-theme-edge
-git clone --depth=1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
-git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
-git clone --depth=1 https://github.com/thinktip/luci-theme-neobird package/luci-theme-neobird
-git clone --depth=1 https://github.com/xiaoqingfengATGH/luci-theme-infinityfreedom package/luci-theme-infinityfreedom
+git clone --depth 1 -b 18.06 https://github.com/kiddin9/luci-theme-edge package/luci-theme-edge
+git clone --depth 1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
+git clone --depth 1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
+git clone --depth 1 https://github.com/thinktip/luci-theme-neobird package/luci-theme-neobird
+git clone --depth 1 https://github.com/xiaoqingfengATGH/luci-theme-infinityfreedom package/luci-theme-infinityfreedom
 svn co https://github.com/rosywrt/luci-theme-rosy/trunk/luci-theme-rosy package/luci-theme-rosy
 svn co https://github.com/haiibo/packages/trunk/luci-theme-atmaterial package/luci-theme-atmaterial
 svn co https://github.com/haiibo/packages/trunk/luci-theme-opentomcat package/luci-theme-opentomcat
@@ -106,7 +106,6 @@ svn co https://github.com/haiibo/packages/trunk/wrtbwmon package/wrtbwmon
 # 设置向导
 svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-wizard package/luci-app-wizard
 sed -i 's/"admin"/"admin", "system"/g' package/luci-app-wizard/files/luci/controller/wizard.lua
-sed -i 's/21/87/g' package/luci-app-wizard/files/luci/controller/wizard.lua
 
 # 在线用户
 svn co https://github.com/haiibo/packages/trunk/luci-app-onliner package/luci-app-onliner
@@ -121,7 +120,7 @@ date_version=$(date +"%Y.%m.%d")
 orig_version=$(echo "$(cat package/lean/default-settings/files/zzz-default-settings)" | grep -Po "DISTRIB_REVISION=\'\K[^\']*")
 sed -i "s/${orig_version}/R${date_version} by Haiibo/g" package/lean/default-settings/files/zzz-default-settings
 
-# 调整 x86 只显示 CPU 型号
+# 调整 x86 型号只显示 CPU 型号
 sed -i '/h=${g}.*/d' package/lean/autocore/files/x86/autocore
 sed -i 's/(dmesg.*/{a}${b}${c}${d}${e}${f}/g' package/lean/autocore/files/x86/autocore
 sed -i 's/echo $h/echo $g/g' package/lean/autocore/files/x86/autocore
