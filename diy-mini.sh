@@ -112,6 +112,11 @@ sed -i 's/"admin/"admin\/services/g' package/luci-app-dockerman/luasrc/model/cbi
 sed -i 's/"admin/"admin\/services/g' package/luci-app-dockerman/luasrc/view/dockerman/*.htm
 sed -i 's/"admin/"admin\/services/g' package/luci-app-dockerman/luasrc/view/dockerman/cbi/*.htm
 
+# 调整 ZeroTier 到 服务 菜单
+sed -i '/"VPN"/d' feeds/luci/applications/luci-app-zerotier/luasrc/controller/zerotier.lua
+sed -i 's/vpn/services/g' feeds/luci/applications/luci-app-zerotier/luasrc/controller/zerotier.lua
+sed -i 's/vpn/services/g' feeds/luci/applications/luci-app-zerotier/luasrc/view/zerotier/zerotier_status.htm
+
 # 修改插件名字
 sed -i 's/"带宽监控"/"监控"/g' `grep "带宽监控" -rl ./`
 
