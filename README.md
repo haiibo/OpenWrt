@@ -163,6 +163,8 @@
 　├── 挂载 SMB 网络共享<br/>
 　├── 网络共享<br/>
 　├── FTP 服务器<br/>
+　├── PCHiFi 数字转盘遥控<br/>
+　├── MJPG-streamer<br/>
 　├── Rclone<br/>
 　├── Aria2 配置<br/>
 　├── miniDLNA<br/>
