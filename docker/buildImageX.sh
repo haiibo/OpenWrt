@@ -40,8 +40,9 @@ cp -f patches/kmod "$TMPDIR/sbin/" && \
 	ln -s kmod rmmod 
       )
 
-cat patches/luci-admin-status-index-html.patch | (cd "$TMPDIR/" && patch -p1) && \
-cat patches/luci-admin-status-index-html-02.patch | (cd "$TMPDIR/" && patch -p1)
+for p in `echo patches/index.html.patches/*.patch`;do
+    cat $p | (cd "$TMPDIR/" && patch -p1 && find . -name '*.orig' -exec rm {} \; && find . -name '*.rej' -exec rm {} \;)
+done
 
 cat patches/init.d_turboacc.patch | (cd "$TMPDIR/" && patch -p1)
 if ! cat patches/cbi_turboacc_new.patch | (cd "$TMPDIR/" && patch -p1);then

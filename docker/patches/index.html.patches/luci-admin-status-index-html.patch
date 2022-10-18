@@ -1,0 +1,119 @@
+--- a/usr/lib/lua/luci/view/admin_status/index.htm
++++ b/usr/lib/lua/luci/view/admin_status/index.htm
+@@ -9,10 +9,18 @@
+ 	local util = require "luci.util"
+ 	local stat = require "luci.tools.status"
+ 	local ver = require "luci.version"
++	local uci = require("luci.model.uci").cursor()
+ 
+ 	local has_ipv6 = fs.access("/usr/sbin/ip6tables")
+ 	local has_dhcp = fs.access("/etc/config/dhcp")
+ 	local has_wifi = ((fs.stat("/etc/config/wireless", "size") or 0) > 0)
++	local has_switch = false
++
++	uci:foreach("network", "switch",
++			function(s)
++				has_switch = true
++				return false
++			end)
+ 
+ 	local sysinfo = luci.util.ubus("system", "info") or { }
+ 	local boardinfo = luci.util.ubus("system", "board") or { }
+@@ -43,12 +51,14 @@
+ 			fs.readfile("/proc/sys/net/netfilter/nf_conntrack_count") or "") or 0
+ 
+ 		local conn_max = tonumber(luci.sys.exec(
+-			"sysctl -n -e net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max"
+-		):match("%d+")) or 4096
++			"sysctl -n -e net.netfilter.nf_conntrack_max net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max | head -n 1"):match("%d+")) or 4096
+ 		
+-		local user_info = luci.sys.exec("cat /proc/net/arp | grep 'br-lan' | grep '0x2' | wc -l")
++		local user_info = luci.sys.exec("cat /proc/net/arp | grep -E 'br-lan|eth0' | grep '0x2' | wc -l")
+ 		
+ 		local cpu_usage = (luci.sys.exec("expr 100 - $(top -n 1 | grep 'CPU:' | awk -F '%' '{print$4}' | awk -F ' ' '{print$2}')") or "6") .. "%"
++		local cpu_stat = luci.sys.exec("/usr/bin/cpustat 2>/dev/null") or { }
++		local eth_info = luci.sys.exec("/usr/bin/cpustat -e 2>/dev/null")
++		local eth_cnt  = luci.sys.exec("/usr/bin/cpustat -ec 2>/dev/null")
+ 
+ 		local rv = {
+ 			cpuusage    = cpu_usage,
+@@ -59,11 +69,14 @@
+ 			memory     = meminfo,
+ 			memcached  = mem_cached,
+ 			swap       = swapinfo,
++			ethinfo	   = eth_info,
++			ethcount   = eth_cnt,
+ 			connmax    = conn_max,
+ 			conncount  = conn_count,
+ 			leases     = stat.dhcp_leases(),
+ 			leases6    = stat.dhcp6_leases(),
+-			wifinets   = stat.wifi_networks()
++			wifinets   = stat.wifi_networks(),
++			cpustat    = cpu_stat
+ 		}
+ 
+ 		if wan then
+@@ -683,9 +696,30 @@
+ 
+ 			var e;
+ 
++			if (e = document.getElementById('ethinfo'))                     {
++				var ports = eval('(' + info.ethinfo + ')');
++				var avg_width = info.ethcount ? 100 / info.ethcount : 100;
++				var tmp = "";
++				for (var i in ports)
++				{
++					tmp = tmp + String.format(
++						'<td style="text-align:center" width="%d%%"><span style="line-height:25px">%s</span><br /><small><img src="<%=resource%>/icons/%s" /><br />%s<br />%s<br />%s</small></td>', 
++							avg_width, 
++							ports[i].name,
++							ports[i].operstate ? 'port_up.png' : 'port_down.png',
++							ports[i].driver,
++							ports[i].speed,
++							ports[i].temperature);
++				};
++				e.innerHTML = "<tr>" + tmp + "</tr>";
++			}
++
+ 			if (e = document.getElementById('localtime'))
+ 				e.innerHTML = info.localtime;
+ 
++			if (e = document.getElementById('cpustat'))
++				e.innerHTML = info.cpustat;
++
+ 			if (e = document.getElementById('uptime'))
+ 				e.innerHTML = String.format('%t', info.uptime);
+ 				
+@@ -742,7 +776,7 @@
+ 	<table width="100%" cellspacing="10">
+ 		<tr><td width="33%"><%:Hostname%></td><td><%=luci.sys.hostname() or "?"%></td></tr>
+ 		<tr><td width="33%"><%:Model%></td><td><%=pcdata(boardinfo.model or "?")%> <%=luci.sys.exec("cat /etc/bench.log") or " "%></td></tr>
+-		<tr><td width="33%"><%:Architecture%></td><td><%=pcdata(boardinfo.system or "ARMv8 Processor")%> x <%=luci.sys.exec("cat /proc/cpuinfo | grep 'processor' | wc -l") or "1"%></td></tr>
++		<tr><td width="33%"><%:Architecture%></td><td><%=luci.sys.exec("/usr/bin/cpustat -a 2>/dev/null")%></td></tr>
+ 		<tr><td width="33%"><%:Firmware Version%></td><td>
+ 			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%> /
+ 			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)
+@@ -750,6 +784,7 @@
+ 		<tr><td width="33%"><%:Kernel Version%></td><td><%=unameinfo.release or "?"%></td></tr>
+ 		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
+ 		<tr><td width="33%"><%:Uptime%></td><td id="uptime">-</td></tr>
++		<tr><td width="33%"><%:CPU状态%></td><td id="cpustat">-</td></tr>
+ 		<tr><td width="33%"><%:Load Average%></td><td id="loadavg">-</td></tr>
+ 		<tr><td width="33%"><%:CPU usage (%)%></td><td id="cpuusage">-</td></tr>
+ 	</table>
+@@ -774,6 +809,15 @@
+ 	</table>
+ </fieldset>
+ <% end %>
++
++<% if not has_switch then %>
++<fieldset class="cbi-section">
++	<legend><%:Interfaces%></legend>
++
++	<table width="100%" cellspacing="10" id="ethinfo">
++	</table>
++</fieldset>
++<% end %>
+ 
+ <fieldset class="cbi-section">
+ 	<legend><%:Network%></legend>
