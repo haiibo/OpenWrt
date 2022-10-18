@@ -77,7 +77,7 @@ jobs:
         PACKAGE_SOC: all
         WHOAMI: Haiibo
         KERNEL_REPO_URL: https://github.com/ophub/kernel/tree/main/pub/stable
-        KERNEL_VERSION_NAME: 5.15.13_5.19.1
+        KERNEL_VERSION_NAME: 5.15.13_6.0.2
         KERNEL_AUTO_LATEST: true
         DISTRIB_REVISION: R${{ env.DATE1 }} by Haiibo
 
