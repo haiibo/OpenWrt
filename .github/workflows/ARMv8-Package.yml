@@ -67,7 +67,7 @@ jobs:
         FIRMWARE_PATH=openwrt/bin/targets/armvirt/64
         [ -d $FIRMWARE_PATH ] || mkdir -p $FIRMWARE_PATH
         wget -q -P $FIRMWARE_PATH https://github.com/$GITHUB_REPOSITORY/releases/download/$FIRMWARE_URL
-        echo "::set-output name=status::success"
+        echo "status=success" >> $GITHUB_OUTPUT
 
     - name: Package OpenWrt Firmware
       uses: ophub/flippy-openwrt-actions@main

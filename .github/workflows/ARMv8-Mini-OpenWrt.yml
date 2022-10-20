@@ -74,7 +74,7 @@ jobs:
         cd openwrt
         VERSION_INFO=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
         echo "VERSION_INFO=$VERSION_INFO" >> $GITHUB_ENV
-        echo "::set-output name=VERSION_INFO::$(echo $VERSION_INFO)"
+        echo "VERSION_INFO=$(echo $VERSION_INFO)" >> $GITHUB_OUTPUT
 
     - name: Install Feeds
       run: |
@@ -132,7 +132,7 @@ jobs:
         cp $GITHUB_WORKSPACE/scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
         make package/install -j$(nproc) || make package/install -j1 V=s
         make target/install -j$(nproc) || make target/install -j1 V=s
-        echo "::set-output name=status::success"
+        echo "status=success" >> $GITHUB_OUTPUT
         make checksum
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
@@ -161,7 +161,7 @@ jobs:
         cd openwrt/bin/targets/*/*
         rm -rf packages feeds.buildinfo version.buildinfo
         echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
-        echo "::set-output name=status::success"
+        echo "status=success" >> $GITHUB_OUTPUT
 
     - name: Upload Firmware To Artifact
       if: steps.organize.outputs.status == 'success' && env.FIRMWARE_RELEASE != 'true'
@@ -216,7 +216,7 @@ jobs:
         curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY/releases" | grep -o "$FIRMWARE_TAG.*rootfs.tar.gz" > DOWNLOAD_ARMVIRT
         [ -s DOWNLOAD_ARMVIRT ]
         wget -q -P openwrt-armvirt https://github.com/$GITHUB_REPOSITORY/releases/download/$(cat DOWNLOAD_ARMVIRT)
-        echo "::set-output name=status::success"
+        echo "status=success" >> $GITHUB_OUTPUT
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
 
