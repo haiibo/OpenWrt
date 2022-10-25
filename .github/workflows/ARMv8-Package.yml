@@ -88,7 +88,7 @@ jobs:
         path: ${{ env.PACKAGED_OUTPUTPATH }}
 
     - name: Upload OpenWrt To Release
-      uses: ncipollo/release-action@main
+      uses: ncipollo/release-action@v1
       if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_RELEASE == 'true'
       with:
         name: R${{ env.DATE }} for ARMv8_${{ env.VERSION }}

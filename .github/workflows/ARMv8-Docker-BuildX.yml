@@ -24,7 +24,7 @@ jobs:
       run: |
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         cd $GITHUB_WORKSPACE/openwrt
-        version=$(echo "$(cat package/lean/default-settings/files/zzz-default-settings)" | grep -Po "DISTRIB_REVISION=\'\K[^\']*")
+        version=$(cat "package/lean/default-settings/files/zzz-default-settings" | grep DISTRIB_REVISION= | awk -F "'" '{print $2}')
         echo "TAG=$version" >> $GITHUB_ENV
 
     - name: Extract OpenWrt Firmware
