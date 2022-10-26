@@ -97,6 +97,10 @@ svn co https://github.com/linkease/nas-packages/trunk/network/services/ddnsto pa
 svn co https://github.com/haiibo/packages/trunk/luci-app-wrtbwmon package/luci-app-wrtbwmon
 svn co https://github.com/haiibo/packages/trunk/wrtbwmon package/wrtbwmon
 
+# Alist
+svn co https://github.com/sbwml/luci-app-alist/trunk/luci-app-alist package/luci-app-alist
+svn co https://github.com/sbwml/luci-app-alist/trunk/alist package/alist
+
 # 设置向导
 svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-wizard package/luci-app-wizard
 sed -i 's/"admin"/"admin", "system"/g' package/luci-app-wizard/files/luci/controller/wizard.lua
