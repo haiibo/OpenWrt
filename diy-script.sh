@@ -15,6 +15,7 @@
 
 # 移除重复软件包
 rm -rf feeds/packages/net/mosdns
+rm -rf feeds/packages/lang/golang
 rm -rf feeds/luci/themes/luci-theme-argon
 rm -rf feeds/luci/themes/luci-theme-netgear
 rm -rf feeds/luci/applications/luci-app-netdata
@@ -96,6 +97,11 @@ svn co https://github.com/linkease/nas-packages/trunk/network/services/ddnsto pa
 # 流量监控
 svn co https://github.com/haiibo/packages/trunk/luci-app-wrtbwmon package/luci-app-wrtbwmon
 svn co https://github.com/haiibo/packages/trunk/wrtbwmon package/wrtbwmon
+
+# Alist
+svn co https://github.com/sbwml/luci-app-alist/trunk/luci-app-alist package/luci-app-alist
+svn co https://github.com/sbwml/luci-app-alist/trunk/alist package/alist
+svn co https://github.com/sbwml/packages_lang_golang/trunk feeds/packages/lang/golang
 
 # 设置向导
 svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-wizard package/luci-app-wizard
