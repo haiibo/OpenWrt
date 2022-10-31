@@ -19,7 +19,6 @@ env:
   CONFIG_FILE: configs/armv8-plus.config
   DIY_SCRIPT: diy-script.sh
   TOOLCHAIN_TAG: Toolchain
-  TOOLCHAIN_RELEASE: true
   UPLOAD_BIN_DIR: false
   FIRMWARE_RELEASE: true
   FIRMWARE_TAG: ROOTFS_PLUS
@@ -58,8 +57,7 @@ jobs:
     - name: Clone Source Code
       id: clone
       run: |
-        df -hT $PWD
-        mkdir -p workspace
+        df -hT $GITHUB_WORKSPACE
         git clone $SOURCE_URL -b $SOURCE_BRANCH workspace/openwrt
         cd workspace/openwrt
         echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV
@@ -102,7 +100,6 @@ jobs:
         cd $OPENWRT_PATH
         export CURRENT_HASH=$(git log --pretty=tformat:"%H" -n1 tools toolchain)
         echo "CURRENT_HASH=$CURRENT_HASH" >> $GITHUB_ENV
-        echo "CURRENT_HASH=$(echo $CURRENT_HASH)" >> $GITHUB_OUTPUT
         echo "CURRENT_HASH is $CURRENT_HASH"
         export CACHE_HASH=$(curl -fSsL https://github.com/$GITHUB_REPOSITORY/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_IMAGE.hash)
         echo "CACHE_HASH is $CACHE_HASH"
@@ -116,12 +113,12 @@ jobs:
         cd $OPENWRT_PATH
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-        make defconfig
 
     - name: Compile Tools
       if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
       run: |
         cd $OPENWRT_PATH
+        make defconfig
         echo -e "$(nproc) thread compile"
         make tools/compile -j$(nproc) || make tools/compile -j1 V=s
 
@@ -144,16 +141,9 @@ jobs:
         echo $CURRENT_HASH > $GITHUB_WORKSPACE/output/$TOOLCHAIN_IMAGE.hash
         ls -lh $GITHUB_WORKSPACE/output
 
-    - name: Upload Toolchain Image To Artifact
-      if: env.TOOLCHAIN_RELEASE != 'true' && steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
-      uses: actions/upload-artifact@main
-      with:
-        name: ${{ env.TOOLCHAIN_IMAGE }}
-        path: output
-
-    - name: Upload Toolchain Image To Release
-      if: env.TOOLCHAIN_RELEASE == 'true' && steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
-      uses: ncipollo/release-action@main
+    - name: Upload Toolchain Image
+      if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
+      uses: ncipollo/release-action@v1
       with:
         name: Toolchain-Image
         allowUpdates: true
@@ -167,17 +157,16 @@ jobs:
     needs: [Toolchain]
     runs-on: ubuntu-22.04
 
-    steps:
-    - name: Restore Variables
-      run: |
-        echo "OPENWRT_PATH=$(echo '${{needs.Toolchain.outputs.OPENWRT_PATH}}')" >> $GITHUB_ENV
-        echo "VERSION_INFO=$(echo '${{needs.Toolchain.outputs.VERSION_INFO}}')" >> $GITHUB_ENV
-        echo "CURRENT_BRANCH=$(echo '${{needs.Toolchain.outputs.CURRENT_BRANCH}}')" >> $GITHUB_ENV
-        echo "SOURCE_REPO=$(echo '${{needs.Toolchain.outputs.SOURCE_REPO}}')" >> $GITHUB_ENV
-        echo "DEVICE_TARGET=$(echo '${{needs.Toolchain.outputs.DEVICE_TARGET}}')" >> $GITHUB_ENV
-        echo "DEVICE_SUBTARGET=$(echo '${{needs.Toolchain.outputs.DEVICE_SUBTARGET}}')" >> $GITHUB_ENV
-        echo "TOOLCHAIN_IMAGE=$(echo '${{needs.Toolchain.outputs.TOOLCHAIN_IMAGE}}')" >> $GITHUB_ENV
+    env:
+      OPENWRT_PATH: ${{ needs.Toolchain.outputs.OPENWRT_PATH }}
+      VERSION_INFO: ${{ needs.Toolchain.outputs.VERSION_INFO }}
+      CURRENT_BRANCH: ${{ needs.Toolchain.outputs.CURRENT_BRANCH }}
+      SOURCE_REPO: ${{ needs.Toolchain.outputs.SOURCE_REPO }}
+      DEVICE_TARGET: ${{ needs.Toolchain.outputs.DEVICE_TARGET }}
+      DEVICE_SUBTARGET: ${{ needs.Toolchain.outputs.DEVICE_SUBTARGET }}
+      TOOLCHAIN_IMAGE: ${{ needs.Toolchain.outputs.TOOLCHAIN_IMAGE }}
 
+    steps:
     - name: Check Server Performance
       run: |
         echo "警告⚠"
@@ -190,7 +179,7 @@ jobs:
         echo "已安装内存详细信息："
         echo -e "$(sudo lshw -short -C memory | grep GiB) \n"
         echo "--------------------------硬盘信息--------------------------"
-        echo "硬盘数量：$(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -Th
+        echo "硬盘数量：$(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
 
     - name: Initialization Environment
       env:
@@ -238,30 +227,7 @@ jobs:
         git fetch
         git checkout -t origin/$CURRENT_BRANCH
 
-    - name: Download Toolchain Image Form Artifact
-      if: env.TOOLCHAIN_RELEASE != 'true'
-      uses: actions/download-artifact@main
-      with:
-        name: ${{ env.TOOLCHAIN_IMAGE }}
-        path: workspace
-
-    - name: Prepare Toolchain Image Form Artifact
-      if: env.TOOLCHAIN_RELEASE != 'true'
-      run: |
-        cd workspace
-        for i in {1..9}
-        do
-          cat $TOOLCHAIN_IMAGE.img.0$i >> $TOOLCHAIN_IMAGE.img.00 && rm $TOOLCHAIN_IMAGE.img.0$i || break
-        done
-        mv $TOOLCHAIN_IMAGE.img.00 $TOOLCHAIN_IMAGE.img
-        mkdir openwrt-ro openwrt workdir overlay
-        sudo mount -o loop $TOOLCHAIN_IMAGE.img openwrt-ro
-        sudo mount -t overlay overlay -o lowerdir=openwrt-ro,upperdir=overlay,workdir=workdir openwrt
-        cd $OPENWRT_PATH
-        git pull
-
-    - name: Prepare Toolchain Image Form Release
-      if: env.TOOLCHAIN_RELEASE == 'true'
+    - name: Prepare Toolchain Image
       run: |
         mkdir -p workspace
         cd workspace
@@ -290,12 +256,11 @@ jobs:
         cd $OPENWRT_PATH
         $GITHUB_WORKSPACE/$DIY_SCRIPT
         $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
-        make defconfig
 
     - name: Download DL Package
-      id: download
       run: |
         cd $OPENWRT_PATH
+        make defconfig
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
@@ -324,11 +289,6 @@ jobs:
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
 
-    - name: Print Sha256sums
-      run: |
-        cd $OPENWRT_PATH/bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
-        cat sha256sums
-
     - name: Check Space Usage
       if: always()
       run: |
@@ -348,13 +308,11 @@ jobs:
     - name: Organize Files
       if: steps.generate.outputs.status == 'success'
       run: |
-        mkdir -p Packages
-        cp $OPENWRT_PATH/.config build.config
-        mv -f $OPENWRT_PATH/bin/packages/*/*/*.ipk Packages
-        mv -f $OPENWRT_PATH/bin/targets/*/*/packages/*.ipk Packages
-        tar -zcvf Packages.tar.gz Packages && rm -rf Packages
-        mv *.config *.tar.gz $OPENWRT_PATH/bin/targets/*/*
         cd $OPENWRT_PATH/bin/targets/*/*
+        cat sha256sums
+        cp $OPENWRT_PATH/.config build.config
+        mv -f $OPENWRT_PATH/bin/packages/*/*/*.ipk packages
+        tar -zcf Packages.tar.gz packages
         rm -rf packages feeds.buildinfo version.buildinfo
         echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
 
@@ -367,7 +325,7 @@ jobs:
 
     - name: Upload Firmware To Release
       if: steps.generate.outputs.status == 'success' && env.FIRMWARE_RELEASE == 'true'
-      uses: ncipollo/release-action@main
+      uses: ncipollo/release-action@v1
       with:
         name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}
         allowUpdates: true
@@ -386,12 +344,12 @@ jobs:
     needs: [Toolchain, Build]
     runs-on: ubuntu-22.04
 
+    env:
+      VERSION_INFO: ${{ needs.Toolchain.outputs.VERSION_INFO }}
+
     steps:
     - name: Checkout
       uses: actions/checkout@main
-
-    - name: Restore Variables
-      run: echo "VERSION_INFO=$(echo '${{needs.Toolchain.outputs.VERSION_INFO}}')" >> $GITHUB_ENV
 
     - name: Initialization Environment
       env:

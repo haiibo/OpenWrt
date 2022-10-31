@@ -12,6 +12,8 @@ on:
   workflow_dispatch:
   schedule:
     - cron: 0 15 * * *
+  watch:
+    types: started
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -22,6 +24,7 @@ env:
 jobs:
   Package:
     runs-on: ubuntu-22.04
+    if: github.event.repository.owner.id == github.event.sender.id || ! github.event.sender.id
     name: Package for ${{ matrix.version }}
     strategy:
       fail-fast: false
@@ -70,8 +73,8 @@ jobs:
         echo "status=success" >> $GITHUB_OUTPUT
 
     - name: Package OpenWrt Firmware
-      uses: ophub/flippy-openwrt-actions@main
       if: steps.download.outputs.status == 'success'
+      uses: ophub/flippy-openwrt-actions@main
       env:
         OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*rootfs.tar.gz
         PACKAGE_SOC: all
@@ -82,14 +85,14 @@ jobs:
         DISTRIB_REVISION: R${{ env.DATE1 }} by Haiibo
 
     - name: Upload OpenWrt To Artifact
-      uses: kittaakos/upload-artifact-as-is@master
       if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_RELEASE != 'true'
+      uses: kittaakos/upload-artifact-as-is@master
       with:
         path: ${{ env.PACKAGED_OUTPUTPATH }}
 
     - name: Upload OpenWrt To Release
-      uses: ncipollo/release-action@v1
       if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_RELEASE == 'true'
+      uses: ncipollo/release-action@v1
       with:
         name: R${{ env.DATE }} for ARMv8_${{ env.VERSION }}
         allowUpdates: true

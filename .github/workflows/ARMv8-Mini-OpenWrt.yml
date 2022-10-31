@@ -48,7 +48,7 @@ jobs:
         echo "已安装内存详细信息："
         echo -e "$(sudo lshw -short -C memory | grep GiB) \n"
         echo "--------------------------硬盘信息--------------------------"
-        echo "硬盘数量：$(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -Th
+        echo "硬盘数量：$(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
 
     - name: Initialization Environment
       env:
@@ -61,50 +61,45 @@ jobs:
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir
-        sudo chown $USER:$GROUPS /workdir
 
     - name: Clone Source Code
-      working-directory: /workdir
       id: clone
       run: |
-        df -hT $PWD
-        git clone $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-        cd openwrt
+        df -hT $GITHUB_WORKSPACE
+        git clone $REPO_URL -b $REPO_BRANCH workdir/openwrt
+        cd workdir/openwrt
+        echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV
         VERSION_INFO=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
         echo "VERSION_INFO=$VERSION_INFO" >> $GITHUB_ENV
         echo "VERSION_INFO=$(echo $VERSION_INFO)" >> $GITHUB_OUTPUT
 
     - name: Install Feeds
       run: |
-        cd openwrt
+        cd $OPENWRT_PATH
         ./scripts/feeds update -a
         ./scripts/feeds install -a
 
     - name: Load Custom Configuration
       run: |
-        [ -e files ] && mv files openwrt/files
-        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+        [ -e files ] && mv files $OPENWRT_PATH/files
+        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
         chmod +x $GITHUB_WORKSPACE/scripts/*.sh
         chmod +x $DIY_SCRIPT
-        cd openwrt
+        cd $OPENWRT_PATH
         $GITHUB_WORKSPACE/$DIY_SCRIPT
         $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
 
     - name: Download DL Package
-      id: package
       run: |
-        cd openwrt
+        cd $OPENWRT_PATH
         make defconfig
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
-    - name: Extract Information
-      id: extract
+    - name: Generate Variables
       run: |
-        cd openwrt
+        cd $OPENWRT_PATH
         SOURCE_REPO=$(echo $REPO_URL | awk -F '/' '{print $(NF)}')
         echo "SOURCE_REPO=$SOURCE_REPO" >> $GITHUB_ENV
         DEVICE_TARGET=$(cat .config | grep CONFIG_TARGET_BOARD | awk -F '"' '{print $2}')
@@ -113,9 +108,8 @@ jobs:
         echo "DEVICE_SUBTARGET=$DEVICE_SUBTARGET" >> $GITHUB_ENV
 
     - name: Compile Packages
-      id: compile
       run: |
-        cd openwrt
+        cd $OPENWRT_PATH
         echo -e "$(nproc) thread compile"
         make tools/compile -j$(nproc) || make tools/compile -j1 V=s
         make toolchain/compile -j$(nproc) || make toolchain/compile -j1 V=s
@@ -127,7 +121,7 @@ jobs:
     - name: Generate Firmware
       id: generate
       run: |
-        cd openwrt
+        cd $OPENWRT_PATH
         mkdir -p files/etc/uci-defaults
         cp $GITHUB_WORKSPACE/scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
         make package/install -j$(nproc) || make package/install -j1 V=s
@@ -146,33 +140,29 @@ jobs:
       uses: actions/upload-artifact@main
       with:
         name: ${{ env.SOURCE_REPO }}-bin-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.FILE_DATE }}
-        path: openwrt/bin
+        path: ${{ env.OPENWRT_PATH }}/bin
 
     - name: Organize Files
       if: steps.generate.outputs.status == 'success'
-      id: organize
       run: |
-        mkdir -p Packages
-        cp openwrt/.config build.config
-        mv -f openwrt/bin/packages/*/*/*.ipk Packages
-        mv -f openwrt/bin/targets/*/*/packages/*.ipk Packages
-        tar -zcvf Packages.tar.gz Packages && rm -rf Packages
-        mv *.config *.tar.gz openwrt/bin/targets/*/*
-        cd openwrt/bin/targets/*/*
+        cd $OPENWRT_PATH/bin/targets/*/*
+        cat sha256sums
+        cp $OPENWRT_PATH/.config build.config
+        mv -f $OPENWRT_PATH/bin/packages/*/*/*.ipk packages
+        tar -zcf Packages.tar.gz packages
         rm -rf packages feeds.buildinfo version.buildinfo
         echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
-        echo "status=success" >> $GITHUB_OUTPUT
 
     - name: Upload Firmware To Artifact
-      if: steps.organize.outputs.status == 'success' && env.FIRMWARE_RELEASE != 'true'
+      if: steps.generate.outputs.status == 'success' && env.FIRMWARE_RELEASE != 'true'
       uses: actions/upload-artifact@main
       with:
         name: ${{ env.SOURCE_REPO }}-firmware-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE_PATH }}
 
     - name: Upload Firmware To Release
-      if: steps.organize.outputs.status == 'success' && env.FIRMWARE_RELEASE == 'true'
-      uses: ncipollo/release-action@main
+      if: steps.generate.outputs.status == 'success' && env.FIRMWARE_RELEASE == 'true'
+      uses: ncipollo/release-action@v1
       with:
         name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}
         allowUpdates: true
@@ -191,12 +181,12 @@ jobs:
     needs: [Build]
     runs-on: ubuntu-22.04
 
+    env:
+      VERSION_INFO: ${{ needs.Build.outputs.VERSION_INFO }}
+
     steps:
     - name: Checkout
       uses: actions/checkout@main
-
-    - name: Restore Variables
-      run: echo "VERSION_INFO=$(echo '${{needs.Build.outputs.VERSION_INFO}}')" >> $GITHUB_ENV
 
     - name: Initialization Environment
       env:
