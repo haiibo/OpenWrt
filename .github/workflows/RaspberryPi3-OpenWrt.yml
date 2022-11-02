@@ -20,6 +20,7 @@ env:
   EXTRA_CONFIG: configs/extra.config
   DIY_SCRIPT: diy-script.sh
   TOOLCHAIN_TAG: Toolchain
+  CLASH_KERNEL: armv8
   UPLOAD_BIN_DIR: false
   FIRMWARE_RELEASE: true
   FIRMWARE_TAG: RaspberryPi3
@@ -255,6 +256,7 @@ jobs:
         chmod +x $DIY_SCRIPT
         cd $OPENWRT_PATH
         $GITHUB_WORKSPACE/$DIY_SCRIPT
+        $GITHUB_WORKSPACE/scripts/preset-clash-core.sh $CLASH_KERNEL
         $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
 
     - name: Download DL Package
