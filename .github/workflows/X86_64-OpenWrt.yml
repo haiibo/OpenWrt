@@ -141,6 +141,16 @@ jobs:
         echo $CURRENT_HASH > $GITHUB_WORKSPACE/output/$TOOLCHAIN_IMAGE.hash
         ls -lh $GITHUB_WORKSPACE/output
 
+    - name: Delete Old Toolchain Assets
+      if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
+      uses: mknejp/delete-release-assets@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ env.TOOLCHAIN_TAG }}
+        assets: '${{ env.TOOLCHAIN_IMAGE }}.*'
+        fail-if-no-assets: false
+        fail-if-no-release: false
+
     - name: Upload Toolchain Image
       if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
       uses: ncipollo/release-action@v1
