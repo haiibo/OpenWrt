@@ -81,7 +81,7 @@ svn co https://github.com/haiibo/packages/trunk/luci-app-wrtbwmon package/luci-a
 svn co https://github.com/haiibo/packages/trunk/wrtbwmon package/wrtbwmon
 
 # 在线用户
-git clone --depth 1 https://github.com/haiibo/luci-app-onliner package/luci-app-onliner
+svn co https://github.com/haiibo/packages/trunk/luci-app-onliner package/luci-app-onliner
 sed -i '/bin\/sh/a\uci set nlbwmon.@nlbwmon[0].refresh_interval=2s' package/lean/default-settings/files/zzz-default-settings
 sed -i '/nlbwmon/a\uci commit nlbwmon' package/lean/default-settings/files/zzz-default-settings
 
@@ -89,6 +89,11 @@ sed -i '/nlbwmon/a\uci commit nlbwmon' package/lean/default-settings/files/zzz-d
 date_version=$(date +"%Y.%m.%d")
 orig_version=$(cat "package/lean/default-settings/files/zzz-default-settings" | grep DISTRIB_REVISION= | awk -F "'" '{print $2}')
 sed -i "s/${orig_version}/R${date_version} by Haiibo/g" package/lean/default-settings/files/zzz-default-settings
+
+# 调整 x86 型号只显示 CPU 型号
+sed -i '/h=${g}.*/d' package/lean/autocore/files/x86/autocore
+sed -i 's/(dmesg.*/{a}${b}${c}${d}${e}${f}/g' package/lean/autocore/files/x86/autocore
+sed -i 's/echo $h/echo $g/g' package/lean/autocore/files/x86/autocore
 
 # 修改 Makefile
 find package/*/ -maxdepth 2 -path "*/Makefile" | xargs -i sed -i 's/include\ \.\.\/\.\.\/luci\.mk/include \$(TOPDIR)\/feeds\/luci\/luci\.mk/g' {}
@@ -108,6 +113,9 @@ sed -i 's/"admin/"admin\/services/g' package/luci-app-dockerman/luasrc/view/dock
 sed -i '/"VPN"/d' feeds/luci/applications/luci-app-zerotier/luasrc/controller/zerotier.lua
 sed -i 's/vpn/services/g' feeds/luci/applications/luci-app-zerotier/luasrc/controller/zerotier.lua
 sed -i 's/vpn/services/g' feeds/luci/applications/luci-app-zerotier/luasrc/view/zerotier/zerotier_status.htm
+
+# 取消对 samba4 的菜单调整
+sed -i '/samba4/s/^/#/' package/lean/default-settings/files/zzz-default-settings
 
 # 修改插件名字
 sed -i 's/"带宽监控"/"监控"/g' `grep "带宽监控" -rl ./`
