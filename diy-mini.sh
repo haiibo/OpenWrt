@@ -101,6 +101,9 @@ find package/*/ -maxdepth 2 -path "*/Makefile" | xargs -i sed -i 's/include\ \.\
 find package/*/ -maxdepth 2 -path "*/Makefile" | xargs -i sed -i 's/PKG_SOURCE_URL:=\@GHREPO/PKG_SOURCE_URL:=https:\/\/github\.com/g' {}
 find package/*/ -maxdepth 2 -path "*/Makefile" | xargs -i sed -i 's/PKG_SOURCE_URL:=\@GHCODELOAD/PKG_SOURCE_URL:=https:\/\/codeload\.github\.com/g' {}
 
+# 删除主题强制默认
+find package/luci-theme-*/* -type f -name '*luci-theme-*' -print -exec sed -i '/set luci.main.mediaurlbase/d' {} \;
+
 # 调整 Dockerman 到 服务 菜单
 sed -i '13s/"config"/"overview"/g' package/luci-app-dockerman/luasrc/controller/*.lua
 sed -i 's/"admin"/"admin", "services"/g' package/luci-app-dockerman/luasrc/controller/*.lua
