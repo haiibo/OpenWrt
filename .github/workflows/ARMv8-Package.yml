@@ -61,7 +61,7 @@ jobs:
         VERSION_INFO=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
         echo "VERSION_INFO=$VERSION_INFO" >> $GITHUB_ENV
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
-        echo "DATE1=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
+        echo "DATE1=$(date +"%y.%m.%d")" >> $GITHUB_ENV
 
     - name: Download Armvirt Firmware
       id: download

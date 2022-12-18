@@ -210,7 +210,7 @@ jobs:
         wget -q -P openwrt-armvirt https://github.com/$GITHUB_REPOSITORY/releases/download/$(cat DOWNLOAD_ARMVIRT)
         echo "status=success" >> $GITHUB_OUTPUT
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
-        echo "DATE1=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
+        echo "DATE1=$(date +"%y.%m.%d")" >> $GITHUB_ENV
 
     - name: Package OpenWrt Firmware
       if: steps.download.outputs.status == 'success'

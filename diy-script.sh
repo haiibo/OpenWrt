@@ -118,7 +118,7 @@ sed -i '/nlbwmon/a\uci commit nlbwmon' package/lean/default-settings/files/zzz-d
 sed -i 's/${g}.*/${a}${b}${c}${d}${e}${f}/g' package/lean/autocore/files/x86/autocore
 
 # 修改版本为编译日期
-date_version=$(date +"%Y.%m.%d")
+date_version=$(date +"%y.%m.%d")
 orig_version=$(cat "package/lean/default-settings/files/zzz-default-settings" | grep DISTRIB_REVISION= | awk -F "'" '{print $2}')
 sed -i "s/${orig_version}/R${date_version} by Haiibo/g" package/lean/default-settings/files/zzz-default-settings
 
