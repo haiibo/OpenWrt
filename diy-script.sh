@@ -105,10 +105,6 @@ svn co https://github.com/sbwml/luci-app-alist/trunk/alist package/alist
 svn co https://github.com/linkease/istore-ui/trunk/app-store-ui package/app-store-ui
 svn co https://github.com/linkease/istore/trunk/luci package/istore
 
-# 设置向导
-svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-wizard package/luci-app-wizard
-sed -i 's/"admin"/"admin", "system"/g' package/luci-app-wizard/luasrc/controller/wizard.lua
-
 # 在线用户
 svn co https://github.com/haiibo/packages/trunk/luci-app-onliner package/luci-app-onliner
 sed -i '/bin\/sh/a\uci set nlbwmon.@nlbwmon[0].refresh_interval=2s' package/lean/default-settings/files/zzz-default-settings
