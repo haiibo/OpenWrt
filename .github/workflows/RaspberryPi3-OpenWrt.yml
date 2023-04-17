@@ -20,7 +20,7 @@ env:
   EXTRA_CONFIG: configs/extra.config
   DIY_SCRIPT: diy-script.sh
   TOOLCHAIN_TAG: Toolchain
-  CLASH_KERNEL: armv8
+  CLASH_KERNEL: arm64
   UPLOAD_BIN_DIR: false
   FIRMWARE_RELEASE: true
   FIRMWARE_TAG: RaspberryPi3

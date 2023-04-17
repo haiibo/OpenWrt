@@ -18,7 +18,7 @@ env:
   REPO_BRANCH: master
   CONFIG_FILE: configs/armv8-mini.config
   DIY_SCRIPT: diy-mini.sh
-  CLASH_KERNEL: armv8
+  CLASH_KERNEL: arm64
   UPLOAD_BIN_DIR: false
   FIRMWARE_RELEASE: true
   FIRMWARE_TAG: ROOTFS_MINI
