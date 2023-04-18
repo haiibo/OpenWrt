@@ -47,15 +47,7 @@
 
 
 ## 近期更新 [![](https://img.shields.io/badge/-近期固件更新-FFFFFF.svg)](#近期更新-)
-- 2022-10-27：添加新设备 `小马 M68S` 固件编译
-- 2022-10-22：添加新设备 `HinLink H68K` 固件编译
-- 2022-09-24：添加 luci-app-wizard 设置向导插件
-- 2022-09-14：添加新设备 `电犀牛 R66S R68S` 固件编译
-- 2022-09-12：添加 luci-app-onliner 在线用户插件
-- 2022-09-08：添加新设备 `树莓派 3B/3B+` 固件编译
-- 2022-09-06：添加新设备 `树莓派 4B` 固件编译
-- 2022-09-06：添加新设备 `香橙派 R1 Plus` 固件编译
-- 2022-09-04：添加新设备 `友善 R5S` 固件编译
+🤣努力修复中……
 
 
 ## 插件预览 [![](https://img.shields.io/badge/-固件插件及功能预览-FFFFFF.svg)](#插件预览-)
@@ -223,7 +215,13 @@
    ```bash
    sudo apt update -y
    sudo apt full-upgrade -y
-   sudo apt install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python2.7 python3 python3-pip libpython3-dev qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
+   sudo apt install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential \
+   bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib \
+   git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev \
+   libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz \
+   mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python2.7 python3 python3-pyelftools \
+   libpython3-dev qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip \
+   vim wget xmlto xxd zlib1g-dev
    ```
 
 3. 下载源代码，更新 feeds 并安装到本地
