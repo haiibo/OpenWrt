@@ -245,5 +245,6 @@ jobs:
           默认 IP：192.168.1.1 默认密码：password
           安装到 EMMC：系统 → 晶晨宝盒 → 安装 OpenWrt → 选择型号 → 安装
           升级 OpenWrt：系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新
+          常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
           当前使用版本:【编译前的最后一次➦[主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.VERSION_INFO }}
