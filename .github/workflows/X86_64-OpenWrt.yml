@@ -17,7 +17,6 @@ env:
   SOURCE_URL: https://github.com/coolsnowwolf/lede
   SOURCE_BRANCH: master
   CONFIG_FILE: configs/x86_64.config
-  EXTRA_CONFIG: configs/extra.config
   DIY_SCRIPT: diy-script.sh
   TOOLCHAIN_TAG: Toolchain
   CLASH_KERNEL: amd64
@@ -261,7 +260,6 @@ jobs:
       run: |
         [ -e files ] && mv files $OPENWRT_PATH/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
-        cat $EXTRA_CONFIG >> $OPENWRT_PATH/.config
         chmod +x $GITHUB_WORKSPACE/scripts/*.sh
         chmod +x $DIY_SCRIPT
         cd $OPENWRT_PATH
