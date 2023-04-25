@@ -262,6 +262,7 @@ jobs:
         [ -e files ] && mv files $OPENWRT_PATH/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
         cat $EXTRA_CONFIG >> $OPENWRT_PATH/.config
+        sed -i '/ath11k/d' $OPENWRT_PATH/.config
         chmod +x $GITHUB_WORKSPACE/scripts/*.sh
         chmod +x $DIY_SCRIPT
         cd $OPENWRT_PATH
