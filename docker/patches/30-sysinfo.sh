@@ -4,6 +4,7 @@
 # any changes will be lost on board support package update
 #
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+[ -x /usr/bin/dmesg ] && alias dmesg='dmesg --color=auto'
 
 THIS_SCRIPT="sysinfo"
 MOTD_DISABLE=""
