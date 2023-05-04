@@ -158,7 +158,6 @@ jobs:
       with:
         name: Toolchain-Image
         allowUpdates: true
-        replacesArtifacts: true
         tag: ${{ env.TOOLCHAIN_TAG }}
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: output/*
@@ -296,7 +295,6 @@ jobs:
         make package/install -j$(nproc) || make package/install -j1 V=s
         make target/install -j$(nproc) || make target/install -j1 V=s
         echo "status=success" >> $GITHUB_OUTPUT
-        make json_overview_image_info
         make checksum
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
@@ -341,7 +339,6 @@ jobs:
       with:
         name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}
         allowUpdates: true
-        replacesArtifacts: true
         tag: ${{ env.FIRMWARE_TAG }}
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: ${{ env.FIRMWARE_PATH }}/*
@@ -379,7 +376,6 @@ jobs:
       run: |
         [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
         curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY/releases" | grep -o "$FIRMWARE_TAG.*rootfs.tar.gz" > DOWNLOAD_ARMVIRT
-        [ -s DOWNLOAD_ARMVIRT ]
         wget -q -P openwrt-armvirt https://github.com/$GITHUB_REPOSITORY/releases/download/$(cat DOWNLOAD_ARMVIRT)
         echo "status=success" >> $GITHUB_OUTPUT
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV

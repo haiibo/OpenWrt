@@ -66,9 +66,9 @@ jobs:
     - name: Download Armvirt Firmware
       id: download
       run: |
-        FIRMWARE_URL=$(curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY/releases" | grep -o "ROOTFS_$VERSION.*rootfs.tar.gz")
         FIRMWARE_PATH=openwrt/bin/targets/armvirt/64
         [ -d $FIRMWARE_PATH ] || mkdir -p $FIRMWARE_PATH
+        FIRMWARE_URL=$(curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY/releases" | grep -o "ROOTFS_$VERSION.*rootfs.tar.gz")
         wget -q -P $FIRMWARE_PATH https://github.com/$GITHUB_REPOSITORY/releases/download/$FIRMWARE_URL
         echo "status=success" >> $GITHUB_OUTPUT
 

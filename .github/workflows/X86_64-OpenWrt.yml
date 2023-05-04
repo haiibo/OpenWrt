@@ -156,7 +156,6 @@ jobs:
       with:
         name: Toolchain-Image
         allowUpdates: true
-        replacesArtifacts: true
         tag: ${{ env.TOOLCHAIN_TAG }}
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: output/*
@@ -339,7 +338,6 @@ jobs:
       with:
         name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}
         allowUpdates: true
-        replacesArtifacts: true
         tag: ${{ env.FIRMWARE_TAG }}
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: ${{ env.FIRMWARE_PATH }}/*

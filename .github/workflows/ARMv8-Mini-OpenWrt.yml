@@ -115,8 +115,8 @@ jobs:
         echo -e "$(nproc) thread compile"
         make tools/compile -j$(nproc) || make tools/compile -j1 V=s
         make toolchain/compile -j$(nproc) || make toolchain/compile -j1 V=s
-        make target/compile -j$(nproc) || make target/compile -j1 V=s IGNORE_ERRORS=1
         make diffconfig
+        make target/compile -j$(nproc) || make target/compile -j1 V=s IGNORE_ERRORS=1
         make package/compile -j$(nproc) IGNORE_ERRORS=1 || make package/compile -j1 V=s IGNORE_ERRORS=1
         make package/index
 
@@ -168,7 +168,6 @@ jobs:
       with:
         name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}
         allowUpdates: true
-        replacesArtifacts: true
         tag: ${{ env.FIRMWARE_TAG }}
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: ${{ env.FIRMWARE_PATH }}/*
@@ -206,7 +205,6 @@ jobs:
       run: |
         [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
         curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY/releases" | grep -o "$FIRMWARE_TAG.*rootfs.tar.gz" > DOWNLOAD_ARMVIRT
-        [ -s DOWNLOAD_ARMVIRT ]
         wget -q -P openwrt-armvirt https://github.com/$GITHUB_REPOSITORY/releases/download/$(cat DOWNLOAD_ARMVIRT)
         echo "status=success" >> $GITHUB_OUTPUT
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV

@@ -109,8 +109,8 @@ jobs:
         echo -e "$(nproc) thread compile"
         make tools/compile -j$(nproc) || make tools/compile -j1 V=s
         make toolchain/compile -j$(nproc) || make toolchain/compile -j1 V=s
-        make target/compile -j$(nproc) || make target/compile -j1 V=s IGNORE_ERRORS=1
         make diffconfig
+        make target/compile -j$(nproc) || make target/compile -j1 V=s IGNORE_ERRORS=1
         make package/compile -j$(nproc) IGNORE_ERRORS=1 || make package/compile -j1 V=s IGNORE_ERRORS=1
         make package/index
 
@@ -158,7 +158,6 @@ jobs:
       with:
         name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}
         allowUpdates: true
-        replacesArtifacts: true
         tag: ${{ env.FIRMWARE_TAG }}
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: ${{ env.FIRMWARE_PATH }}/*
