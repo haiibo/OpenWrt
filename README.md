@@ -25,7 +25,7 @@
 
 ## 固件特色 [![](https://img.shields.io/badge/-本项目固件特色-FFFFFF.svg)](#固件特色-)
 1. 固件每天定时自动编译，以确保获得最新体验
-2. 集成绝大多数有线、无线、3G / 4G 网卡驱动
+2. 集成部分常用有线、无线、3G / 4G 网卡驱动
 3. 集成中文版 netdata 实时监控插件，小白也能轻松看懂系统概况
 4. 集成 iStore 应用商店，可根据自己需求自由安装所需插件
 5. 集成 Docker 服务，可在 OpenWrt 内自由部署 Docker 应用
@@ -75,8 +75,8 @@
 　├── 内核日志<br/>
 　├── 系统进程<br/>
 　├── 实时信息<br/>
-　├── 在线用户<br/>
 　├── 实时监控<br/>
+　├── 在线用户<br/>
 　├── WireGuard 状态<br/>
 　├── 负载均衡<br/>
 　└── 释放内存
@@ -105,11 +105,9 @@
 　├── PassWall2<br/>
 　├── Hello World<br/>
 　├── iKoolProxy 滤广告<br/>
-　├── Bypass<br/>
 　├── 广告屏蔽大师 Plus+<br/>
 　├── AdGuard Home<br/>
 　├── ShadowSocksR Plus+<br/>
-　├── DDNSTO 远程控制<br/>
 　├── 应用过滤<br/>
 　├── 微信推送<br/>
 　├── 上网时间控制<br/>
@@ -148,10 +146,10 @@
 　├── 可道云<br/>
 　├── NFS 管理<br/>
 　├── 微力同步<br/>
+　├── Alist 文件列表<br/>
 　├── qBittorrent<br/>
 　├── USB 打印服务器<br/>
 　├── 硬盘休眠<br/>
-　├── aMule设置<br/>
 　├── 挂载 SMB 网络共享<br/>
 　├── 网络共享<br/>
 　├── FTP 服务器<br/>
@@ -192,7 +190,7 @@
 　├── 配置<br/>
 　├── 备份<br/>
 　├── 网速监控<br/>
-　└── 流量监控
+　└── 实时流量监测
 </details>
 　└── <b>退出</b>
 </details>
