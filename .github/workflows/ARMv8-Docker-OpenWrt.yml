@@ -75,7 +75,7 @@ jobs:
       run: |
         [ -e files ] && mv files $OPENWRT_PATH/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
-        sed -i -e '/\/clash_/d' -e '/.dat/d' scripts/preset-clash-core.sh
+        sed -i '/\/clash_/d; /.dat/d' scripts/preset-clash-core.sh
         chmod +x $GITHUB_WORKSPACE/scripts/*.sh
         chmod +x $DIY_SCRIPT
         cd $OPENWRT_PATH
