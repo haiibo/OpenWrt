@@ -143,3 +143,53 @@ jobs:
           默认 IP：192.168.1.1 默认密码：password
           当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.VERSION_INFO }}
+
+  Upload:
+    needs: [Build]
+    runs-on: ubuntu-22.04
+
+    env:
+      DOCKER_BUILD: buildImageX.sh
+      DOCKER_IMAGE: summary/openwrt-aarch64
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Extract OpenWrt Version
+      run: |
+        git clone $REPO_URL -b $REPO_BRANCH openwrt
+        cd $GITHUB_WORKSPACE/openwrt
+        version=$(cat "package/lean/default-settings/files/zzz-default-settings" | grep DISTRIB_REVISION= | awk -F "'" '{print $2}')
+        echo "TAG=$version" >> $GITHUB_ENV
+
+    - name: Extract OpenWrt Firmware
+      id: download
+      run: |
+        cd $GITHUB_WORKSPACE/docker
+        wget -q $(curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY/releases" | grep "ARMv8_Docker.*rootfs.tar.gz" | cut -d '"' -f 4)
+        chmod +x $DOCKER_BUILD && ./$DOCKER_BUILD
+        echo "status=success" >> $GITHUB_OUTPUT
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@master
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@master
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@master
+      with:
+         username: ${{ secrets.DOCKER_USERNAME }}
+         password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push Docker
+      if: steps.download.outputs.status == 'success'
+      uses: docker/build-push-action@master
+      with:
+        platforms: linux/arm64
+        context: docker
+        push: true
+        tags: |
+          ${{ env.DOCKER_IMAGE }}:${{ env.TAG }}
+          ${{ env.DOCKER_IMAGE }}
