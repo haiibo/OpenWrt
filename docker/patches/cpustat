@@ -236,11 +236,11 @@ sub get_eth_temperature {
 sub get_ethlist() {
     my $board = &get_boardinfo;
     if($board eq "FastRhino R66S") {
-     	return reverse sort (</sys/class/net/e[tn]*>);   
+	return reverse sort (</sys/class/net/e[tn]*>);
     } elsif($board eq "HINLINK OPC-H68K Board") {
-     	return reverse sort (</sys/class/net/e[tn]*>);   
-    } elsif($board eq "Radxa E25") {
-     	return reverse sort (</sys/class/net/e[tn]*>);   
+	return reverse sort (</sys/class/net/e[tn]*>);
+    } elsif($board eq "HINLINK OWL H88K-V3 Board") {
+	return reverse sort (</sys/class/net/e[tn]*>);
     } else {
      	return sort (</sys/class/net/e[tn]*>);   
     }

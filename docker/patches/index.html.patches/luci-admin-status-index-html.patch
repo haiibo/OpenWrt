@@ -53,7 +53,7 @@
  		}
  
  		if wan then
-@@ -683,9 +696,30 @@
+@@ -641,9 +654,30 @@
  
  			var e;
  
@@ -84,7 +84,7 @@
  			if (e = document.getElementById('uptime'))
  				e.innerHTML = String.format('%t', info.uptime);
  				
-@@ -742,7 +776,7 @@
+@@ -700,7 +734,7 @@
  	<table width="100%" cellspacing="10">
  		<tr><td width="33%"><%:Hostname%></td><td><%=luci.sys.hostname() or "?"%></td></tr>
  		<tr><td width="33%"><%:Model%></td><td><%=pcdata(boardinfo.model or "?")%> <%=luci.sys.exec("cat /etc/bench.log") or " "%></td></tr>
@@ -93,7 +93,7 @@
  		<tr><td width="33%"><%:Firmware Version%></td><td>
  			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%> /
  			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)
-@@ -750,6 +784,7 @@
+@@ -708,6 +742,7 @@
  		<tr><td width="33%"><%:Kernel Version%></td><td><%=unameinfo.release or "?"%></td></tr>
  		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
  		<tr><td width="33%"><%:Uptime%></td><td id="uptime">-</td></tr>
@@ -101,7 +101,7 @@
  		<tr><td width="33%"><%:Load Average%></td><td id="loadavg">-</td></tr>
  		<tr><td width="33%"><%:CPU usage (%)%></td><td id="cpuusage">-</td></tr>
  	</table>
-@@ -774,6 +809,15 @@
+@@ -732,6 +767,15 @@
  	</table>
  </fieldset>
  <% end %>
