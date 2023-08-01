@@ -11,7 +11,7 @@ name: ARMv8 Docker OpenWrt
 on:
   workflow_dispatch:
   schedule:
-    - cron: 0 20 * * 5
+    - cron: 0 21 * * 5
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
