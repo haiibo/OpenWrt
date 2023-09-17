@@ -73,8 +73,8 @@ cp -f $GITHUB_WORKSPACE/images/bg1.jpg package/luci-theme-argon/htdocs/luci-stat
 #svn export https://github.com/sbwml/luci-app-alist/trunk/alist package/alist
 
 # iStore
-#svn export https://github.com/linkease/istore-ui/trunk/app-store-ui package/app-store-ui
-svn export https://github.com/kenzok8/openwrt-packages/tree/1a411142b040db309ce52fb819bf6d16cd962cbd/luci-app-store package/luci-app-store
+svn export https://github.com/linkease/istore-ui/trunk/app-store-ui package/app-store-ui
+svn export https://github.com/linkease/istore/trunk/luci package/luci-app-store
 
 # 在线用户
 #svn export https://github.com/haiibo/packages/trunk/luci-app-onliner package/luci-app-onliner
