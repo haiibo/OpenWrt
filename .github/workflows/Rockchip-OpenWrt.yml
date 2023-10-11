@@ -14,8 +14,10 @@ on:
     - cron: 0 18 * * *
 
 env:
-  SOURCE_URL: https://github.com/coolsnowwolf/lede
-  SOURCE_BRANCH: master
+#  SOURCE_URL: https://github.com/coolsnowwolf/lede
+#  SOURCE_BRANCH: master
+  SOURCE_URL: https://github.com/DHDAXCW/lede-rockchip
+  SOURCE_BRANCH: stable
   CONFIG_FILE: configs/rockchip.config
   EXTRA_CONFIG: configs/extra.config
   DIY_SCRIPT: diy-script.sh
