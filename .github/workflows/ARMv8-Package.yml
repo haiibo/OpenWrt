@@ -1,11 +1,3 @@
-#===============================================
-# Description: ARMv8 Package
-# File name: armv8-package.yml
-# Lisence: MIT
-# Author: HAIIBO
-# https://github.com/haiibo
-#===============================================
-
 name: ARMv8 Package
 
 on:
