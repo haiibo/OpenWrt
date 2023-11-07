@@ -1,16 +1,8 @@
 #!/bin/bash
-#===============================================
-# File name: preset-terminal-tools.sh
-# System Required: Linux
-# Version: 1.0
-# Author: SuLingGG
-# Blog: https://mlapp.cn
-#===============================================
 
 mkdir -p files/root
 pushd files/root
 
-# Install oh-my-zsh
 # Clone oh-my-zsh repository
 git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh ./.oh-my-zsh
 
