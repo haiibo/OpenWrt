@@ -237,9 +237,7 @@ sub get_ethlist() {
     my $board = &get_boardinfo;
     if($board eq "FastRhino R66S") {
 	return reverse sort (</sys/class/net/e[tn]*>);
-    } elsif($board eq "HINLINK OPC-H68K Board") {
-	return reverse sort (</sys/class/net/e[tn]*>);
-    } elsif($board eq "HINLINK OWL H88K-V3 Board") {
+    } elsif($board =~ m/NLnet Watermelon Pi/i) {
 	return reverse sort (</sys/class/net/e[tn]*>);
     } else {
      	return sort (</sys/class/net/e[tn]*>);   
@@ -322,6 +320,41 @@ sub get_boardinfo() {
     return $ret;
 }
 
+sub get_dc_voltage() {
+    my $precision = shift;
+    my $board = &get_boardinfo;
+    my $up_res = 0;
+    my $down_res = 0;
+    my $iio_channel;
+    my $ret = 0;
+    my $fh;
+    if($board =~ m/Radxa ROCK 5B/) {
+	$up_res = 100;
+	$down_res = 8.2;
+	$iio_channel = 6;
+	$ret = "(Probably) 12";
+    }
+
+    if($up_res && $down_res) {
+        my $voltage_raw = 0;
+        my $voltage_scale = 0;
+	open $fh, "<", "/sys/bus/iio/devices/iio:device0/in_voltage_scale" or die;
+	read $fh, $voltage_scale, 40;
+	close $fh;
+
+	open $fh, "<", "/sys/bus/iio/devices/iio:device0/in_voltage${iio_channel}_raw" or die;
+	read $fh, $voltage_raw, 40;
+	close $fh;
+
+        if($voltage_raw && $voltage_scale && (($voltage_raw + 1) * $voltage_scale < 1800)) {
+	    $precision = 0 unless $precision;
+	    my $fmt = "%0.${precision}f";
+            $ret = sprintf $fmt, $voltage_raw * $voltage_scale * ($up_res + $down_res) / $down_res / 1000.0;
+	}
+    }
+    return $ret;
+}
+
 #####   main program #####
 my $argc = scalar( @ARGV );
 if($argc == 0) {
@@ -348,4 +381,6 @@ if($argc == 0) {
     print &get_ethcount, "\n";
 } elsif($ARGV[0] eq "-b") {
     print &get_boardinfo, "\n";
+} elsif($ARGV[0] =~ m/-V(\d{0,1})/) {
+    print &get_dc_voltage($1), "\n";
 }
