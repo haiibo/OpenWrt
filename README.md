@@ -12,7 +12,7 @@
 
 
 ## 项目说明 [![](https://img.shields.io/badge/-项目基本介绍-FFFFFF.svg)](#项目说明-)
-- 固件来源：[![Lean](https://img.shields.io/badge/Lede-Lean-ff69b4.svg?style=flat&logo=appveyor)](https://github.com/coolsnowwolf/lede) [![P3TERX](https://img.shields.io/badge/OpenWrt-P3TERX-blueviolet.svg?style=flat&logo=appveyor)](https://github.com/P3TERX/Actions-OpenWrt) [![Flippy](https://img.shields.io/badge/Package-Flippy-orange.svg?style=flat&logo=appveyor)](https://github.com/unifreq/openwrt_packit) [![Haiibo](https://img.shields.io/badge/Build-Haiibo-32C955.svg?style=flat&logo=appveyor)](https://github.com/haiibo/OpenWrt)
+- 固件构成：[![Lean](https://img.shields.io/badge/Lede-Lean-ff69b4.svg?style=flat&logo=appveyor)](https://github.com/coolsnowwolf/lede) [![P3TERX](https://img.shields.io/badge/OpenWrt-P3TERX-blueviolet.svg?style=flat&logo=appveyor)](https://github.com/P3TERX/Actions-OpenWrt) [![Flippy](https://img.shields.io/badge/Package-Flippy-orange.svg?style=flat&logo=appveyor)](https://github.com/unifreq/openwrt_packit) [![Haiibo](https://img.shields.io/badge/Build-Haiibo-32C955.svg?style=flat&logo=appveyor)](https://github.com/haiibo/OpenWrt)
 - 项目使用 Github Actions 拉取 [Lean](https://github.com/coolsnowwolf/lede) 的 Openwrt 源码仓库进行云编译
 - 固件默认管理地址：`192.168.1.1` 默认用户：`root` 默认密码：`password`
 - 提供适配于 ARMv8 电视盒子、Rockchip 平台、树莓派以及 X86 平台设备的 OpenWrt 固件
@@ -91,8 +91,8 @@
 　├── 计划任务<br/>
 　├── 挂载点<br/>
 　├── 磁盘管理<br/>
-　├── LED 配置<br/>
 　├── 备份/升级<br/>
+　├── 自定义命令<br/>
 　├── 定时重启<br/>
 　├── 文件传输<br/>
 　├── Argon 主题设置<br/>
@@ -105,29 +105,31 @@
 　├── PassWall2<br/>
 　├── Hello World<br/>
 　├── iKoolProxy 滤广告<br/>
+　├── V2ray 服务器<br/>
 　├── 广告屏蔽大师 Plus+<br/>
-　├── AdGuard Home<br/>
 　├── ShadowSocksR Plus+<br/>
+　├── AdGuard Home<br/>
 　├── 应用过滤<br/>
+　├── MosDNS<br/>
+　├── 全能推送<br/>
 　├── 微信推送<br/>
 　├── 上网时间控制<br/>
-　├── 全能推送<br/>
-　├── MosDNS<br/>
-　├── OpenClash<br/>
 　├── 解锁网易云灰色歌曲<br/>
+　├── OpenClash<br/>
 　├── 动态 DNS<br/>
+　├── MultiSD_Lite<br/>
 　├── SmartDNS<br/>
-　├── 迅雷快鸟<br/>
 　├── 网络唤醒<br/>
-　├── UU游戏加速器<br/>
-　├── Frp 内网穿透<br/>
+　├── 迅雷快鸟<br/>
 　├── Frps<br/>
-　├── AirPlay 2 音频接收<br/>
+　├── UU游戏加速器<br/>
 　├── UPnP<br/>
 　├── KMS 服务器<br/>
-　├── uHTTPd<br/>
+　├── AirPlay 2 音频接收<br/>
 　├── udpxy<br/>
 　├── Nps 内网穿透<br/>
+　├── uHTTPd<br/>
+　├── Frp 内网穿透<br/>
 　└── MWAN3 分流助手
 </details>
 <details>
@@ -160,7 +162,6 @@
 </details>
 <details>
 <summary><b>├── VPN</b></summary>
-　├── V2ray 服务器<br/>
 　├── N2N v2 VPN<br/>
 　├── SoftEther VPN 服务器<br/>
 　├── OpenVPN 服务器<br/>
@@ -255,8 +256,6 @@
 - **本人不对任何人因使用本固件所遭受的任何理论或实际的损失承担责任！**
 
 - **本固件禁止用于任何商业用途，请务必严格遵守国家互联网使用相关法律规定！**
-
-- **请务必遵从 “不涉及政治，不涉及宗教，不涉及黄赌毒” 三不原则！**
 
 
 ## 鸣谢 [![](https://img.shields.io/badge/-跪谢各大佬-FFFFFF.svg)](#鸣谢-)
