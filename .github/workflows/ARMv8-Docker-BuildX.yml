@@ -3,7 +3,7 @@ name: ARMv8 Docker BuildX
 on:
   workflow_dispatch:
   schedule:
-    - cron: 0 23 * * 5
+    - cron: 0 0 * * 6
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -43,18 +43,18 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       run: |
         docker rmi $(docker images -q)
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /etc/mysql /etc/php /usr/local/lib/android
-        sudo -E apt-get -qq update
+        sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d /usr/local/lib/android $AGENT_TOOLSDIRECTORY
+        sudo -E apt-get -y update
         sudo -E apt-get -y install $(curl -fsSL is.gd/depends_ubuntu_2204)
-        sudo -E apt-get -qq autoremove --purge
-        sudo -E apt-get -qq clean
+        sudo -E apt-get -y autoremove --purge
+        sudo -E apt-get -y clean
         sudo timedatectl set-timezone "$TZ"
 
     - name: Clone Source Code
       run: |
         df -hT $GITHUB_WORKSPACE
-        git clone $REPO_URL -b $REPO_BRANCH workdir/openwrt
-        cd workdir/openwrt
+        git clone $REPO_URL -b $REPO_BRANCH openwrt
+        cd openwrt
         echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV
 
     - name: Install Feeds
@@ -92,7 +92,7 @@ jobs:
         make -j$(nproc) || make -j1 || make -j1 V=s
         echo "status=success" >> $GITHUB_OUTPUT
 
-    - name: Generate OpenWrt Firmware
+    - name: Generate Firmware
       if: steps.compile.outputs.status == 'success'
       id: generate
       run: |
@@ -119,8 +119,8 @@ jobs:
       if: steps.generate.outputs.status == 'success'
       uses: docker/build-push-action@master
       with:
-        platforms: linux/arm64
         context: docker
+        platforms: linux/arm64
         push: true
         tags: |
           ${{ env.DOCKER_IMAGE }}:${{ env.TAG }}
