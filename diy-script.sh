@@ -50,7 +50,7 @@ svn export https://github.com/haiibo/packages/trunk/luci-theme-opentomcat packag
 svn export https://github.com/haiibo/packages/trunk/luci-theme-netgear package/luci-theme-netgear
 
 # 更改 Argon 主题背景
-cp -f $GITHUB_WORKSPACE/images/bg1.jpg package/luci-theme-argon/htdocs/luci-static/argon/img/bg1.jpg
+cp -f $GITHUB_WORKSPACE/images/SHINKU_AS_e14a1.png package/luci-theme-argon/htdocs/luci-static/argon/img/bg1.png
 
 # 晶晨宝盒
 svn export https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
