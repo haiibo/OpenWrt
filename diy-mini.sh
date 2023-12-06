@@ -9,6 +9,9 @@ sed -i 's/192.168.1.1/192.168.11.1/g' package/base-files/files/bin/config_genera
 # 删除ipv6前缀
 sed -i 's/auto//' package/base-files/files/bin/config_generate
 
+# 端口初始化
+cp -f $GITHUB_WORKSPACE/scripts/99-default_network.txt package/base-files/files/etc/board.d/99-default_network
+
 # TTYD 自动登录
 sed -i 's|/bin/login|/bin/login -f root|g' feeds/packages/utils/ttyd/files/ttyd.config
 
