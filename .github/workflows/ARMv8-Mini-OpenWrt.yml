@@ -211,10 +211,10 @@ jobs:
       env:
         OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*rootfs.tar.gz
         PACKAGE_SOC: all
-        WHOAMI: Haiibo
+        WHOAMI: XuJiuChuan
         KERNEL_VERSION_NAME: 5.15.13_6.1.5
         KERNEL_AUTO_LATEST: true
-        DISTRIB_REVISION: R${{ env.DATE1 }} by Haiibo
+        DISTRIB_REVISION: R${{ env.DATE1 }} by XuJiuChuan
 
     - name: Upload OpenWrt To Artifact
       if: env.PACKAGED_STATUS == 'success' && env.OPENWRT_RELEASE != 'true'
@@ -235,7 +235,7 @@ jobs:
         body: |
           **This is OpenWrt Firmware for Armvirt 64**
           * 这是 ARMv8 精简版，只集成了一些常用插件
-          默认 IP：192.168.1.1 默认密码：password
+          默认 IP：192.168.11.1 默认密码：password
           安装到 EMMC：系统 → 晶晨宝盒 → 安装 OpenWrt → 选择型号 → 安装
           升级 OpenWrt：系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新
           常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
