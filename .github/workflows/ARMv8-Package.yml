@@ -23,7 +23,7 @@ jobs:
       matrix:
         include:
         - version: MINI
-          explain: 这是 ARMv8 精简版，只集成了一些常用插件
+          explain: 这是 ARMv8 精简版，主打科学上网适合养老
         - version: PLUS
           explain: 这是 ARMv8 多功能版，集成插件多适合折腾
 
@@ -47,7 +47,7 @@ jobs:
       run: |
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         cd openwrt
-        VERSION_INFO=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
+        VERSION_INFO=$(git show -s --date=short --format="作者: %an<br/>时间: %cd<br/>内容: %s<br/>hash: %H")
         echo "VERSION_INFO=$VERSION_INFO" >> $GITHUB_ENV
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
 
@@ -90,10 +90,16 @@ jobs:
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
         body: |
           **This is OpenWrt Firmware for Armvirt 64**
-          * ${{ matrix.explain }}
-          默认 IP：192.168.1.1 默认密码：password
-          安装到 EMMC：系统 → 晶晨宝盒 → 安装 OpenWrt → 选择型号 → 安装
-          升级 OpenWrt：系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新
-          常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
-          当前使用版本:【编译前的最后一次➦[主源码](https://github.com/coolsnowwolf/lede)更新记录】
-          ${{ env.VERSION_INFO }}
+          ### 📒 固件信息
+          - 💻 ${{ matrix.explain }}
+          - ⚽ 固件源码: ${{ env.REPO_URL }}
+          - 💝 源码分支: ${{ env.REPO_BRANCH }}
+          - 🌐 默认地址: 192.168.1.1
+          - 🔑 默认密码: password
+          ### 🍻 安装与更新
+          - 安装固件: 系统 → 晶晨宝盒 → 安装 OpenWrt → 选择型号 → 安装
+          - 升级固件: 系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新
+          - 常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
+          ### 🧊 固件版本
+          - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
+          - ${{ env.VERSION_INFO }}
