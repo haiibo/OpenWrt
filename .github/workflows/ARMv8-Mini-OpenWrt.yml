@@ -24,7 +24,10 @@ jobs:
     runs-on: ubuntu-22.04
 
     outputs:
-      VERSION_INFO: ${{ steps.clone.outputs.VERSION_INFO }}
+      author: ${{ steps.clone.outputs.author }}
+      date: ${{ steps.clone.outputs.date }}
+      commit: ${{ steps.clone.outputs.commit }}
+      hash: ${{ steps.clone.outputs.hash }}
 
     steps:
     - name: Checkout
@@ -34,15 +37,16 @@ jobs:
       run: |
         echo "警告⚠"
         echo "分配的服务器性能有限，若选择的插件过多，务必注意CPU性能！"
-        echo -e "已知CPU型号（降序）：7763，8370C，8272CL，8171M，E5-2673 \n"
+        echo -e "已知CPU型号(降序): 7763，8370C，8272CL，8171M，E5-2673\n"
         echo "--------------------------CPU信息--------------------------"
-        echo "CPU物理数量：$(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
-        echo -e "CPU核心信息：$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
+        echo "CPU物理数量: $(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
+        echo "CPU核心数量: $(nproc)"
+        echo -e "CPU型号信息:$(cat /proc/cpuinfo | grep -m1 name | awk -F: '{print $2}')\n"
         echo "--------------------------内存信息--------------------------"
-        echo "已安装内存详细信息："
-        echo -e "$(sudo lshw -short -C memory | grep GiB) \n"
+        echo "已安装内存详细信息:"
+        echo -e "$(sudo lshw -short -C memory | grep GiB)\n"
         echo "--------------------------硬盘信息--------------------------"
-        echo "硬盘数量：$(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
+        echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
 
     - name: Initialization Environment
       env:
@@ -65,9 +69,18 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         cd openwrt
         echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV
-        VERSION_INFO=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
-        echo "VERSION_INFO=$VERSION_INFO" >> $GITHUB_ENV
-        echo "VERSION_INFO=$VERSION_INFO" >> $GITHUB_OUTPUT
+        author=$(git show -s --date=short --format="作者: %an")
+        date=$(git show -s --date=short --format="时间: %ci")
+        commit=$(git show -s --date=short --format="内容: %s")
+        hash=$(git show -s --date=short --format="hash: %H")
+        echo "author=$author" >> $GITHUB_ENV
+        echo "author=$author" >> $GITHUB_OUTPUT
+        echo "date=$date" >> $GITHUB_ENV
+        echo "date=$date" >> $GITHUB_OUTPUT
+        echo "commit=$commit" >> $GITHUB_ENV
+        echo "commit=$commit" >> $GITHUB_OUTPUT
+        echo "hash=$hash" >> $GITHUB_ENV
+        echo "hash=$hash" >> $GITHUB_OUTPUT
 
     - name: Generate Variables
       run: |
@@ -166,17 +179,29 @@ jobs:
         artifacts: ${{ env.FIRMWARE_PATH }}/*
         body: |
           **This is Temporary Firmware for Armvirt 64**
-          * 这是 ARMv8_MINI 精简版打包临时固件，不可直刷
-          直刷固件参见 Tag 名为 ARMv8_MINI 的 Releases
-          当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
-          ${{ env.VERSION_INFO }}
+          ### 📒 固件信息
+          - 💻 这是 ARMv8 精简版打包临时固件，不可直刷
+          - 🚀 直刷固件点击此处跳转➦[ARMv8_MINI](https://github.com/jiu-chuan/OpenWrt/releases/tag/ARMv8_MINI)即可下载
+          - ⚽ 固件源码: ${{ env.REPO_URL }}
+          - 💝 源码分支: ${{ env.REPO_BRANCH }}
+          - 🌐 默认地址: 192.168.1.1
+          - 🔑 默认密码: password
+          ### 🧊 固件版本
+          - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
+          - ${{ env.author }}
+          - ${{ env.date }}
+          - ${{ env.commit }}
+          - ${{ env.hash }}
 
   Package:
     needs: [Build]
     runs-on: ubuntu-22.04
 
     env:
-      VERSION_INFO: ${{ needs.Build.outputs.VERSION_INFO }}
+      author: ${{ needs.Build.outputs.author }}
+      date: ${{ needs.Build.outputs.date }}
+      commit: ${{ needs.Build.outputs.commit }}
+      hash: ${{ needs.Build.outputs.hash }}
 
     steps:
     - name: Checkout
@@ -200,7 +225,7 @@ jobs:
         FIRMWARE_PATH=openwrt/bin/targets/armvirt/64
         [ -d $FIRMWARE_PATH ] || mkdir -p $FIRMWARE_PATH
         cd $FIRMWARE_PATH
-        wget -q $(curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY/releases" | grep "$FIRMWARE_TAG.*rootfs.tar.gz" | cut -d '"' -f 4)
+        wget -q $(curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY/releases" | grep "$FIRMWARE_TAG.*rootfs.tar.gz" | awk -F '"' '{print $4}')
         echo "status=success" >> $GITHUB_OUTPUT
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date +"%y.%m.%d")" >> $GITHUB_ENV
@@ -234,10 +259,19 @@ jobs:
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
         body: |
           **This is OpenWrt Firmware for Armvirt 64**
-          * 这是 ARMv8 精简版，只集成了一些常用插件
-          默认 IP：192.168.11.1 默认密码：password
-          安装到 EMMC：系统 → 晶晨宝盒 → 安装 OpenWrt → 选择型号 → 安装
-          升级 OpenWrt：系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新
-          常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
-          当前使用版本:【编译前的最后一次➦[主源码](https://github.com/coolsnowwolf/lede)更新记录】
-          ${{ env.VERSION_INFO }}
+          ### 📒 固件信息
+          - 💻 这是 ARMv8 精简版，主打科学上网适合养老
+          - ⚽ 固件源码: ${{ env.REPO_URL }}
+          - 💝 源码分支: ${{ env.REPO_BRANCH }}
+          - 🌐 默认地址: 192.168.1.1
+          - 🔑 默认密码: password
+          ### 🍻 安装与更新
+          - 安装固件: 系统 → 晶晨宝盒 → 安装 OpenWrt → 选择型号 → 安装
+          - 升级固件: 系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新
+          - 常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
+          ### 🧊 固件版本
+          - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
+          - ${{ env.author }}
+          - ${{ env.date }}
+          - ${{ env.commit }}
+          - ${{ env.hash }}
