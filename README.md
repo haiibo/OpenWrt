@@ -42,7 +42,7 @@
 
 
 ## 近期更新 [![](https://img.shields.io/badge/-近期固件更新-FFFFFF.svg)](#近期更新-)
-[title]([./dir/file.md](https://github.com/jiu-chuan/OpenWrt/blob/main/Recent_updates.md))
+<!-- @import "Recent_updates.md" -->
 
 ## 定制固件 [![](https://img.shields.io/badge/-项目基本编译教程-FFFFFF.svg)](#定制固件-)
 1. 首先要登录 Gihub 账号，然后 Fork 此项目到你自己的 Github 仓库
