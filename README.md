@@ -42,7 +42,7 @@
 
 
 ## 近期更新 [![](https://img.shields.io/badge/-近期固件更新-FFFFFF.svg)](#近期更新-)
-@import "Recent_updates.md"
+<!-- @import "Recent_updates.md" -->
 
 
 2023年11月29日
