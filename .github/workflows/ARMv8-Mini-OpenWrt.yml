@@ -184,7 +184,7 @@ jobs:
           - 🚀 直刷固件点击此处跳转➦[ARMv8_MINI](https://github.com/jiu-chuan/OpenWrt/releases/tag/ARMv8_MINI)即可下载
           - ⚽ 固件源码: ${{ env.REPO_URL }}
           - 💝 源码分支: ${{ env.REPO_BRANCH }}
-          - 🌐 默认地址: 192.168.1.1
+          - 🌐 默认地址: 192.168.11.1
           - 🔑 默认密码: password
           ### 🧊 固件版本
           - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
@@ -263,7 +263,7 @@ jobs:
           - 💻 这是 ARMv8 精简版，主打科学上网适合养老
           - ⚽ 固件源码: ${{ env.REPO_URL }}
           - 💝 源码分支: ${{ env.REPO_BRANCH }}
-          - 🌐 默认地址: 192.168.1.1
+          - 🌐 默认地址: 192.168.11.1
           - 🔑 默认密码: password
           ### 🍻 安装与更新
           - 安装固件: 系统 → 晶晨宝盒 → 安装 OpenWrt → 选择型号 → 安装
