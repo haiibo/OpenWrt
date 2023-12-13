@@ -24,10 +24,12 @@ jobs:
     runs-on: ubuntu-22.04
 
     outputs:
-      author: ${{ steps.clone.outputs.author }}
-      date: ${{ steps.clone.outputs.date }}
-      commit: ${{ steps.clone.outputs.commit }}
-      hash: ${{ steps.clone.outputs.hash }}
+      COMMIT_AUTHOR: ${{ steps.clone.outputs.COMMIT_AUTHOR }}
+      COMMIT_DATE: ${{ steps.clone.outputs.COMMIT_DATE }}
+      COMMIT_MESSAGE: ${{ steps.clone.outputs.COMMIT_MESSAGE }}
+      COMMIT_HASH: ${{ steps.clone.outputs.COMMIT_HASH }}
+      DEVICE_TARGET: ${{ steps.variable.outputs.DEVICE_TARGET }}
+      DEVICE_SUBTARGET: ${{ steps.variable.outputs.DEVICE_SUBTARGET }}
 
     steps:
     - name: Checkout
@@ -69,20 +71,21 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         cd openwrt
         echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV
-        author=$(git show -s --date=short --format="作者: %an")
-        date=$(git show -s --date=short --format="时间: %ci")
-        commit=$(git show -s --date=short --format="内容: %s")
-        hash=$(git show -s --date=short --format="hash: %H")
-        echo "author=$author" >> $GITHUB_ENV
-        echo "author=$author" >> $GITHUB_OUTPUT
-        echo "date=$date" >> $GITHUB_ENV
-        echo "date=$date" >> $GITHUB_OUTPUT
-        echo "commit=$commit" >> $GITHUB_ENV
-        echo "commit=$commit" >> $GITHUB_OUTPUT
-        echo "hash=$hash" >> $GITHUB_ENV
-        echo "hash=$hash" >> $GITHUB_OUTPUT
+        COMMIT_AUTHOR=$(git show -s --date=short --format="作者: %an")
+        echo "COMMIT_AUTHOR=$COMMIT_AUTHOR" >> $GITHUB_ENV
+        echo "COMMIT_AUTHOR=$COMMIT_AUTHOR" >> $GITHUB_OUTPUT
+        COMMIT_DATE=$(git show -s --date=short --format="时间: %ci")
+        echo "COMMIT_DATE=$COMMIT_DATE" >> $GITHUB_ENV
+        echo "COMMIT_DATE=$COMMIT_DATE" >> $GITHUB_OUTPUT
+        COMMIT_MESSAGE=$(git show -s --date=short --format="内容: %s")
+        echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
+        echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+        COMMIT_HASH=$(git show -s --date=short --format="hash: %H")
+        echo "COMMIT_HASH=$COMMIT_HASH" >> $GITHUB_ENV
+        echo "COMMIT_HASH=$COMMIT_HASH" >> $GITHUB_OUTPUT
 
     - name: Generate Variables
+      id: variable
       run: |
         cp $CONFIG_FILE $OPENWRT_PATH/.config
         cd $OPENWRT_PATH
@@ -91,8 +94,10 @@ jobs:
         echo "SOURCE_REPO=$SOURCE_REPO" >> $GITHUB_ENV
         DEVICE_TARGET=$(cat .config | grep CONFIG_TARGET_BOARD | awk -F '"' '{print $2}')
         echo "DEVICE_TARGET=$DEVICE_TARGET" >> $GITHUB_ENV
+        echo "DEVICE_TARGET=$DEVICE_TARGET" >> $GITHUB_OUTPUT
         DEVICE_SUBTARGET=$(cat .config | grep CONFIG_TARGET_SUBTARGET | awk -F '"' '{print $2}')
         echo "DEVICE_SUBTARGET=$DEVICE_SUBTARGET" >> $GITHUB_ENV
+        echo "DEVICE_SUBTARGET=$DEVICE_SUBTARGET" >> $GITHUB_OUTPUT
 
     - name: Cache Toolchain
       if: env.CACHE_TOOLCHAIN == 'true'
@@ -180,28 +185,30 @@ jobs:
         body: |
           **This is Temporary Firmware for Armvirt 64**
           ### 📒 固件信息
-          - 💻 这是 ARMv8 精简版打包临时固件，不可直刷
-          - 🚀 直刷固件点击此处跳转➦[ARMv8_MINI](https://github.com/haiibo/OpenWrt/releases/tag/ARMv8_MINI)即可下载
+          - 🚀 成品固件点击此处跳转➦[MINI](https://github.com/haiibo/OpenWrt/releases/tag/ARMv8_MINI)即可下载
+          - 💻 平台架构: ${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }} (精简版临时固件)
           - ⚽ 固件源码: ${{ env.REPO_URL }}
           - 💝 源码分支: ${{ env.REPO_BRANCH }}
           - 🌐 默认地址: 192.168.1.1
           - 🔑 默认密码: password
           ### 🧊 固件版本
           - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
-          - ${{ env.author }}
-          - ${{ env.date }}
-          - ${{ env.commit }}
-          - ${{ env.hash }}
+          - ${{ env.COMMIT_AUTHOR }}
+          - ${{ env.COMMIT_DATE }}
+          - ${{ env.COMMIT_MESSAGE }}
+          - ${{ env.COMMIT_HASH }}
 
   Package:
     needs: [Build]
     runs-on: ubuntu-22.04
 
     env:
-      author: ${{ needs.Build.outputs.author }}
-      date: ${{ needs.Build.outputs.date }}
-      commit: ${{ needs.Build.outputs.commit }}
-      hash: ${{ needs.Build.outputs.hash }}
+      COMMIT_AUTHOR: ${{ needs.Build.outputs.COMMIT_AUTHOR }}
+      COMMIT_DATE: ${{ needs.Build.outputs.COMMIT_DATE }}
+      COMMIT_MESSAGE: ${{ needs.Build.outputs.COMMIT_MESSAGE }}
+      COMMIT_HASH: ${{ needs.Build.outputs.COMMIT_HASH }}
+      DEVICE_TARGET: ${{ needs.Build.outputs.DEVICE_TARGET }}
+      DEVICE_SUBTARGET: ${{ needs.Build.outputs.DEVICE_SUBTARGET }}
 
     steps:
     - name: Checkout
@@ -260,7 +267,8 @@ jobs:
         body: |
           **This is OpenWrt Firmware for Armvirt 64**
           ### 📒 固件信息
-          - 💻 这是 ARMv8 精简版，主打科学上网适合养老
+          - 🚀 ARMv8 精简版，主打科学上网适合养老
+          - 💻 平台架构: ${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}
           - ⚽ 固件源码: ${{ env.REPO_URL }}
           - 💝 源码分支: ${{ env.REPO_BRANCH }}
           - 🌐 默认地址: 192.168.1.1
@@ -274,7 +282,7 @@ jobs:
           - 部分常见问题及注意事项请参考恩山论坛F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
           ### 🧊 固件版本
           - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
-          - ${{ env.author }}
-          - ${{ env.date }}
-          - ${{ env.commit }}
-          - ${{ env.hash }}
+          - ${{ env.COMMIT_AUTHOR }}
+          - ${{ env.COMMIT_DATE }}
+          - ${{ env.COMMIT_MESSAGE }}
+          - ${{ env.COMMIT_HASH }}

@@ -23,9 +23,9 @@ jobs:
       matrix:
         include:
         - version: MINI
-          explain: 这是 ARMv8 精简版，主打科学上网适合养老
+          explain: ARMv8 精简版，主打科学上网适合养老
         - version: PLUS
-          explain: 这是 ARMv8 多功能版，集成插件多适合折腾
+          explain: ARMv8 多功能版，集成插件多适合折腾
 
     steps:
     - name: Checkout
@@ -48,14 +48,14 @@ jobs:
         df -hT $GITHUB_WORKSPACE
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         cd openwrt
-        author=$(git show -s --date=short --format="作者: %an")
-        date=$(git show -s --date=short --format="时间: %ci")
-        commit=$(git show -s --date=short --format="内容: %s")
-        hash=$(git show -s --date=short --format="hash: %H")
-        echo "author=$author" >> $GITHUB_ENV
-        echo "date=$date" >> $GITHUB_ENV
-        echo "commit=$commit" >> $GITHUB_ENV
-        echo "hash=$hash" >> $GITHUB_ENV
+        COMMIT_AUTHOR=$(git show -s --date=short --format="作者: %an")
+        echo "COMMIT_AUTHOR=$COMMIT_AUTHOR" >> $GITHUB_ENV
+        COMMIT_DATE=$(git show -s --date=short --format="时间: %ci")
+        echo "COMMIT_DATE=$COMMIT_DATE" >> $GITHUB_ENV
+        COMMIT_MESSAGE=$(git show -s --date=short --format="内容: %s")
+        echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
+        COMMIT_HASH=$(git show -s --date=short --format="hash: %H")
+        echo "COMMIT_HASH=$COMMIT_HASH" >> $GITHUB_ENV
 
     - name: Download Armvirt Firmware
       id: download
@@ -98,7 +98,8 @@ jobs:
         body: |
           **This is OpenWrt Firmware for Armvirt 64**
           ### 📒 固件信息
-          - 💻 ${{ matrix.explain }}
+          - 🚀 ${{ matrix.explain }}
+          - 💻 平台架构: armvirt-64
           - ⚽ 固件源码: ${{ env.REPO_URL }}
           - 💝 源码分支: ${{ env.REPO_BRANCH }}
           - 🌐 默认地址: 192.168.1.1
@@ -112,7 +113,7 @@ jobs:
           - 部分常见问题及注意事项请参考恩山论坛F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
           ### 🧊 固件版本
           - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
-          - ${{ env.author }}
-          - ${{ env.date }}
-          - ${{ env.commit }}
-          - ${{ env.hash }}
+          - ${{ env.COMMIT_AUTHOR }}
+          - ${{ env.COMMIT_DATE }}
+          - ${{ env.COMMIT_MESSAGE }}
+          - ${{ env.COMMIT_HASH }}
