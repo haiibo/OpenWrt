@@ -14,9 +14,9 @@ env:
   CACHE_TOOLCHAIN: true
   UPLOAD_BIN_DIR: false
   FIRMWARE_RELEASE: true
-  FIRMWARE_TAG: ROOTFS_MINI
+  FIRMWARE_TAG: ROOTFS_SELF
   OPENWRT_RELEASE: true
-  OPENWRT_TAG: ARMv8_MINI
+  OPENWRT_TAG: ARMv8_SELF
   TZ: Asia/Shanghai
 
 jobs:
@@ -166,8 +166,8 @@ jobs:
         artifacts: ${{ env.FIRMWARE_PATH }}/*
         body: |
           **This is Temporary Firmware for Armvirt 64**
-          * 这是 ARMv8_MINI 精简版打包临时固件，不可直刷
-          直刷固件参见 Tag 名为 ARMv8_MINI 的 Releases
+          * 这是 ARMv8_SELF 精简版打包临时固件，不可直刷
+          直刷固件参见 Tag 名为 ARMv8_SELF 的 Releases
           当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.VERSION_INFO }}
 
