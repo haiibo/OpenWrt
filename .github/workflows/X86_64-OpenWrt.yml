@@ -2,9 +2,14 @@ name: X86_64 OpenWrt
 
 on:
   workflow_dispatch:
+   inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
   schedule:
-    - cron: 0 19 * * *
-
+    - cron: 0 12 1 * *
+    
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
@@ -114,6 +119,13 @@ jobs:
         $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
         $GITHUB_WORKSPACE/scripts/preset-adguard-core.sh $CLASH_KERNEL
 
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
     - name: Download DL Package
       run: |
         cd $OPENWRT_PATH
@@ -131,7 +143,7 @@ jobs:
         echo -e "$(nproc) thread compile"
         make -j$(nproc) || make -j1 || make -j1 V=s
         echo "status=success" >> $GITHUB_OUTPUT
-        echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
+        echo "DATE=$(date +"%Y-%m-%d %H-%M")" >> $GITHUB_ENV
         echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
 
     - name: Check Space Usage
@@ -168,10 +180,10 @@ jobs:
       if: steps.compile.outputs.status == 'success' && env.FIRMWARE_RELEASE == 'true'
       uses: ncipollo/release-action@v1
       with:
-        name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}
+        name: R${{ env.FILE_DATE }} for ${{ env.FIRMWARE_TAG }}
         allowUpdates: true
-        tag: ${{ env.FIRMWARE_TAG }}
-        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ env.FILE_DATE }}
+        token: ${{ secrets.GH_TOKEN }}
         artifacts: ${{ env.FIRMWARE_PATH }}/*
         body: |
           **This is OpenWrt Firmware for ${{ env.FIRMWARE_TAG }}**
@@ -180,11 +192,34 @@ jobs:
           - ⚽ 固件源码: ${{ env.REPO_URL }}
           - 💝 源码分支: ${{ env.REPO_BRANCH }}
           - 🚀 内核版本: ${{ env.KERNEL }}
-          - 🌐 默认地址: 192.168.1.1
-          - 🔑 默认密码: password
+          - 🌐 默认地址: 192.168.5.1
+          - 🔑 默认密码: 空
           ### 🧊 固件版本
           - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
           - ${{ env.COMMIT_AUTHOR }}
           - ${{ env.COMMIT_DATE }}
           - ${{ env.COMMIT_MESSAGE }}
           - ${{ env.COMMIT_HASH }}
+
+    - name: Remove old Releases
+      uses: dev-drprasad/delete-older-releases@v0.3.2
+      if: env.FIRMWARE_RELEASE == 'true' && !cancelled()
+      with:
+        keep_latest: 2
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+   
+    - name: Notify on Compile Status
+      if: always()
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_CHAT_ID }}
+        token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        message: |
+          lede-openwrt编译状态 ${{ job.status }}!
+          工作流: ${{ github.workflow }}
+          用户名: ${{ github.actor }}
+          仓库: ${{ github.repository }}
+          Commit: ${{ github.sha }}
+          Commit Message: ${{ github.event.head_commit.message }}
