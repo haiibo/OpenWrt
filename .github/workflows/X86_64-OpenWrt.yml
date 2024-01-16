@@ -192,7 +192,7 @@ jobs:
           - 💝 源码分支: ${{ env.REPO_BRANCH }}
           - 🚀 内核版本: ${{ env.KERNEL }}
           - 🌐 默认地址: 192.168.5.1
-          - 🔑 默认密码: 空
+          - 🔑 默认密码: password
           ### 🧊 固件版本
           - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
           - ${{ env.COMMIT_AUTHOR }}
@@ -216,9 +216,8 @@ jobs:
         to: ${{ secrets.TELEGRAM_CHAT_ID }}
         token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         message: |
-          lede-openwrt编译状态 ${{ job.status }}!
+          编译状态 ${{ job.status }}!
           工作流: ${{ github.workflow }}
           用户名: ${{ github.actor }}
           仓库: ${{ github.repository }}
           Commit: ${{ github.sha }}
-          Commit Message: ${{ github.event.head_commit.message }}
