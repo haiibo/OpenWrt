@@ -54,9 +54,9 @@ jobs:
     - name: Combine Disks
       uses: easimon/maximize-build-space@master
       with:
-        swap-size-mb: 1024
+        swap-size-mb: 2048
         temp-reserve-mb: 100
-        root-reserve-mb: 1024
+        root-reserve-mb: 4096
 
     - name: Checkout
       uses: actions/checkout@main
