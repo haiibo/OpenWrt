@@ -23,9 +23,9 @@ jobs:
       matrix:
         include:
         - version: MINI
-          explain: 这是 ARMv8 精简版，只集成了一些常用插件
+          explain: ARMv8 精简版，主打科学上网适合养老
         - version: PLUS
-          explain: 这是 ARMv8 多功能版，集成插件多适合折腾
+          explain: ARMv8 多功能版，集成插件多适合折腾
 
     steps:
     - name: Checkout
@@ -45,11 +45,18 @@ jobs:
 
     - name: Clone Source Code
       run: |
+        df -hT $GITHUB_WORKSPACE
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         cd openwrt
-        VERSION_INFO=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
-        echo "VERSION_INFO=$VERSION_INFO" >> $GITHUB_ENV
-        echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
+
+        COMMIT_AUTHOR=$(git show -s --date=short --format="作者: %an")
+        echo "COMMIT_AUTHOR=$COMMIT_AUTHOR" >> $GITHUB_ENV
+        COMMIT_DATE=$(git show -s --date=short --format="时间: %ci")
+        echo "COMMIT_DATE=$COMMIT_DATE" >> $GITHUB_ENV
+        COMMIT_MESSAGE=$(git show -s --date=short --format="内容: %s")
+        echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
+        COMMIT_HASH=$(git show -s --date=short --format="hash: %H")
+        echo "COMMIT_HASH=$COMMIT_HASH" >> $GITHUB_ENV
 
     - name: Download Armvirt Firmware
       id: download
@@ -59,6 +66,7 @@ jobs:
         FIRMWARE_URL=$(curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY/releases" | grep -o "ROOTFS_${{ matrix.version }}.*rootfs.tar.gz")
         wget -q -P $FIRMWARE_PATH https://github.com/$GITHUB_REPOSITORY/releases/download/$FIRMWARE_URL
         echo "status=success" >> $GITHUB_OUTPUT
+
         echo "DATE1=$(date +"%y.%m.%d")" >> $GITHUB_ENV
 
     - name: Package OpenWrt Firmware
@@ -82,18 +90,31 @@ jobs:
       if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_RELEASE == 'true'
       uses: ncipollo/release-action@v1
       with:
-        name: R${{ env.DATE }} for ARMv8_${{ env.VERSION }}
+        name: R${{ env.DATE }} for ARMv8_${{ matrix.version }}
         allowUpdates: true
         removeArtifacts: true
-        tag: ARMv8_${{ env.VERSION }}
+        tag: ARMv8_${{ matrix.version }}
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
         body: |
           **This is OpenWrt Firmware for Armvirt 64**
-          * ${{ matrix.explain }}
-          默认 IP：192.168.1.1 默认密码：password
-          安装到 EMMC：系统 → 晶晨宝盒 → 安装 OpenWrt → 选择型号 → 安装
-          升级 OpenWrt：系统 → 晶晨宝盒 → 手动上传更新 或者 在线下载更新
-          常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
-          当前使用版本:【编译前的最后一次➦[主源码](https://github.com/coolsnowwolf/lede)更新记录】
-          ${{ env.VERSION_INFO }}
+          ### 📒 固件信息
+          - 🚀 ${{ matrix.explain }}
+          - 💻 平台架构: armvirt-64
+          - ⚽ 固件源码: ${{ env.REPO_URL }}
+          - 💝 源码分支: ${{ env.REPO_BRANCH }}
+          - 🌐 默认地址: 192.168.1.1
+          - 🔑 默认密码: password
+          ### 🍻 安装与更新
+          - 用插件安装: 系统 → 晶晨宝盒 → 安装 OpenWrt → 选择型号 → 安装
+          - 用命令安装: U盘启动成功后输入命令 `openwrt-install-amlogic` 按照英文提示写入到 emmc
+          - 用插件更新: 系统 → 晶晨宝盒 → 在线下载更新 → 完整更新全系统
+          - 用命令更新: 上传固件到 `/mnt/mmcblk2p4` 目录，输入命令 `openwrt-update-amlogic` 即可更新
+          - 注意: 如非 `amlogic` 平台，请将其更改为对应平台 `rockchip` `allwinner`
+          - 部分常见问题及注意事项请参考恩山论坛F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
+          ### 🧊 固件版本
+          - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
+          - ${{ env.COMMIT_AUTHOR }}
+          - ${{ env.COMMIT_DATE }}
+          - ${{ env.COMMIT_MESSAGE }}
+          - ${{ env.COMMIT_HASH }}
