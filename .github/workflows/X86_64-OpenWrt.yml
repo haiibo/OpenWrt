@@ -192,7 +192,7 @@ jobs:
       uses: dev-drprasad/delete-older-releases@v0.3.2
       if: env.FIRMWARE_RELEASE == 'true' && !cancelled()
       with:
-        keep_latest: 3
+        keep_latest: 4
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
