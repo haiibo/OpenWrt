@@ -201,7 +201,7 @@ jobs:
           - ${{ env.COMMIT_HASH }}
 
     - name: Remove old Releases
-      uses: dev-drprasad/delete-older-releases@v0.3.2
+      uses: dev-drprasad/delete-older-releases@master
       if: env.FIRMWARE_RELEASE == 'true' && !cancelled()
       with:
         keep_latest: 4
