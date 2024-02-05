@@ -71,6 +71,7 @@ jobs:
         df -hT $GITHUB_WORKSPACE
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         cd openwrt
+        git checkout e3811adc69ea29da92f51625055e1fc83c256b43
         # git checkout 053f193d01cf2ce910d1e9c2f740b4e6d6efdfef     
         echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV
         COMMIT_AUTHOR=$(git show -s --date=short --format="作者: %an")
