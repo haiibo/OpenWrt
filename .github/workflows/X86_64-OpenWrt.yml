@@ -69,6 +69,7 @@ jobs:
       run: |
         df -hT $GITHUB_WORKSPACE
         git clone $REPO_URL -b $REPO_BRANCH openwrt
+        sed -i 's/iperf3-ssl[[:space:]]*//g' openwrt/target/linux/x86/Makefile
         cd openwrt    
         echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV
         COMMIT_AUTHOR=$(git show -s --date=short --format="作者: %an")
