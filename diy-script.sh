@@ -23,10 +23,9 @@ rm -rf feeds/luci/applications/luci-app-serverchan
 
 # 修复 iperf3-ssl冲突
 sed -i 's/iperf3-ssl[[:space:]]*//g' target/linux/x86/Makefile
-# 修复 curl 8.6.0 bug
-pushd feeds/packages/net/curl
-git checkout 6501290c17fb2c65e0fb589da94d121ff89e7d5e
-popd
+# 修复passwall百度连接失败，替换为 curl 8.5.0
+rm -rf feeds/packages/net/curl
+git clone https://github.com/sbwml/feeds_packages_net_curl feeds/packages/net/curl
 
 # Git稀疏克隆，只克隆指定目录到本地
 function git_sparse_clone() {
