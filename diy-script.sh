@@ -21,9 +21,6 @@ rm -rf feeds/luci/applications/luci-app-mosdns
 rm -rf feeds/luci/applications/luci-app-netdata
 rm -rf feeds/luci/applications/luci-app-serverchan
 
-# 修复 iperf3-ssl 冲突
-sed -i 's/iperf3-ssl[[:space:]]*//g' openwrt/target/linux/x86/Makefile
-
 # Git稀疏克隆，只克隆指定目录到本地
 function git_sparse_clone() {
   branch="$1" repourl="$2" && shift 2
@@ -111,6 +108,9 @@ sed -i "s/${orig_version}/R${date_version} by TonyLee/g" package/lean/default-se
 
 # 修复 hostapd 报错
 cp -f $GITHUB_WORKSPACE/scripts/011-fix-mbo-modules-build.patch package/network/services/hostapd/patches/011-fix-mbo-modules-build.patch
+
+# 修复 iperf3-ssl 冲突
+sed -i 's/iperf3-ssl/iperf3/g' package/luci-app-netspeedtest/Makefile
 
 # 修复 armv8 设备 xfsprogs 报错
 sed -i 's/TARGET_CFLAGS.*/TARGET_CFLAGS += -DHAVE_MAP_SYNC -D_LARGEFILE64_SOURCE/g' feeds/packages/utils/xfsprogs/Makefile
