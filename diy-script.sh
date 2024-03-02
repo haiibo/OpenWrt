@@ -114,8 +114,8 @@ cp -f $GITHUB_WORKSPACE/scripts/011-fix-mbo-modules-build.patch package/network/
 sed -i 's/iperf3-ssl/iperf3/g' package/luci-app-netspeedtest/Makefile
 
 # 修改 cloudflared 版本
-sed -i 's/2023.2.2/2024.2.1/g' packages/net/cloudflared/Makefile
-sed -i 's/b0abaff125d29c517894f6ea74dcc7044c92500670463595ba9ff4950a1d2fc2/c4a741ee532b8544a65a598e739e002ec04cfffb202119e3e2315e9ecc7dc07a/g' packages/net/cloudflared/Makefile
+sed -i 's/2023.2.2/2024.2.1/g' feeds/packages/net/cloudflared
+sed -i 's/b0abaff125d29c517894f6ea74dcc7044c92500670463595ba9ff4950a1d2fc2/c4a741ee532b8544a65a598e739e002ec04cfffb202119e3e2315e9ecc7dc07a/g' feeds/packages/net/cloudflared
 
 # 修复 armv8 设备 xfsprogs 报错
 sed -i 's/TARGET_CFLAGS.*/TARGET_CFLAGS += -DHAVE_MAP_SYNC -D_LARGEFILE64_SOURCE/g' feeds/packages/utils/xfsprogs/Makefile
