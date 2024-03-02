@@ -21,6 +21,8 @@ rm -rf feeds/luci/applications/luci-app-mosdns
 rm -rf feeds/luci/applications/luci-app-netdata
 rm -rf feeds/luci/applications/luci-app-serverchan
 
+# 修复 iperf3-ssl 冲突
+sed -i 's/iperf3-ssl[[:space:]]*//g' openwrt/target/linux/x86/Makefile
 
 # Git稀疏克隆，只克隆指定目录到本地
 function git_sparse_clone() {
