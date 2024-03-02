@@ -21,8 +21,6 @@ rm -rf feeds/luci/applications/luci-app-mosdns
 rm -rf feeds/luci/applications/luci-app-netdata
 rm -rf feeds/luci/applications/luci-app-serverchan
 
-# 修复 iperf3-ssl冲突
-# sed -i 's/iperf3-ssl[[:space:]]*//g' target/linux/x86/Makefile
 
 # Git稀疏克隆，只克隆指定目录到本地
 function git_sparse_clone() {
@@ -46,6 +44,9 @@ git_sparse_clone main https://github.com/kenzok8/small-package luci-app-advanced
 git_sparse_clone main https://github.com/Lienol/openwrt-package luci-app-filebrowser luci-app-ssr-mudb-server
 git_sparse_clone openwrt-18.06 https://github.com/immortalwrt/luci applications/luci-app-eqos
 # git_sparse_clone master https://github.com/syb999/openwrt-19.07.1 package/network/services/msd_lite
+
+# 修复 iperf3-ssl冲突
+# sed -i 's/iperf3-ssl[[:space:]]*//g' package/luci-app-netspeedtest/Makefile
 
 # 科学上网插件
 git clone --depth=1 -b main https://github.com/fw876/helloworld package/luci-app-ssr-plus
