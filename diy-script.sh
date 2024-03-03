@@ -42,7 +42,7 @@ git clone --depth=1 https://github.com/Erope/openwrt_nezha package/openwrt_nezha
 git_sparse_clone main https://github.com/kenzok8/small-package luci-app-advanced luci-app-netspeedtest luci-app-quickstart quickstart homebox
 git_sparse_clone main https://github.com/Lienol/openwrt-package luci-app-filebrowser luci-app-ssr-mudb-server
 git_sparse_clone openwrt-18.06 https://github.com/immortalwrt/luci applications/luci-app-eqos 
-git_sparse_clone master https://github.com/openwrt/luci applications/luci-app-cloudflared
+# git_sparse_clone master https://github.com/openwrt/luci applications/luci-app-cloudflared
 # git_sparse_clone master https://github.com/syb999/openwrt-19.07.1 package/network/services/msd_lite
 
 # 科学上网插件
@@ -113,9 +113,9 @@ cp -f $GITHUB_WORKSPACE/scripts/011-fix-mbo-modules-build.patch package/network/
 # 修复 iperf3-ssl 冲突
 sed -i 's/iperf3-ssl/iperf3/g' package/luci-app-netspeedtest/Makefile
 
-# 修改 cloudflared 版本
-sed -i 's/2023.2.2/2024.2.1/g' feeds/packages/net/cloudflared
-sed -i 's/b0abaff125d29c517894f6ea74dcc7044c92500670463595ba9ff4950a1d2fc2/c4a741ee532b8544a65a598e739e002ec04cfffb202119e3e2315e9ecc7dc07a/g' feeds/packages/net/cloudflared
+# 修改 cloudflared 版本 测试
+# sed -i 's/2023.2.2/2024.2.1/g' feeds/packages/net/cloudflared/Makefile
+# sed -i 's/b0abaff125d29c517894f6ea74dcc7044c92500670463595ba9ff4950a1d2fc2/c4a741ee532b8544a65a598e739e002ec04cfffb202119e3e2315e9ecc7dc07a/g' feeds/packages/net/cloudflared/Makefile
 
 # 修复 armv8 设备 xfsprogs 报错
 sed -i 's/TARGET_CFLAGS.*/TARGET_CFLAGS += -DHAVE_MAP_SYNC -D_LARGEFILE64_SOURCE/g' feeds/packages/utils/xfsprogs/Makefile
