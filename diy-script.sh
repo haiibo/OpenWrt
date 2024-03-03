@@ -114,8 +114,8 @@ cp -f $GITHUB_WORKSPACE/scripts/011-fix-mbo-modules-build.patch package/network/
 sed -i 's/iperf3-ssl/iperf3/g' package/luci-app-netspeedtest/Makefile
 
 # 修复 passwall passwall2 百度https错误
-sed -i 's/‘https://www.baidu.com’/‘http://www.baidu.com’/g' package/luci-app-passwall/luasrc/view/passwall/global/status.htm
-sed -i 's/‘https://www.baidu.com’/‘http://www.baidu.com’/g' package/luci-app-passwall2/luasrc/view/passwall2/global/status.htm
+sed -i 's/‘https://www.baidu.com’/‘http://www.baidu.com’/g' package/luci-app-passwall/luci-app-passwall/luasrc/view/passwall/global/status.htm
+sed -i 's/‘https://www.baidu.com’/‘http://www.baidu.com’/g' package/luci-app-passwall2/luci-app-passwall2/luasrc/view/passwall2/global/status.htm
 
 # 修改 cloudflared 版本 测试
 # sed -i 's/2023.2.2/2024.2.1/g' feeds/packages/net/cloudflared/Makefile
