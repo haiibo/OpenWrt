@@ -48,7 +48,7 @@ git_sparse_clone openwrt-18.06 https://github.com/immortalwrt/luci applications/
 # 科学上网插件
 git clone --depth=1 -b main https://github.com/fw876/helloworld package/luci-app-ssr-plus
 git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall
-git clone --depth=1 https://github.com/tonylee2022/openwrt-passwall package/luci-app-passwall
+git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall package/luci-app-passwall
 git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall2 package/luci-app-passwall2
 git_sparse_clone master https://github.com/vernesong/OpenClash luci-app-openclash
 
@@ -111,7 +111,7 @@ sed -i "s/${orig_version}/R${date_version} by TonyLee/g" package/lean/default-se
 cp -f $GITHUB_WORKSPACE/scripts/011-fix-mbo-modules-build.patch package/network/services/hostapd/patches/011-fix-mbo-modules-build.patch
 
 # 修复 iperf3-ssl 冲突
-sed -i 's/iperf3-ssl/iperf3/g' package/luci-app-netspeedtest/Makefile
+# sed -i 's/iperf3-ssl/iperf3/g' package/luci-app-netspeedtest/Makefile
 
 # 修改 cloudflared 版本 测试
 # sed -i 's/2023.2.2/2024.2.1/g' feeds/packages/net/cloudflared/Makefile
