@@ -111,7 +111,7 @@ sed -i "s/${orig_version}/R${date_version} by TonyLee/g" package/lean/default-se
 cp -f $GITHUB_WORKSPACE/scripts/011-fix-mbo-modules-build.patch package/network/services/hostapd/patches/011-fix-mbo-modules-build.patch
 
 # 修复 iperf3-ssl 冲突
-# sed -i 's/iperf3-ssl/iperf3/g' package/luci-app-netspeedtest/Makefile
+sed -i 's/iperf3-ssl/iperf3/g' package/luci-app-netspeedtest/Makefile
 
 # 修复 xray-core1.8.8 编译错误
 sed -i 's/1.8.8/1.8.6/g'  package/openwrt-passwall/xray-core/Makefile
