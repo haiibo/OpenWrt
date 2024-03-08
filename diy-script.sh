@@ -40,14 +40,15 @@ git clone --depth=1 https://github.com/esirplayground/luci-app-poweroff package/
 git clone --depth=1 https://github.com/destan19/OpenAppFilter package/OpenAppFilter
 git clone --depth=1 https://github.com/Jason6111/luci-app-netdata package/luci-app-netdata
 git clone --depth=1 https://github.com/Erope/openwrt_nezha package/openwrt_nezha
-git_sparse_clone main https://github.com/kenzok8/small-package luci-app-advanced luci-app-netspeedtest luci-app-quickstart quickstart homebox
+git_sparse_clone master https://github.com/sirpdboy/netspeedtest homebox luci-app-netspeedtest
+git_sparse_clone main https://github.com/kenzok8/small-package luci-app-advanced luci-app-quickstart quickstart 
 git_sparse_clone main https://github.com/Lienol/openwrt-package luci-app-filebrowser luci-app-ssr-mudb-server
 git_sparse_clone openwrt-18.06 https://github.com/immortalwrt/luci applications/luci-app-eqos 
 # git_sparse_clone master https://github.com/syb999/openwrt-19.07.1 package/network/services/msd_lite
 
 # 科学上网插件
 git clone --depth=1 -b main https://github.com/fw876/helloworld package/luci-app-ssr-plus
-git clone --depth=1 https://github.com/lwb1978/openwrt-passwall-packages package/openwrt-passwall
+git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall
 git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall package/luci-app-passwall
 git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall2 package/luci-app-passwall2
 git_sparse_clone master https://github.com/vernesong/OpenClash luci-app-openclash
@@ -80,7 +81,7 @@ git clone --depth=1 https://github.com/ximiTech/msd_lite package/msd_lite
 git clone --depth=1 https://github.com/sbwml/luci-app-mosdns package/luci-app-mosdns
 
 # Alist
-git clone --depth=1 https://github.com/sbwml/luci-app-alist package/luci-app-alist
+# git clone --depth=1 https://github.com/sbwml/luci-app-alist package/luci-app-alist
 
 # DDNS.to
 git_sparse_clone main https://github.com/linkease/nas-packages-luci luci/luci-app-ddnsto
@@ -111,8 +112,9 @@ sed -i "s/${orig_version}/R${date_version} by TonyLee/g" package/lean/default-se
 cp -f $GITHUB_WORKSPACE/scripts/011-fix-mbo-modules-build.patch package/network/services/hostapd/patches/011-fix-mbo-modules-build.patch
 
 # 修改 iperf3 版本
-sed -i 's/3.12/3.16/g' feeds/packages/net/iperf3/Makefile
-sed -i 's/72034ecfb6a7d6d67e384e19fb6efff3236ca4f7ed4c518d7db649c447e1ffd6/cc740c6bbea104398cc3e466befc515a25896ec85e44a662d5f4a767b9cf713e/g'  feeds/packages/net/iperf3/Makefile
+# sed -i 's/3.12/3.16/g' feeds/packages/net/iperf3/Makefile
+# sed -i 's/72034ecfb6a7d6d67e384e19fb6efff3236ca4f7ed4c518d7db649c447e1ffd6/cc740c6bbea104398cc3e466befc515a25896ec85e44a662d5f4a767b9cf713e/g'  feeds/packages/net/iperf3/Makefile
+
 # 修复 xray-core1.8.8 编译错误
 rm -rf feeds/packages/lang/golang
 git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
