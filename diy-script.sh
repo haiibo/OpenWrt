@@ -12,6 +12,7 @@ sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
 sed -i 's|/bin/login|/bin/login -f root|g' feeds/packages/utils/ttyd/files/ttyd.config
 
 # 移除要替换的包
+# rm -rf feeds/packages/net/iperf3
 rm -rf feeds/packages/net/mosdns
 rm -rf feeds/packages/net/msd_lite
 rm -rf feeds/packages/net/smartdns
@@ -109,14 +110,14 @@ sed -i "s/${orig_version}/R${date_version} by TonyLee/g" package/lean/default-se
 # 修复 hostapd 报错
 cp -f $GITHUB_WORKSPACE/scripts/011-fix-mbo-modules-build.patch package/network/services/hostapd/patches/011-fix-mbo-modules-build.patch
 
-# 修复 iperf3-ssl 冲突
-sed -i 's/iperf3-ssl[[:space:]]*//g' package/luci-app-netspeedtest/Makefile
-
+# 修改 iperf3 版本
+sed -i 's/3.12/3.16/g' feeds/packages/net/iperf3/Makefile
+sed -i 's/72034ecfb6a7d6d67e384e19fb6efff3236ca4f7ed4c518d7db649c447e1ffd6/cc740c6bbea104398cc3e466befc515a25896ec85e44a662d5f4a767b9cf713e/g'  feeds/packages/net/iperf3/Makefile
 # 修复 xray-core1.8.8 编译错误
 rm -rf feeds/packages/lang/golang
 git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
 
-# 修改 cloudflared 版本 测试
+# 修改 cloudflared 版本
 # sed -i 's/2023.2.2/2024.2.1/g' feeds/packages/net/cloudflared/Makefile
 # sed -i 's/b0abaff125d29c517894f6ea74dcc7044c92500670463595ba9ff4950a1d2fc2/c4a741ee532b8544a65a598e739e002ec04cfffb202119e3e2315e9ecc7dc07a/g' feeds/packages/net/cloudflared/Makefile
 
